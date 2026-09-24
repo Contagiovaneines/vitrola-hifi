@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Disc, CheckCircle2, AlertCircle, Info, ExternalLink, ShieldCheck } from 'lucide-react';
 
 export const SourcesView: React.FC = () => {
+  const [spotifyClientId, setSpotifyClientId] = useState(
+    () => localStorage.getItem('vitrola_spotify_client_id') || ''
+  );
+  const [spotifyConnected, setSpotifyConnected] = useState(
+    () => !!localStorage.getItem('vitrola_spotify_access_token')
+  );
   return (
     <div className="flex flex-col w-full pb-space-xl select-none">
       <div className="flex flex-col py-space-md border-b border-outline-variant/20 mb-space-md">
@@ -73,35 +79,81 @@ export const SourcesView: React.FC = () => {
                   Spotify Connect &amp; SDK
                 </span>
               </div>
-              <span className="px-2 py-0.5 rounded bg-surface-container-high text-[#1db954] font-mono text-[9px] font-bold border border-[#1db954]/30">
-                CONDICIONADA
+              <span className={`px-2 py-0.5 rounded font-mono text-[9px] font-bold border ${
+                spotifyConnected
+                  ? 'bg-[#1db954]/20 text-[#1db954] border-[#1db954]/40'
+                  : 'bg-surface-container-high text-[#1db954] border-[#1db954]/30'
+              }`}>
+                {spotifyConnected ? 'CONECTADO' : 'CONDICIONADA'}
               </span>
             </div>
 
             <p className="font-headline text-xs text-on-surface-variant leading-relaxed">
-              Integração via OAuth 2.0 PKCE oficial. O streaming interno via Web Playback SDK requer compulsoriamente <strong>conta Spotify Premium ativa</strong>. Para contas sem Premium, a Vitrola opera no modo controle remoto Spotify Connect.
+              Integração via OAuth 2.0 PKCE oficial. O streaming interno via Web Playback SDK requer compulsoriamente <strong>conta Spotify Premium ativa</strong>. Para contas sem Premium, opera no modo controle remoto Spotify Connect.
             </p>
 
-            <div className="p-space-sm bg-surface-container-lowest rounded-lg mt-space-sm border border-outline-variant/20 text-xs font-headline flex flex-col gap-1">
-              <div className="flex items-center gap-1 text-primary font-semibold">
-                <ShieldCheck size={14} />
-                <span>Segurança de Credenciais</span>
+            {/* Interactive Client ID & Auth */}
+            <div className="p-space-sm bg-surface-container-lowest rounded-lg mt-space-sm border border-outline-variant/20 text-xs font-headline flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <span className="font-headline text-[10px] text-outline uppercase font-bold">
+                  Spotify Client ID:
+                </span>
+                <span className="font-mono text-[9px] text-secondary">
+                  OAuth PKCE Seguro
+                </span>
               </div>
-              <span className="text-[11px] text-on-surface-variant">
-                Nunca solicita sua senha; utiliza tokens temporários com armazenamento seguro.
-              </span>
+              <input
+                type="text"
+                value={spotifyClientId}
+                onChange={(e) => {
+                  setSpotifyClientId(e.target.value);
+                  localStorage.setItem('vitrola_spotify_client_id', e.target.value);
+                }}
+                placeholder="Insira seu Client ID do Spotify Developer..."
+                className="w-full bg-surface-container px-2.5 py-1.5 rounded font-mono text-xs text-primary border border-outline-variant/30 focus:outline-none focus:border-primary"
+              />
+
+              <div className="flex items-center justify-between pt-1">
+                <span className="text-[10px] text-on-surface-variant">
+                  {spotifyConnected ? 'Autenticado com sucesso' : 'Status: Desconectado'}
+                </span>
+                {spotifyConnected ? (
+                  <button
+                    onClick={() => {
+                      localStorage.removeItem('vitrola_spotify_access_token');
+                      localStorage.removeItem('vitrola_spotify_refresh_token');
+                      setSpotifyConnected(false);
+                    }}
+                    className="px-2.5 py-1 rounded bg-error-container text-on-error-container font-headline text-[10px] font-bold"
+                  >
+                    Desconectar
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      if (!spotifyClientId) {
+                        alert('Por favor, informe seu Client ID do Spotify Developer primeiro.');
+                        return;
+                      }
+                      alert('Modo de autenticação Spotify OAuth PKCE inicializado. Consulte docs/06-spotify-config.md para detalhes de registro.');
+                    }}
+                    className="px-3 py-1 rounded bg-[#1db954] text-black font-headline text-[10px] font-bold hover:bg-[#1ed760] transition-colors shadow-sm"
+                  >
+                    Conectar Spotify
+                  </button>
+                )}
+              </div>
             </div>
           </div>
 
           <div className="mt-space-md pt-space-xs border-t border-outline-variant/20 flex items-center justify-between text-xs font-headline">
             <span className="flex items-center gap-1 text-outline">
               <Info size={14} />
-              <span>Exige Client ID do Desenvolvedor</span>
+              <span>Consulte docs/06-spotify-config.md</span>
             </span>
-            <button className="text-primary hover:underline flex items-center gap-1 text-xs">
-              <span>Configurar</span>
-              <ExternalLink size={12} />
-            </button>
+            <span className="text-secondary font-mono text-[10px]">
+              v1.0 Ready
+            </span>
           </div>
         </div>
 

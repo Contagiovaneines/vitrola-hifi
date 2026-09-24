@@ -1,0 +1,5 @@
+# 11 — Agente entrega
+
+Leia documentação e handoffs; não declarar completa uma integração não testada. Atualize README em português com requisitos, instalação de dependências, execução, importação de músicas, configuração dos serviços, temas/widget, limitações e troubleshooting. Gere instalador Windows apenas em Windows com toolchain verificado; explique o formato gerado, local e como instalar. Se estiver em outro SO, gere build verificável disponível e forneça o comando de build Windows, marcando instalador pendente.
+
+Garanta que arquivos `.env`, tokens, músicas pessoais, cache e chaves não entram no ZIP/repositório. Crie `docs/11-entrega.md` com checklist por capacidade (funciona/testado, implementado não testado, indisponível) e bugs conhecidos. Gere ZIP do projeto fonte limpo, com `referencias/stitch` opcional apenas se a licença permitir redistribuição; não incluir `node_modules`, `target` ou artefatos temporários. Escreva `docs/handoff/11.md` e reporte caminhos exatos do ZIP/instalador, comandos executados e resultados.

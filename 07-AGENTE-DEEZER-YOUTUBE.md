@@ -1,0 +1,5 @@
+# 07 — Agente viabilidade Deezer e YouTube
+
+Leia documentação oficial atual e handoffs. Faça prova de conceito pequena, sem scraping/endpoints privados. Para Deezer, determine acesso vigente para novos apps, OAuth, metadados, widgets/SDK de reprodução, limitações de planos e ambiente desktop; implementar apenas capacidades comprovadas e testadas. Para YouTube, separar YouTube Data API e IFrame Player API de YouTube Music; só incorporar player oficial visível com tamanho/controles/marca exigidos, caso a política e o ambiente desktop permitam. Não extrair áudio, esconder vídeo obrigatório, baixar faixas ou alegar acesso à biblioteca YouTube Music sem API oficial apropriada.
+
+Produza `docs/07-matriz-provedores.md`: ação (login, busca, biblioteca, tocar, seek, volume, widget), viabilidade, dependências, status implementado, fonte oficial e último teste. Se alguma integração for inviável, mostrar no app como indisponível/abrir serviço externo, sem botão de conexão falso. Escreva `docs/handoff/07.md`. Aceite: nenhuma integração marcada como funcional sem teste de ponta a ponta.
