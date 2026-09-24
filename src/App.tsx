@@ -429,7 +429,9 @@ export const App: React.FC = () => {
             />
           )}
 
-          {currentTab === 'fontes' && <SourcesView />}
+          {currentTab === 'fontes' && (
+            <SourcesView onPlayTrack={handleSelectTrack} />
+          )}
 
           {currentTab === 'aparencia' && (
             <CustomizationView

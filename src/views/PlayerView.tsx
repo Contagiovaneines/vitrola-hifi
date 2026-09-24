@@ -8,6 +8,7 @@ import { BallisticVUMeters } from '../components/player/BallisticVUMeters';
 import { PreampKnobs } from '../components/player/PreampKnobs';
 import { SourceSelector } from '../components/player/SourceSelector';
 import { NextTracks } from '../components/player/NextTracks';
+import { YouTubePlayerMonitor } from '../components/player/YouTubePlayerMonitor';
 
 interface PlayerViewProps {
   playbackState: PlayerPlaybackState;
@@ -194,6 +195,18 @@ export const PlayerView: React.FC<PlayerViewProps> = ({
             currentSource={currentSource}
             onSourceChange={setSource}
           />
+
+          {/* COMPLIANT YOUTUBE VIDEO MONITOR (MANDATORY WHEN YOUTUBE IS SELECTED) */}
+          {currentSource === 'youtube' && (
+            <YouTubePlayerMonitor
+              currentVideoId={
+                currentTrack?.source === 'youtube'
+                  ? currentTrack.uri.replace('youtube-', '')
+                  : 'jfKfPfyJRdk'
+              }
+              isCompact={true}
+            />
+          )}
 
           {/* UP NEXT / QUEUE PREVIEW */}
           <NextTracks

@@ -1,13 +1,60 @@
 import React, { useState } from 'react';
-import { Disc, CheckCircle2, AlertCircle, Info, ExternalLink, ShieldCheck } from 'lucide-react';
+import {
+  Disc,
+  CheckCircle2,
+  AlertCircle,
+  Info,
+  ExternalLink,
+  ShieldCheck,
+  Search,
+  Play,
+  Tv,
+  Music2,
+  Lock,
+} from 'lucide-react';
+import { Track } from '../types';
+import { DeezerPlaybackProvider } from '../services/providers/deezer/DeezerPlaybackProvider';
+import { YouTubePlayerMonitor } from '../components/player/YouTubePlayerMonitor';
 
-export const SourcesView: React.FC = () => {
+interface SourcesViewProps {
+  onPlayTrack?: (track: Track) => void;
+}
+
+export const SourcesView: React.FC<SourcesViewProps> = ({ onPlayTrack }) => {
+  // Spotify State
   const [spotifyClientId, setSpotifyClientId] = useState(
     () => localStorage.getItem('vitrola_spotify_client_id') || ''
   );
   const [spotifyConnected, setSpotifyConnected] = useState(
     () => !!localStorage.getItem('vitrola_spotify_access_token')
   );
+
+  // Deezer State
+  const [deezerQuery, setDeezerQuery] = useState('Miles Davis');
+  const [deezerResults, setDeezerResults] = useState<Track[]>([]);
+  const [isSearchingDeezer, setIsSearchingDeezer] = useState(false);
+  const [deezerError, setDeezerError] = useState<string | null>(null);
+
+  // YouTube State
+  const [ytVideoId, setYtVideoId] = useState('jfKfPfyJRdk');
+
+  const handleSearchDeezer = async () => {
+    if (!deezerQuery.trim()) return;
+    setIsSearchingDeezer(true);
+    setDeezerError(null);
+    try {
+      const results = await DeezerPlaybackProvider.search(deezerQuery.trim(), 8);
+      setDeezerResults(results);
+      if (results.length === 0) {
+        setDeezerError('Nenhuma faixa encontrada para esta busca.');
+      }
+    } catch (err) {
+      setDeezerError((err as Error).message || 'Falha ao buscar no Deezer.');
+    } finally {
+      setIsSearchingDeezer(false);
+    }
+  };
+
   return (
     <div className="flex flex-col w-full pb-space-xl select-none">
       <div className="flex flex-col py-space-md border-b border-outline-variant/20 mb-space-md">
@@ -15,12 +62,12 @@ export const SourcesView: React.FC = () => {
           Fontes de Áudio &amp; Adaptadores
         </h2>
         <p className="font-headline text-xs text-on-surface-variant mt-1">
-          Capacidades oficiais comprovadas e requisitos técnicos de cada provedor
+          Capacidades oficiais comprovadas, testes de ponta a ponta e políticas de conformidade
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-space-lg">
-        {/* Source 1: Local Files (The Core) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-space-lg">
+        {/* Source 1: Local Files (The Core Hi-Res Engine) */}
         <div className="flex flex-col justify-between bg-surface-container-low rounded-xl p-space-md shadow-[0_12px_28px_rgba(0,0,0,0.85)] border border-primary/40">
           <div>
             <div className="flex items-center justify-between pb-space-xs border-b border-outline-variant/20 mb-space-sm">
@@ -31,12 +78,12 @@ export const SourcesView: React.FC = () => {
                 </span>
               </div>
               <span className="px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-mono text-[9px] font-bold">
-                CONFIRMADA · PADRÃO
+                CONFIRMADA · 100% FUNCIONAL
               </span>
             </div>
 
             <p className="font-headline text-xs text-on-surface-variant leading-relaxed">
-              O coração de fidelidade da Vitrola. Reprodução direta sem compressão ou rede, leitura nativa de metadados ID3/Vorbis/FLAC, persistência local e alimentação real do analisador PCM dos medidores VU.
+              O coração de fidelidade da Vitrola. Reprodução direta sem compressão ou rede, leitura nativa de metadados ID3/Vorbis/FLAC, persistência local e alimentação real do analisador PCM dos medidores VU analógicos.
             </p>
 
             <div className="flex flex-wrap gap-1.5 mt-space-sm">
@@ -61,7 +108,7 @@ export const SourcesView: React.FC = () => {
           <div className="mt-space-md pt-space-xs border-t border-outline-variant/20 flex items-center justify-between text-xs font-headline">
             <span className="flex items-center gap-1.5 text-secondary font-bold">
               <CheckCircle2 size={15} />
-              <span>100% Autônomo &amp; Offline</span>
+              <span>Autônomo &amp; Sem Dependências Externas</span>
             </span>
             <span className="font-mono text-[10px] text-outline">
               Bit-Perfect WASAPI
@@ -69,7 +116,7 @@ export const SourcesView: React.FC = () => {
           </div>
         </div>
 
-        {/* Source 2: Spotify */}
+        {/* Source 2: Spotify (Official OAuth PKCE & Web Playback SDK) */}
         <div className="flex flex-col justify-between bg-surface-container-low rounded-xl p-space-md shadow-[0_12px_28px_rgba(0,0,0,0.85)] border border-outline-variant/30">
           <div>
             <div className="flex items-center justify-between pb-space-xs border-b border-outline-variant/20 mb-space-sm">
@@ -84,7 +131,7 @@ export const SourcesView: React.FC = () => {
                   ? 'bg-[#1db954]/20 text-[#1db954] border-[#1db954]/40'
                   : 'bg-surface-container-high text-[#1db954] border-[#1db954]/30'
               }`}>
-                {spotifyConnected ? 'CONECTADO' : 'CONDICIONADA'}
+                {spotifyConnected ? 'CONECTADO' : 'CONDICIONADA (PREMIUM)'}
               </span>
             </div>
 
@@ -152,12 +199,12 @@ export const SourcesView: React.FC = () => {
               <span>Consulte docs/06-spotify-config.md</span>
             </span>
             <span className="text-secondary font-mono text-[10px]">
-              v1.0 Ready
+              SDK Pronto
             </span>
           </div>
         </div>
 
-        {/* Source 3: Deezer */}
+        {/* Source 3: Deezer (Audio API & 30s Preview Player) */}
         <div className="flex flex-col justify-between bg-surface-container-low rounded-xl p-space-md shadow-[0_12px_28px_rgba(0,0,0,0.85)] border border-outline-variant/30">
           <div>
             <div className="flex items-center justify-between pb-space-xs border-b border-outline-variant/20 mb-space-sm">
@@ -167,51 +214,145 @@ export const SourcesView: React.FC = () => {
                   Deezer Audio API
                 </span>
               </div>
-              <span className="px-2 py-0.5 rounded bg-surface-container-high text-[#a238ff] font-mono text-[9px] font-bold border border-[#a238ff]/30">
-                PREVIEW 30s CONFIRMADO
+              <span className="px-2 py-0.5 rounded bg-[#a238ff]/15 text-[#a238ff] font-mono text-[9px] font-bold border border-[#a238ff]/30">
+                PRÉVIA 30s CONFIRMADA
               </span>
             </div>
 
             <p className="font-headline text-xs text-on-surface-variant leading-relaxed">
-              Acesso a buscas de catálogo, metadados e prévias oficiais em MP3 de 30 segundos sem necessidade de conta paga. Reprodução de faixas completas em HiFi FLAC é restrita a assinantes com token de sessão ativo.
+              Busca pública e prévias oficiais em MP3 de 30 segundos totalmente funcionais sem login. Faixas completas exigem assinatura Deezer Premium e abertura no aplicativo oficial Deezer.
             </p>
+
+            {/* Interactive Deezer Search Box */}
+            <div className="mt-space-sm p-space-sm bg-surface-container-lowest rounded-lg border border-outline-variant/20 flex flex-col gap-2">
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={deezerQuery}
+                  onChange={(e) => setDeezerQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearchDeezer()}
+                  placeholder="Buscar artista, álbum ou faixa no Deezer..."
+                  className="flex-1 bg-surface-container px-2.5 py-1.5 rounded font-mono text-xs text-primary border border-outline-variant/30 focus:outline-none focus:border-primary"
+                />
+                <button
+                  onClick={handleSearchDeezer}
+                  disabled={isSearchingDeezer}
+                  className="px-3 py-1.5 rounded bg-[#a238ff] text-white font-headline text-xs font-bold hover:bg-[#b04eff] transition-colors flex items-center gap-1 disabled:opacity-50"
+                >
+                  <Search size={13} />
+                  <span>{isSearchingDeezer ? 'Buscando...' : 'Buscar'}</span>
+                </button>
+              </div>
+
+              {deezerError && (
+                <div className="text-[11px] text-error flex items-center gap-1">
+                  <AlertCircle size={13} />
+                  <span>{deezerError}</span>
+                </div>
+              )}
+
+              {/* Deezer Results List */}
+              {deezerResults.length > 0 && (
+                <div className="flex flex-col gap-1.5 mt-1 max-h-48 overflow-y-auto pr-1">
+                  {deezerResults.map((t) => (
+                    <div
+                      key={t.id}
+                      className="flex items-center justify-between p-1.5 rounded bg-surface-container/70 border border-outline-variant/20 hover:border-primary/40 transition-colors"
+                    >
+                      <div className="flex items-center gap-2 truncate">
+                        {t.coverUri ? (
+                          <img
+                            src={t.coverUri}
+                            alt=""
+                            className="w-8 h-8 rounded object-cover shrink-0"
+                          />
+                        ) : (
+                          <div className="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center shrink-0">
+                            <Music2 size={14} className="text-outline" />
+                          </div>
+                        )}
+                        <div className="flex flex-col truncate">
+                          <span className="font-headline text-xs text-on-surface font-semibold truncate">
+                            {t.title}
+                          </span>
+                          <span className="font-headline text-[10px] text-on-surface-variant truncate">
+                            {t.artist} · {t.album}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        {onPlayTrack && (
+                          <button
+                            onClick={() => onPlayTrack(t)}
+                            className="px-2 py-1 rounded bg-[#a238ff] text-white font-headline text-[10px] font-bold hover:bg-[#b04eff] transition-colors flex items-center gap-1"
+                            title="Tocar prévia de 30s no prato da Vitrola"
+                          >
+                            <Play size={10} />
+                            <span>Tocar (30s)</span>
+                          </button>
+                        )}
+                        <a
+                          href={`https://www.deezer.com/track/${t.id.replace('deezer-', '')}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="p-1 rounded text-outline hover:text-[#a238ff] transition-colors"
+                          title="Abrir faixa completa no Deezer oficial"
+                        >
+                          <ExternalLink size={13} />
+                        </a>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="mt-space-md pt-space-xs border-t border-outline-variant/20 flex items-center justify-between text-xs font-headline">
             <span className="flex items-center gap-1 text-secondary font-semibold">
               <CheckCircle2 size={14} />
-              <span>Prévias de 30s Ativas</span>
+              <span>Prévias de 30s com VU Meter Real</span>
             </span>
             <span className="font-mono text-[10px] text-outline">
-              Catálogo Oficial
+              Limitação Legal Declarada
             </span>
           </div>
         </div>
 
-        {/* Source 4: YouTube */}
+        {/* Source 4: YouTube (IFrame Player API & Anti-Extraction Compliance) */}
         <div className="flex flex-col justify-between bg-surface-container-low rounded-xl p-space-md shadow-[0_12px_28px_rgba(0,0,0,0.85)] border border-outline-variant/30">
           <div>
             <div className="flex items-center justify-between pb-space-xs border-b border-outline-variant/20 mb-space-sm">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#ff3333] shadow-[0_0_8px_#ff3333]"></span>
                 <span className="font-display text-base text-on-surface font-bold">
-                  YouTube Player
+                  YouTube Player Oficial
                 </span>
               </div>
-              <span className="px-2 py-0.5 rounded bg-surface-container-high text-[#ff3333] font-mono text-[9px] font-bold border border-[#ff3333]/30">
+              <span className="px-2 py-0.5 rounded bg-[#ff3333]/15 text-[#ff3333] font-mono text-[9px] font-bold border border-[#ff3333]/30">
                 CONFORMIDADE ESTRITA
               </span>
             </div>
 
             <p className="font-headline text-xs text-on-surface-variant leading-relaxed">
-              Em estrita conformidade com os Termos de Serviço da API do YouTube, o Vitrola <strong>não extrai áudio isolado nem reproduz em segundo plano com janela oculta</strong>. A reprodução é feita com o IFrame oficial exibido na tela.
+              Em estrita conformidade com os Termos de Serviço da API do YouTube (Seção III.A.1 e III.E), o Vitrola <strong>não extrai áudio isolado nem reproduz em segundo plano com vídeo oculto</strong>. A reprodução é realizada com o player IFrame oficial visível.
             </p>
 
-            <div className="p-space-sm bg-surface-container-lowest rounded-lg mt-space-sm border border-outline-variant/20 text-xs font-headline flex items-center gap-2 text-error">
-              <AlertCircle size={16} className="shrink-0" />
-              <span className="text-[11px]">
-                YouTube Music não possui API pública para áudio puro de terceiros.
+            <div className="p-space-xs bg-surface-container-lowest rounded-lg mt-space-sm border border-outline-variant/20 text-xs font-headline flex items-center gap-2 text-on-surface-variant">
+              <AlertCircle size={15} className="text-[#ff3333] shrink-0" />
+              <span className="text-[10px]">
+                <strong>YouTube Music:</strong> Indisponível para reprodutores de terceiros (não há API pública aberta de áudio).
               </span>
+            </div>
+
+            {/* Embedded Compliant Player Monitor Preview */}
+            <div className="mt-space-sm">
+              <YouTubePlayerMonitor
+                currentVideoId={ytVideoId}
+                onVideoChange={setYtVideoId}
+                isCompact={false}
+              />
             </div>
           </div>
 
@@ -219,8 +360,9 @@ export const SourcesView: React.FC = () => {
             <span className="font-mono text-[10px] text-outline">
               YouTube IFrame Player API
             </span>
-            <span className="text-secondary font-bold text-xs">
-              Player Embutido
+            <span className="text-secondary font-bold text-xs flex items-center gap-1">
+              <ShieldCheck size={14} />
+              <span>Vídeo Visível Mandatório</span>
             </span>
           </div>
         </div>
