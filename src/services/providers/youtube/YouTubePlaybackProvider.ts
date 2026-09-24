@@ -265,14 +265,39 @@ export class YouTubePlaybackProvider implements PlaybackProvider {
   }
 
   /**
+   * Extrai o identificador e tipo de mídia (vídeo ou playlist) a partir de URL do YouTube ou YouTube Music.
+   */
+  static extractMedia(urlOrId: string): { type: 'video' | 'playlist'; id: string } | null {
+    if (!urlOrId) return null;
+
+    // 1. Extração de Playlist (YouTube e YouTube Music: music.youtube.com/playlist?list=...)
+    const playlistMatch = urlOrId.match(/[?&]list=([a-zA-Z0-9_-]+)/);
+    if (playlistMatch) {
+      return { type: 'playlist', id: playlistMatch[1] };
+    }
+    if (/^(?:PL|RD|OLAK5uy_|LR|LM|FL)[a-zA-Z0-9_-]+$/.test(urlOrId)) {
+      return { type: 'playlist', id: urlOrId };
+    }
+
+    // 2. Extração de Vídeo único
+    if (/^[a-zA-Z0-9_-]{11}$/.test(urlOrId)) {
+      return { type: 'video', id: urlOrId };
+    }
+
+    const videoRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+    const match = urlOrId.match(videoRegex);
+    if (match) {
+      return { type: 'video', id: match[1] };
+    }
+
+    return null;
+  }
+
+  /**
    * Extrai o ID de 11 caracteres de um link do YouTube ou retorna o próprio identificador.
    */
   static extractVideoId(urlOrId: string): string | null {
-    if (!urlOrId) return null;
-    if (/^[a-zA-Z0-9_-]{11}$/.test(urlOrId)) return urlOrId;
-
-    const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
-    const match = urlOrId.match(regex);
-    return match ? match[1] : null;
+    const media = YouTubePlaybackProvider.extractMedia(urlOrId);
+    return media && media.type === 'video' ? media.id : null;
   }
 }

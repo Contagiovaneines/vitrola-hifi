@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Tv, ShieldCheck, ExternalLink, Play, AlertCircle } from 'lucide-react';
+import { Tv, ShieldCheck, ExternalLink, Play, AlertCircle, ListMusic } from 'lucide-react';
 import { YouTubePlaybackProvider } from '../../services/providers/youtube/YouTubePlaybackProvider';
 
 interface YouTubePlayerMonitorProps {
@@ -14,18 +14,30 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
   isCompact = false,
 }) => {
   const [inputUrl, setInputUrl] = useState('');
-  const [activeId, setActiveId] = useState(currentVideoId);
+  const [activeMedia, setActiveMedia] = useState<{ type: 'video' | 'playlist'; id: string }>({
+    type: 'video',
+    id: currentVideoId,
+  });
 
   const handleLoad = () => {
-    const extracted = YouTubePlaybackProvider.extractVideoId(inputUrl);
+    const extracted = YouTubePlaybackProvider.extractMedia(inputUrl.trim());
     if (extracted) {
-      setActiveId(extracted);
-      if (onVideoChange) onVideoChange(extracted);
+      setActiveMedia(extracted);
+      if (onVideoChange) onVideoChange(extracted.id);
       setInputUrl('');
     } else {
-      alert('Por favor, informe uma URL ou ID válido de vídeo do YouTube (11 caracteres).');
+      alert('Por favor, informe uma URL ou ID válido de vídeo ou playlist do YouTube/YouTube Music.');
     }
   };
+
+  const origin = typeof window !== 'undefined' ? window.location.origin : '';
+  const embedSrc = activeMedia.type === 'playlist'
+    ? `https://www.youtube.com/embed/videoseries?list=${activeMedia.id}&enablejsapi=1&origin=${origin}`
+    : `https://www.youtube.com/embed/${activeMedia.id}?enablejsapi=1&origin=${origin}`;
+
+  const externalUrl = activeMedia.type === 'playlist'
+    ? `https://music.youtube.com/playlist?list=${activeMedia.id}`
+    : `https://www.youtube.com/watch?v=${activeMedia.id}`;
 
   return (
     <div className="w-full rounded-xl bg-surface-container-low p-space-md shadow-[0_8px_24px_rgba(0,0,0,0.85)] border border-primary/30 select-none flex flex-col gap-3">
@@ -34,22 +46,30 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
         <div className="flex items-center gap-2">
           <Tv size={16} className="text-[#ff3333]" />
           <span className="font-display text-xs text-primary font-bold tracking-wide">
-            MONITOR CRT · YOUTUBE PLAYER OFICIAL
+            MONITOR CRT · YOUTUBE {activeMedia.type === 'playlist' ? 'PLAYLIST' : 'PLAYER'}
           </span>
         </div>
-        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#ff3333]/15 text-[#ff3333] border border-[#ff3333]/30 font-mono text-[9px] font-bold">
-          <ShieldCheck size={12} />
-          <span>TERMOS DE SERVIÇO CUMPRIDOS</span>
+        <div className="flex items-center gap-2">
+          {activeMedia.type === 'playlist' && (
+            <span className="px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-mono text-[9px] font-bold flex items-center gap-1">
+              <ListMusic size={11} />
+              <span>PLAYLIST ATIVA</span>
+            </span>
+          )}
+          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#ff3333]/15 text-[#ff3333] border border-[#ff3333]/30 font-mono text-[9px] font-bold">
+            <ShieldCheck size={12} />
+            <span>TERMOS CUMPRIDOS</span>
+          </div>
         </div>
       </div>
 
       {/* Monitor Screen Frame */}
       <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-black border-2 border-outline-variant/40 shadow-[inset_0_0_20px_rgba(0,0,0,0.9)]">
-        {activeId ? (
+        {activeMedia.id ? (
           <iframe
             id="vitrola-youtube-player-iframe"
             title="Vitrola Official YouTube Player"
-            src={`https://www.youtube.com/embed/${activeId}?enablejsapi=1&origin=${typeof window !== 'undefined' ? window.location.origin : ''}`}
+            src={embedSrc}
             className="w-full h-full border-0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
@@ -57,7 +77,7 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-center p-4 text-outline font-headline text-xs">
             <AlertCircle size={28} className="mb-2 text-outline-variant" />
-            <span>Nenhum vídeo carregado no monitor</span>
+            <span>Nenhuma mídia carregada no monitor</span>
           </div>
         )}
       </div>
@@ -70,8 +90,9 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
               type="text"
               value={inputUrl}
               onChange={(e) => setInputUrl(e.target.value)}
-              placeholder="Cole link ou ID do YouTube (ex: jfKfPfyJRdk)..."
-              className="flex-1 bg-surface-container px-2.5 py-1.5 rounded font-mono text-xs text-primary border border-outline-variant/30 focus:outline-none focus:border-primary"
+              onKeyDown={(e) => e.key === 'Enter' && handleLoad()}
+              placeholder="Cole link de vídeo ou playlist (YouTube / YouTube Music)..."
+              className="flex-1 bg-surface-container px-2.5 py-1.5 rounded font-mono text-xs text-primary border border-outline-variant/30 focus:outline-none focus:border-primary placeholder:text-outline/50"
             />
             <button
               onClick={handleLoad}
@@ -83,12 +104,24 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
           </div>
 
           <div className="flex items-center justify-between text-[10px] font-headline text-on-surface-variant pt-1 border-t border-outline-variant/10">
-            <span className="flex items-center gap-1 text-secondary">
-              <span>● Vídeo 100% visível na tela</span>
-            </span>
-            <span className="text-outline">
-              Sem extração ilegal de áudio
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="flex items-center gap-1 text-secondary">
+                <span>● Vídeo 100% visível na tela</span>
+              </span>
+              <span className="text-outline hidden sm:inline">
+                (Suporte a vídeos e playlists)
+              </span>
+            </div>
+            <a
+              href={externalUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1 text-[#ff3333] hover:underline"
+              title="Abrir no YouTube oficial em nova aba"
+            >
+              <span>Abrir no YouTube</span>
+              <ExternalLink size={11} />
+            </a>
           </div>
         </div>
       )}
