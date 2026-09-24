@@ -199,6 +199,7 @@ export const PlayerView: React.FC<PlayerViewProps> = ({
                   : ''
               }
               onPlayTrack={onSelectTrack}
+              onStateChange={setPlaybackState}
               isCompact={false}
             />
           )}

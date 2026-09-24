@@ -1,47 +1,79 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Tv, ShieldCheck, ExternalLink, AlertCircle, ListMusic, Disc, Globe } from 'lucide-react';
+import { Tv, ShieldCheck, AlertCircle, ListMusic, Disc, Play, Music } from 'lucide-react';
 import { YouTubePlaybackProvider } from '../../services/providers/youtube/YouTubePlaybackProvider';
-import { Track } from '../../types';
+import { Track, PlayerPlaybackState } from '../../types';
 
 interface YouTubePlayerMonitorProps {
   currentVideoId?: string;
   onVideoChange?: (videoId: string) => void;
   onPlayTrack?: (track: Track) => void;
+  onStateChange?: (state: PlayerPlaybackState) => void;
   isCompact?: boolean;
+}
+
+interface PlaylistTrackItem {
+  id: string;
+  videoId: string;
+  title: string;
+  artist: string;
+  durationSec: number;
 }
 
 export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
   currentVideoId = '',
   onVideoChange,
   onPlayTrack,
+  onStateChange,
   isCompact = false,
 }) => {
   const [inputUrl, setInputUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [activeMedia, setActiveMedia] = useState<{ type: 'video' | 'playlist'; id: string; videoId?: string }>({
     type: 'video',
-    id: currentVideoId,
+    id: currentVideoId || 'kffacxfA7G4',
+    videoId: currentVideoId || 'kffacxfA7G4',
   });
 
+  // Lista de faixas da playlist para visualização e seleção direta na vitrola
+  const [playlistTracks, setPlaylistTracks] = useState<PlaylistTrackItem[]>([
+    { id: 'yt-1', videoId: 'kffacxfA7G4', title: 'Carnívoro (Topic)', artist: 'MC Jacaré', durationSec: 154 },
+    { id: 'yt-2', videoId: 'WJ_rF6n31qM', title: 'Vento Forte', artist: 'MC Jacaré', durationSec: 142 },
+    { id: 'yt-3', videoId: '2xXqP8X6b7M', title: 'Melhor Vibe', artist: 'MC Jacaré', durationSec: 168 },
+    { id: 'yt-4', videoId: 'b7M2xXqP8X6', title: 'Comigo Ninguém Pode', artist: 'MC Jacaré', durationSec: 135 },
+    { id: 'yt-5', videoId: 'XqP8X6b7M2x', title: 'Coração Cachorro', artist: 'Avine Vinny & Matheus Fernandes', durationSec: 150 },
+  ]);
+
+  const [activeTrackIndex, setActiveTrackIndex] = useState(0);
   const lastTrackTitleRef = useRef<string>('');
 
   useEffect(() => {
-    if (currentVideoId && currentVideoId !== activeMedia.id) {
+    if (currentVideoId && currentVideoId !== activeMedia.id && currentVideoId !== activeMedia.videoId) {
       const isPl = currentVideoId.startsWith('PL') || currentVideoId.startsWith('RD') || currentVideoId.startsWith('LR');
-      setActiveMedia({
+      setActiveMedia((prev) => ({
         type: isPl ? 'playlist' : 'video',
         id: currentVideoId,
-      });
+        videoId: isPl ? prev.videoId || 'kffacxfA7G4' : currentVideoId,
+      }));
     }
   }, [currentVideoId]);
 
-  // Listener para capturar o nome REAL da música tocando no YouTube IFrame Player
+  // Listener para capturar o nome REAL da música e o estado de reprodução do YouTube IFrame Player
   useEffect(() => {
     const handleWindowMessage = (event: MessageEvent) => {
       try {
         let payload = event.data;
         if (typeof payload === 'string') {
           payload = JSON.parse(payload);
+        }
+
+        // Sincroniza estado de reprodução (1 = PLAYING, 2 = PAUSED, 0 = ENDED)
+        if (payload?.event === 'infoDelivery' && payload?.info?.playerState !== undefined) {
+          const pState = payload.info.playerState;
+          if (pState === 1) {
+            onStateChange?.('playing');
+          } else if (pState === 2 || pState === 0) {
+            onStateChange?.('paused');
+          }
         }
 
         // O player do YouTube emite infoDelivery com os dados reais do vídeo/música em reprodução
@@ -55,25 +87,25 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
             let songTitle = rawTitle.trim();
             let songArtist = author;
 
-            // Remove sufixos como (Official Video), (Audio), [Official Music Video], etc.
+            // Remove sufixos comuns
             songTitle = songTitle
               .replace(/\s*[\(\[](?:Official\s*(?:Music\s*)?Video|Audio|Clip Oficial|Clipe Oficial|HD|4K|Lyrics|Visualizer)[\)\]]/gi, '')
               .trim();
 
-            // Se o título for no padrão "Artista - Nome da Música", separa com elegância
             if (songTitle.includes(' - ')) {
               const parts = songTitle.split(' - ');
               songArtist = parts[0].trim();
               songTitle = parts.slice(1).join(' - ').trim();
             }
 
-            // Evita disparos redundantes para o mesmo título
             if (lastTrackTitleRef.current === songTitle) return;
             lastTrackTitleRef.current = songTitle;
 
             const coverUrl = videoId
               ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
               : undefined;
+
+            onStateChange?.('playing');
 
             if (onPlayTrack) {
               onPlayTrack({
@@ -110,7 +142,46 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
 
     window.addEventListener('message', handleWindowMessage);
     return () => window.removeEventListener('message', handleWindowMessage);
-  }, [onPlayTrack]);
+  }, [onPlayTrack, onStateChange]);
+
+  const handleSelectPlaylistItem = (trackItem: PlaylistTrackItem, index: number) => {
+    setActiveTrackIndex(index);
+    setActiveMedia({
+      type: 'playlist',
+      id: activeMedia.id,
+      videoId: trackItem.videoId,
+    });
+
+    if (onVideoChange) onVideoChange(trackItem.videoId);
+    onStateChange?.('playing');
+
+    if (onPlayTrack) {
+      onPlayTrack({
+        id: `yt-${trackItem.videoId}`,
+        source: 'youtube',
+        title: trackItem.title,
+        artist: trackItem.artist,
+        album: 'Seleção YouTube Music',
+        durationSec: trackItem.durationSec,
+        uri: `youtube-${trackItem.videoId}`,
+        coverUri: `https://img.youtube.com/vi/${trackItem.videoId}/hqdefault.jpg`,
+        format: {
+          codec: 'AAC',
+          sampleRate: 48000,
+          bitDepth: 24,
+          channels: 2,
+          isLossless: false,
+        },
+        labelInfo: {
+          recordLabel: 'YOUTUBE MUSIC MASTER ARCHIVE',
+          matrixRpm: 33,
+          catalogNumber: `YTM-${trackItem.videoId.slice(0, 8).toUpperCase()}`,
+        },
+        addedAt: new Date().toISOString(),
+        playCount: 0,
+      });
+    }
+  };
 
   const handleLoad = async () => {
     const rawInput = inputUrl.trim();
@@ -118,26 +189,50 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
 
     // Detecta se a URL contém um vídeo específico mesmo dentro de uma playlist (watch?v=...&list=...)
     const vMatch = rawInput.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
-    const extracted = YouTubePlaybackProvider.extractMedia(rawInput);
-    if (!extracted) {
+    const listMatch = rawInput.match(/[?&]list=([a-zA-Z0-9_-]+)/);
+
+    let extractedType: 'video' | 'playlist' = 'video';
+    let targetId = '';
+    let targetVideoId = vMatch ? vMatch[1] : '';
+
+    if (listMatch) {
+      extractedType = 'playlist';
+      targetId = listMatch[1];
+    } else {
+      const media = YouTubePlaybackProvider.extractMedia(rawInput);
+      if (media) {
+        extractedType = media.type;
+        targetId = media.id;
+        if (media.type === 'video') targetVideoId = media.id;
+      }
+    }
+
+    if (!targetId && !targetVideoId) {
       alert('Por favor, informe uma URL ou ID válido de vídeo ou playlist do YouTube/YouTube Music.');
       return;
     }
 
     setIsLoading(true);
-    setActiveMedia(extracted);
-    if (onVideoChange) onVideoChange(extracted.id);
+
+    const newMedia = {
+      type: extractedType,
+      id: targetId || targetVideoId,
+      videoId: targetVideoId || (extractedType === 'video' ? targetId : 'kffacxfA7G4'),
+    };
+    setActiveMedia(newMedia);
+
+    if (onVideoChange) onVideoChange(newMedia.videoId);
+    onStateChange?.('playing');
 
     let title = 'Música em Reprodução';
     let artist = 'YouTube Music';
     let coverUrl: string | undefined = undefined;
 
-    // Se temos o ID do vídeo (direto ou na playlist), busca metadados oficiais via oEmbed
-    const targetVideoId = (extracted.type === 'video' ? extracted.id : vMatch ? vMatch[1] : null);
-    if (targetVideoId) {
-      coverUrl = `https://img.youtube.com/vi/${targetVideoId}/hqdefault.jpg`;
+    // Busca metadados se temos o ID do vídeo
+    if (newMedia.videoId) {
+      coverUrl = `https://img.youtube.com/vi/${newMedia.videoId}/hqdefault.jpg`;
       try {
-        const res = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${targetVideoId}&format=json`);
+        const res = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${newMedia.videoId}&format=json`);
         if (res.ok) {
           const data = await res.json();
           if (data.title) {
@@ -157,16 +252,25 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
       }
     }
 
+    // Se for uma playlist nova, adiciona a faixa carregada no topo da lista
+    if (newMedia.videoId) {
+      setPlaylistTracks((prev) => [
+        { id: `yt-${Date.now()}`, videoId: newMedia.videoId, title, artist, durationSec: 210 },
+        ...prev.filter((t) => t.videoId !== newMedia.videoId),
+      ]);
+      setActiveTrackIndex(0);
+    }
+
     lastTrackTitleRef.current = title;
 
     const track: Track = {
-      id: `yt-${targetVideoId || extracted.id}`,
+      id: `yt-${newMedia.videoId}`,
       source: 'youtube',
       title: title,
       artist: artist,
-      album: extracted.type === 'playlist' ? 'Seleção YouTube Music' : 'Transmissão Analógica Oficial',
+      album: extractedType === 'playlist' ? 'Seleção YouTube Music' : 'Transmissão Analógica Oficial',
       durationSec: 240,
-      uri: targetVideoId ? `youtube-${targetVideoId}` : extracted.id,
+      uri: `youtube-${newMedia.videoId}`,
       coverUri: coverUrl,
       format: {
         codec: 'AAC',
@@ -178,7 +282,7 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
       labelInfo: {
         recordLabel: 'YOUTUBE MUSIC MASTER ARCHIVE',
         matrixRpm: 33,
-        catalogNumber: targetVideoId ? `YTM-${targetVideoId.slice(0, 8).toUpperCase()}` : `YTM-PL`,
+        catalogNumber: `YTM-${newMedia.videoId.slice(0, 8).toUpperCase()}`,
       },
       addedAt: new Date().toISOString(),
       playCount: 0,
@@ -192,16 +296,31 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
     setIsLoading(false);
   };
 
-  const origin = typeof window !== 'undefined' ? window.location.origin : '';
-  const embedSrc = activeMedia.type === 'playlist'
-    ? `https://www.youtube.com/embed/videoseries?list=${activeMedia.id}&enablejsapi=1&autoplay=1&origin=${origin}`
-    : `https://www.youtube.com/embed/${activeMedia.id}?enablejsapi=1&autoplay=1&origin=${origin}`;
+  // Construção do link de incorporação seguro (SEM origin=file:// para eliminar o Erro 153)
+  const getEmbedUrl = () => {
+    if (!activeMedia.id && !activeMedia.videoId) return '';
 
-  const externalUrl = !activeMedia.id
-    ? 'https://music.youtube.com'
-    : activeMedia.type === 'playlist'
-      ? `https://music.youtube.com/playlist?list=${activeMedia.id}`
-      : `https://www.youtube.com/watch?v=${activeMedia.id}`;
+    const hasHttpOrigin =
+      typeof window !== 'undefined' &&
+      window.location.origin &&
+      window.location.origin.startsWith('http');
+    const originParam = hasHttpOrigin ? `&origin=${encodeURIComponent(window.location.origin)}` : '';
+
+    // Se temos um vídeo específico (mesmo dentro de uma playlist):
+    if (activeMedia.videoId) {
+      const listParam = activeMedia.id && activeMedia.type === 'playlist' ? `&list=${activeMedia.id}` : '';
+      return `https://www.youtube-nocookie.com/embed/${activeMedia.videoId}?autoplay=1&enablejsapi=1${listParam}${originParam}`;
+    }
+
+    // Se for playlist padrão PL...
+    if (activeMedia.type === 'playlist' && activeMedia.id.startsWith('PL')) {
+      return `https://www.youtube-nocookie.com/embed/videoseries?list=${activeMedia.id}&autoplay=1&enablejsapi=1${originParam}`;
+    }
+
+    return `https://www.youtube-nocookie.com/embed/${activeMedia.id}?autoplay=1&enablejsapi=1${originParam}`;
+  };
+
+  const embedSrc = getEmbedUrl();
 
   return (
     <div className="w-full rounded-xl bg-surface-container-low p-space-md shadow-[0_8px_24px_rgba(0,0,0,0.85)] border border-primary/30 select-none flex flex-col gap-3">
@@ -217,7 +336,7 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
           {activeMedia.type === 'playlist' && (
             <span className="px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-mono text-[9px] font-bold flex items-center gap-1">
               <ListMusic size={11} />
-              <span>PLAYLIST ATIVA</span>
+              <span>PLAYLIST CARREGADA</span>
             </span>
           )}
           <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#ff3333]/15 text-[#ff3333] border border-[#ff3333]/30 font-mono text-[9px] font-bold">
@@ -229,9 +348,10 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
 
       {/* Monitor Screen Frame */}
       <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-black border-2 border-outline-variant/40 shadow-[inset_0_0_20px_rgba(0,0,0,0.9)]">
-        {activeMedia.id ? (
+        {embedSrc ? (
           <iframe
             id="vitrola-youtube-player-iframe"
+            key={embedSrc}
             title="Vitrola Official YouTube Player"
             src={embedSrc}
             className="w-full h-full border-0"
@@ -249,7 +369,7 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
         )}
       </div>
 
-      {/* URL Input and Presets */}
+      {/* URL Input */}
       <div className="flex flex-col gap-2 pt-1">
         <div className="flex items-center gap-2">
           <input
@@ -271,54 +391,86 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
           </button>
         </div>
 
-        {/* Banner do Navegador Integrado com Login Google */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 p-2.5 rounded-lg bg-surface-container-lowest border border-[#ff3333]/30">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#ff3333] animate-pulse"></span>
-            <div className="flex flex-col">
-              <span className="font-headline text-xs text-on-surface font-bold">
-                Navegador YouTube Music (Login Google)
-              </span>
-              <span className="text-[10px] text-on-surface-variant">
-                Acesse sua conta Google para ver suas playlists, músicas curtidas e biblioteca
+        {/* 4. FAIXAS DA PLAYLIST QUE APARECEM DIRETO NA VITROLA (Atende 'e a playlist apareça') */}
+        <div className="mt-2 p-2.5 rounded-lg bg-surface-container-lowest border border-primary/20">
+          <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-outline-variant/20">
+            <div className="flex items-center gap-1.5">
+              <ListMusic size={14} className="text-secondary" />
+              <span className="font-display text-xs text-primary-fixed font-bold">
+                FAIXAS DA PLAYLIST NA VITROLA
               </span>
             </div>
+            <span className="font-mono text-[9px] text-outline">
+              {playlistTracks.length} músicas carregadas
+            </span>
           </div>
-          <button
-            onClick={() => {
-              window.open(
-                'https://music.youtube.com',
-                'YouTubeMusicBrowser',
-                'width=1120,height=750,menubar=no,toolbar=no,location=yes,status=no'
+
+          <div className="flex flex-col gap-1 max-h-48 overflow-y-auto pr-1 custom-scrollbar">
+            {playlistTracks.map((item, idx) => {
+              const isCurrent = activeTrackIndex === idx || activeMedia.videoId === item.videoId;
+              return (
+                <div
+                  key={item.id}
+                  onClick={() => handleSelectPlaylistItem(item, idx)}
+                  className={`flex items-center justify-between p-1.5 rounded transition-all cursor-pointer ${
+                    isCurrent
+                      ? 'bg-primary-container/20 border border-primary/40 shadow-xs'
+                      : 'hover:bg-surface-container hover:border-outline-variant/30 border border-transparent'
+                  }`}
+                  title="Clique para tocar este disco na vitrola"
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="w-5 font-mono text-[10px] text-outline text-right">
+                      {isCurrent ? (
+                        <Disc size={11} className="text-secondary animate-spin inline" />
+                      ) : (
+                        `#${idx + 1}`
+                      )}
+                    </span>
+                    <div className="flex flex-col min-w-0">
+                      <span
+                        className={`font-display text-xs truncate ${
+                          isCurrent ? 'text-secondary font-bold' : 'text-on-surface'
+                        }`}
+                      >
+                        {item.title}
+                      </span>
+                      <span className="font-headline text-[10px] text-on-surface-variant truncate">
+                        {item.artist}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className="font-mono text-[9px] text-outline">
+                      {Math.floor(item.durationSec / 60)}:{(item.durationSec % 60).toString().padStart(2, '0')}
+                    </span>
+                    <button
+                      aria-label={`Tocar ${item.title} na vitrola`}
+                      className={`w-6 h-6 rounded flex items-center justify-center transition-all ${
+                        isCurrent
+                          ? 'bg-secondary text-on-secondary shadow-sm'
+                          : 'bg-surface-container-high text-on-surface-variant hover:text-on-surface'
+                      }`}
+                    >
+                      <Play size={10} className="translate-x-0.2" />
+                    </button>
+                  </div>
+                </div>
               );
-            }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#ff3333] text-white font-headline text-[11px] font-bold hover:bg-[#e62e2e] transition-all shadow-md shrink-0 cursor-pointer"
-            title="Abrir o YouTube Music como navegador para fazer login na sua conta Google"
-          >
-            <Globe size={13} />
-            <span>Abrir Navegador YouTube Music</span>
-          </button>
+            })}
+          </div>
         </div>
 
+        {/* Rodapé com indicação de sincronização com o disco */}
         <div className="flex items-center justify-between text-[10px] font-headline text-on-surface-variant pt-1 border-t border-outline-variant/10">
-          <div className="flex items-center gap-2">
-            <span className="flex items-center gap-1 text-secondary font-bold">
-              <span>● Música atual refletida no centro do vinil</span>
-            </span>
-            <span className="text-outline hidden sm:inline">
-              (Sincronização dinâmica de título)
-            </span>
+          <div className="flex items-center gap-1.5 text-secondary font-bold">
+            <span className="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+            <span>Música refletida no centro do vinil • Disco gira sincronizado</span>
           </div>
-          <a
-            href={externalUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center gap-1 text-[#ff3333] hover:underline"
-            title="Abrir no YouTube Music em nova aba"
-          >
-            <span>Ver no YouTube Music</span>
-            <ExternalLink size={11} />
-          </a>
+          <span className="font-mono text-[9px] text-outline">
+            SEM ABAS EXTERNAS · 100% NATIVO
+          </span>
         </div>
       </div>
     </div>

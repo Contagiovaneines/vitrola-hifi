@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PlayerPlaybackState } from '../../types';
 
 interface TonearmProps {
@@ -7,6 +7,8 @@ interface TonearmProps {
 }
 
 export const Tonearm: React.FC<TonearmProps> = ({ playbackState, onCueToggle }) => {
+  const [imageError, setImageError] = useState(false);
+
   // Mechanical arm angles:
   // - empty (repouso no clamp de estacionamento): 0deg
   // - paused / buffering (elevado pelo cue lift): 12deg
@@ -28,6 +30,8 @@ export const Tonearm: React.FC<TonearmProps> = ({ playbackState, onCueToggle }) 
     isCueLifted = false;
     isLightOn = false;
   }
+
+  const tonearmSrc = './images/tonearm.png';
 
   return (
     <div
@@ -64,12 +68,56 @@ export const Tonearm: React.FC<TonearmProps> = ({ playbackState, onCueToggle }) 
           transform: `rotate(${rotationAngle}deg)`,
         }}
       >
-        <img
-          src="/images/tonearm.png"
-          alt="Braço fonocaptor analógico em S"
-          className="w-full h-full object-contain filter drop-shadow-[6px_16px_14px_rgba(0,0,0,0.85)] brightness-[1.03] contrast-[1.06]"
-          draggable={false}
-        />
+        {!imageError ? (
+          <img
+            src={tonearmSrc}
+            alt="Braço fonocaptor analógico em S"
+            onError={() => setImageError(true)}
+            className="w-full h-full object-contain filter drop-shadow-[6px_16px_14px_rgba(0,0,0,0.85)] brightness-[1.03] contrast-[1.06]"
+            draggable={false}
+          />
+        ) : (
+          /* High-Precision SVG Tonearm Vector Fallback */
+          <svg
+            viewBox="0 0 160 380"
+            className="w-full h-full filter drop-shadow-[6px_16px_14px_rgba(0,0,0,0.85)]"
+          >
+            <defs>
+              <linearGradient id="armBrass" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#f5d77f" />
+                <stop offset="50%" stopColor="#cda851" />
+                <stop offset="100%" stopColor="#8c6d23" />
+              </linearGradient>
+              <linearGradient id="armChrome" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#999" />
+                <stop offset="50%" stopColor="#f0f0f0" />
+                <stop offset="100%" stopColor="#666" />
+              </linearGradient>
+            </defs>
+            {/* Contrapeso */}
+            <rect x="92" y="30" width="22" height="32" rx="4" fill="url(#armBrass)" stroke="#333" strokeWidth="1" />
+            <line x1="92" y1="46" x2="114" y2="46" stroke="#222" strokeWidth="1.5" />
+            {/* Haste do braço em S */}
+            <path
+              d="M 103 62 C 103 140, 68 190, 72 260 C 75 300, 48 335, 26 358"
+              fill="none"
+              stroke="url(#armChrome)"
+              strokeWidth="5.5"
+              strokeLinecap="round"
+            />
+            {/* Headshell / Concha Portacápsula */}
+            <path
+              d="M 26 358 L 18 372 L 28 375 L 34 361 Z"
+              fill="#181512"
+              stroke="url(#armBrass)"
+              strokeWidth="1.5"
+            />
+            {/* Cápsula Fonocaptora */}
+            <rect x="19" y="371" width="8" height="6" rx="1" fill="#e0a96d" />
+            {/* Haste do Guia do Dedo */}
+            <path d="M 28 368 Q 36 366 35 360" fill="none" stroke="url(#armBrass)" strokeWidth="1.5" />
+          </svg>
+        )}
 
         {/* 4. Luz de Mira da Agulha / Glow Quente no Sulco de Vinil (Quando em Reprodução) */}
         <div
@@ -99,6 +147,13 @@ export const Tonearm: React.FC<TonearmProps> = ({ playbackState, onCueToggle }) 
           >
             {isCueLifted ? 'UP (12deg)' : 'DOWN (21deg)'}
           </span>
+        </div>
+        <div className="w-1.5 h-6 bg-surface-container-highest rounded-full p-0.5 flex flex-col justify-end">
+          <div
+            className={`w-full h-2 rounded-full bg-primary transition-all duration-300 ${
+              isCueLifted ? 'translate-y-[-12px] bg-secondary' : 'translate-y-0'
+            }`}
+          ></div>
         </div>
       </div>
     </div>
