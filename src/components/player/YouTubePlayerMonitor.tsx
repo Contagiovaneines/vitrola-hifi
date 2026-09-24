@@ -175,6 +175,35 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
           </button>
         </div>
 
+        {/* Banner do Navegador Integrado com Login Google */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 p-2.5 rounded-lg bg-surface-container-lowest border border-[#ff3333]/30">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#ff3333] animate-pulse"></span>
+            <div className="flex flex-col">
+              <span className="font-headline text-xs text-on-surface font-bold">
+                Navegador YouTube Music (Login Google)
+              </span>
+              <span className="text-[10px] text-on-surface-variant">
+                Acesse sua conta Google para ver suas playlists, músicas curtidas e biblioteca
+              </span>
+            </div>
+          </div>
+          <button
+            onClick={() => {
+              window.open(
+                'https://music.youtube.com',
+                'YouTubeMusicBrowser',
+                'width=1120,height=750,menubar=no,toolbar=no,location=yes,status=no'
+              );
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#ff3333] text-white font-headline text-[11px] font-bold hover:bg-[#e62e2e] transition-all shadow-md shrink-0 cursor-pointer"
+            title="Abrir o YouTube Music como navegador para fazer login na sua conta Google"
+          >
+            <ExternalLink size={12} />
+            <span>Abrir Navegador YouTube Music</span>
+          </button>
+        </div>
+
         <div className="flex items-center justify-between text-[10px] font-headline text-on-surface-variant pt-1 border-t border-outline-variant/10">
           <div className="flex items-center gap-2">
             <span className="flex items-center gap-1 text-secondary">
