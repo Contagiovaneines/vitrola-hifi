@@ -339,14 +339,34 @@ export const SourcesView: React.FC<SourcesViewProps> = ({ onPlayTrack }) => {
               Em estrita conformidade com os Termos de Serviço da API do YouTube (Seção III.A.1 e III.E), o Vitrola <strong>não extrai áudio isolado nem reproduz em segundo plano com vídeo oculto</strong>. A reprodução é realizada com o player IFrame oficial visível.
             </p>
 
-            {/* Reprodução Direta no Prato da Vitrola */}
+            {/* Reprodução Direta no Prato da Vitrola & Esclarecimento YouTube Data API vs YouTube Music */}
             <div className="p-space-sm bg-surface-container-lowest rounded-lg mt-space-sm border border-outline-variant/20 text-xs font-headline flex flex-col gap-2 text-on-surface-variant">
               <span className="font-display text-xs text-primary font-bold">
-                Tocar Música ou Playlist na Vitrola
+                API Oficial vs YouTube Music
               </span>
               <p className="text-[11px] text-on-surface-variant leading-relaxed">
-                Cole o link de qualquer música ou playlist do <strong>YouTube Music</strong> (<code className="text-secondary">music.youtube.com/...</code>) ou YouTube no campo abaixo e clique em <strong>Tocar na Vitrola</strong>. O console carrega o disco imediatamente no prato com o vinil girando e a música no centro!
+                O OAuth oficial do Google concede acesso a dados e playlists via <strong>YouTube Data API v3</strong>, mas a Google <strong>não oferece SDK público para streaming de áudio avulso do YouTube Music</strong> em apps de terceiros. Por restrições de segurança do Google (cabeçalhos <em>X-Frame-Options</em> e proteção contra clickjacking), telas de login não podem ser exibidas dentro de iframes.
               </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1">
+                <div className="p-2 rounded bg-surface-container border border-outline-variant/30 flex flex-col gap-1">
+                  <span className="font-bold text-[11px] text-primary">
+                    1. Playlists Pessoais no Vitrola:
+                  </span>
+                  <span className="text-[10px] text-on-surface-variant leading-normal">
+                    No YouTube Music, defina sua playlist como <em>"Não listada"</em> ou <em>"Pública"</em>, cole o link (<code className="text-secondary font-mono text-[9px]">music.youtube.com/playlist?list=...</code>) e toque diretamente na Vitrola.
+                  </span>
+                </div>
+
+                <div className="p-2 rounded bg-surface-container border border-outline-variant/30 flex flex-col gap-1">
+                  <span className="font-bold text-[11px] text-primary">
+                    2. Desktop App Companion:
+                  </span>
+                  <span className="text-[10px] text-on-surface-variant leading-normal">
+                    Execute <code className="text-secondary font-mono text-[9px]">iniciar-youtube-music.bat</code> na raiz do Vitrola para abrir o YouTube Music em janela dedicada com sua conta Google e alta fidelidade ativa.
+                  </span>
+                </div>
+              </div>
             </div>
 
             {/* Embedded Compliant Player Monitor Preview */}

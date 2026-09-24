@@ -9,6 +9,7 @@ import { PreampKnobs } from '../components/player/PreampKnobs';
 import { SourceSelector } from '../components/player/SourceSelector';
 import { NextTracks } from '../components/player/NextTracks';
 import { YouTubePlayerMonitor } from '../components/player/YouTubePlayerMonitor';
+import { AlbumJacketStand } from '../components/player/AlbumJacketStand';
 import { Maximize2 } from 'lucide-react';
 
 interface PlayerViewProps {
@@ -165,6 +166,11 @@ export const PlayerView: React.FC<PlayerViewProps> = ({
             rightDb={vuRightDb}
             isLive={playbackState === 'playing'}
           />
+
+          {/* STAND DE ENCARTE & CAPA ORIGINAL QUADRADA ÍNTEGRA */}
+          {currentTrack?.coverUri && (
+            <AlbumJacketStand currentTrack={currentTrack} />
+          )}
 
           {/* TACTILE ANALOG PREAMP POTENTIOMETERS */}
           <PreampKnobs

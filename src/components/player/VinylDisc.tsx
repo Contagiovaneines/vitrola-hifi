@@ -61,7 +61,7 @@ export const VinylDisc: React.FC<VinylDiscProps> = ({
 
               {/* Center Album Label */}
               <div
-                className="relative z-10 w-[42%] aspect-square rounded-full bg-gradient-to-tr from-[#1b1714] via-[#2d221a] to-[#120f0d] shadow-[0_4px_16px_rgba(0,0,0,0.95),inset_0_1px_2px_rgba(255,255,255,0.25)] flex flex-col items-center justify-center p-2.5 text-center border-[3px] border-[#a57f43]"
+                className="relative z-10 w-[44%] aspect-square rounded-full bg-gradient-to-tr from-[#1b1714] via-[#2d221a] to-[#120f0d] shadow-[0_4px_16px_rgba(0,0,0,0.95),inset_0_1px_2px_rgba(255,255,255,0.25)] flex flex-col items-center justify-center p-2 text-center border-[3px] border-[#a57f43] overflow-hidden"
                 style={{
                   backgroundColor: currentTrack?.source === 'local' ? undefined : '#221d19'
                 }}
@@ -71,31 +71,39 @@ export const VinylDisc: React.FC<VinylDiscProps> = ({
                   {currentTrack?.labelInfo?.recordLabel || 'ORIGINAL MASTER RECORDING'}
                 </span>
 
+                {/* Square Album Cover Frame in Center Label (when available) */}
+                {currentTrack?.coverUri ? (
+                  <div className="relative w-14 h-14 sm:w-16 sm:h-16 aspect-square rounded overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.9)] border border-[#ffddbb]/40 my-0.5 bg-black/80 shrink-0">
+                    <img
+                      src={currentTrack.coverUri}
+                      alt={currentTrack.album || currentTrack.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/15 pointer-events-none" />
+                  </div>
+                ) : null}
+
                 {/* THE MUSIC / TRACK TITLE PROMINENTLY IN THE CENTER */}
-                <span className="font-display text-[12px] sm:text-[13px] text-primary-fixed font-black tracking-wide leading-tight drop-shadow-md truncate max-w-[94%] my-0.5">
+                <span className="font-display text-[11px] sm:text-[12px] text-primary-fixed font-black tracking-wide leading-tight drop-shadow-md truncate max-w-[94%] my-0.5">
                   {currentTrack?.title || 'FAIXA EM REPRODUÇÃO'}
                 </span>
 
                 {/* ARTIST & ALBUM */}
-                <span className="font-headline text-[8px] sm:text-[9px] text-tertiary-fixed font-bold tracking-wider uppercase truncate max-w-[90%] -mt-0.5">
+                <span className="font-headline text-[8px] text-tertiary-fixed font-bold tracking-wider uppercase truncate max-w-[90%] -mt-0.5">
                   {currentTrack?.artist || 'ARTISTA DESCONHECIDO'}
                 </span>
-                {currentTrack?.album && (
+                {currentTrack?.album && !currentTrack?.coverUri && (
                   <span className="font-mono text-[7px] text-on-surface-variant/80 truncate max-w-[88%] italic">
                     {currentTrack.album}
                   </span>
                 )}
 
-                <div className="my-0.5 px-2 py-[1px] bg-surface-container-lowest/80 rounded font-mono text-[8px] text-secondary font-bold border border-outline-variant/30">
+                <div className="my-0.5 px-2 py-[1px] bg-surface-container-lowest/80 rounded font-mono text-[7px] text-secondary font-bold border border-outline-variant/30">
                   LADO 1 · {speed} RPM
                 </div>
 
-                <span className="font-mono text-[7px] text-on-surface-variant/70 tracking-tighter truncate max-w-[90%]">
-                  {currentTrack?.labelInfo?.catalogNumber || 'MATRIZ ANALÓGICA DIRECT CUT'}
-                </span>
-
                 {/* Metal Center Spindle Pin */}
-                <div className="absolute inset-0 m-auto w-4 h-4 rounded-full bg-gradient-to-br from-on-surface via-outline to-surface-container-lowest shadow-[0_2px_6px_rgba(0,0,0,0.9)] flex items-center justify-center">
+                <div className="absolute inset-0 m-auto w-4 h-4 rounded-full bg-gradient-to-br from-on-surface via-outline to-surface-container-lowest shadow-[0_2px_6px_rgba(0,0,0,0.9)] flex items-center justify-center pointer-events-none">
                   <div className="w-1.5 h-1.5 rounded-full bg-surface-bright"></div>
                 </div>
               </div>

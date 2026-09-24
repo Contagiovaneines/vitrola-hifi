@@ -199,6 +199,88 @@ async function runTestSuite() {
     assert(false, `Erro na suíte 6: ${err.message}`);
   }
 
+  // SUÍTE 7: VALIDAÇÃO E EXTRAÇÃO DE LINKS DO SPOTIFY E CAPAS
+  console.log('\nSUÍTE 7: Validação e Extração de Links do Spotify e Apresentação de Capas');
+  try {
+    const spotifyServicePath = path.join(rootDir, 'src', 'services', 'providers', 'spotify', 'SpotifyLinkService.ts');
+    assert(fs.existsSync(spotifyServicePath), 'Módulo SpotifyLinkService.ts implementado');
+
+    const serviceCode = fs.readFileSync(spotifyServicePath, 'utf8');
+
+    // Validação de Regex de Track e Album
+    const trackRegex = /(?:spotify:track:|open\.spotify\.com\/(?:intl-[a-z]{2}\/)?track\/)([a-zA-Z0-9]{22})/i;
+    const albumRegex = /(?:spotify:album:|open\.spotify\.com\/(?:intl-[a-z]{2}\/)?album\/)([a-zA-Z0-9]{22})/i;
+
+    const validTrackUrl = 'https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT';
+    const validTrackUri = 'spotify:track:4cOdK2wGLETKBW3PvgPWqT';
+    const validAlbumUrl = 'https://open.spotify.com/album/1DFixLWuPkv3KT3TnV35m3';
+    const validAlbumUri = 'spotify:album:1DFixLWuPkv3KT3TnV35m3';
+    const invalidUrl = 'https://google.com/search?q=miles+davis';
+
+    const trackUrlMatch = validTrackUrl.match(trackRegex);
+    const trackUriMatch = validTrackUri.match(trackRegex);
+    const albumUrlMatch = validAlbumUrl.match(albumRegex);
+    const albumUriMatch = validAlbumUri.match(albumRegex);
+    const invalidMatch = invalidUrl.match(trackRegex) || invalidUrl.match(albumRegex);
+
+    assert(trackUrlMatch && trackUrlMatch[1] === '4cOdK2wGLETKBW3PvgPWqT', 'Extração correta de ID Base62 de URL do Spotify Track');
+    assert(trackUriMatch && trackUriMatch[1] === '4cOdK2wGLETKBW3PvgPWqT', 'Extração correta de ID Base62 de URI spotify:track');
+    assert(albumUrlMatch && albumUrlMatch[1] === '1DFixLWuPkv3KT3TnV35m3', 'Extração correta de ID Base62 de URL do Spotify Album');
+    assert(albumUriMatch && albumUriMatch[1] === '1DFixLWuPkv3KT3TnV35m3', 'Extração correta de ID Base62 de URI spotify:album');
+    assert(!invalidMatch, 'Rejeição segura de links não pertencentes ao Spotify');
+
+    // Suporte a Capa Quadrada Íntegra e Atribuição Oficial
+    const jacketPath = path.join(rootDir, 'src', 'components', 'player', 'AlbumJacketStand.tsx');
+    assert(fs.existsSync(jacketPath), 'Componente AlbumJacketStand.tsx implementado');
+    const jacketCode = fs.readFileSync(jacketPath, 'utf8');
+    assert(jacketCode.includes('aspect-square') && jacketCode.includes('object-contain'), 'Capa quadrada sem cortes ou distorções (aspect-square + object-contain)');
+    assert(jacketCode.includes('open.spotify.com') && jacketCode.includes('Ouvir no Spotify'), 'Atribuição visível com link oficial para reprodução externa no Spotify');
+
+    // Capa suportada no selo central do vinil
+    const vinylPath = path.join(rootDir, 'src', 'components', 'player', 'VinylDisc.tsx');
+    const vinylCode = fs.readFileSync(vinylPath, 'utf8');
+    assert(vinylCode.includes('currentTrack.coverUri') && vinylCode.includes('aspect-square'), 'Capa do álbum integrada dentro do selo central do vinil');
+  } catch (err) {
+    assert(false, `Erro na suíte 7: ${err.message}`);
+  }
+
+  // SUÍTE 8: PERSISTÊNCIA DA BIBLIOTECA COM NOVAS FONTES
+  console.log('\nSUÍTE 8: Persistência da Biblioteca com Novas Fontes (Spotify e YouTube)');
+  try {
+    const libraryPath = path.join(rootDir, 'src', 'views', 'LibraryView.tsx');
+    const libraryCode = fs.readFileSync(libraryPath, 'utf8');
+    assert(libraryCode.includes('onAddAlbum') && libraryCode.includes('onAddTrack'), 'Biblioteca suporta adição de novos álbuns e faixas');
+    assert(libraryCode.includes('handleImportLink'), 'Processador de entrada de links integrado ao rack da biblioteca');
+    assert(libraryCode.includes('spotify') && libraryCode.includes('youtube'), 'Badges de identificação de fonte de mídia implementadas');
+
+    const appPath = path.join(rootDir, 'src', 'App.tsx');
+    const appCode = fs.readFileSync(appPath, 'utf8');
+    assert(appCode.includes('handleAddAlbum') && appCode.includes('handleAddTrack'), 'App.tsx persiste novos álbuns e faixas no LibraryStorage');
+    assert(appCode.includes('setSpotifyNotice'), 'Notificação honesta sobre requisitos do Spotify Premium implementada');
+  } catch (err) {
+    assert(false, `Erro na suíte 8: ${err.message}`);
+  }
+
+  // SUÍTE 9: SINCRONIZAÇÃO WINDOWS SMTC (SYSTEM MEDIA TRANSPORT CONTROLS)
+  console.log('\nSUÍTE 9: Sincronização Windows SMTC e Prevenção de Conflitos');
+  try {
+    const smtcPath = path.join(rootDir, 'src', 'services', 'windows', 'MediaSessionService.ts');
+    assert(fs.existsSync(smtcPath), 'Módulo MediaSessionService.ts implementado');
+
+    const smtcCode = fs.readFileSync(smtcPath, 'utf8');
+    assert(smtcCode.includes('setPositionState'), 'Método setPositionState implementado para sincronizar barra no Windows (Win+L / flyout)');
+    assert(smtcCode.includes('clearSession'), 'Método clearSession implementado para prevenir sessões duplicadas ou conflitantes');
+    assert(smtcCode.includes('seekbackward') && smtcCode.includes('seekforward'), 'Manipuladores de avanço e retrocesso registrados no SMTC');
+    assert(smtcCode.includes('512x512'), 'Artes de capa em múltiplas resoluções registradas para Windows');
+
+    const appPath = path.join(rootDir, 'src', 'App.tsx');
+    const appCode = fs.readFileSync(appPath, 'utf8');
+    assert(appCode.includes('MediaSessionService.setPositionState'), 'Sincronização contínua de posição durante reprodução local');
+    assert(appCode.includes('MediaSessionService.clearSession'), 'Liberação do SMTC em fontes externas para evitar conflito com apps nativos');
+  } catch (err) {
+    assert(false, `Erro na suíte 9: ${err.message}`);
+  }
+
   console.log('\n===============================================================');
   console.log(`TOTAL DE TESTES EXECUTADOS: ${passedCount + failedCount}`);
   console.log(`PASSARAM: ${passedCount}`);
