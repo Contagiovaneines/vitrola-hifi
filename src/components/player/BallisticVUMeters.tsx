@@ -11,6 +11,10 @@ export const BallisticVUMeters: React.FC<BallisticVUMetersProps> = ({
   rightDb = -20,
   isLive = false
 }) => {
+  const clamp = (val: number, min: number, max: number): number => {
+    return Math.max(min, Math.min(max, val));
+  };
+
   // Converte dB (-20dB a +3dB) em ângulo de rotação (-28° a +18°)
   const dbToAngle = (db: number): number => {
     if (db <= -24) return -26;
@@ -19,11 +23,8 @@ export const BallisticVUMeters: React.FC<BallisticVUMetersProps> = ({
     // -20 dB -> -22 deg
     // 0 dB   -> 0 deg
     // +3 dB  -> +16 deg
-    if (db <= 0) {
-      return -22 + ((db + 20) / 20) * 22;
-    } else {
-      return (db / 3) * 16;
-    }
+    const raw = db <= 0 ? -22 + ((db + 20) / 20) * 22 : (db / 3) * 16;
+    return clamp(raw, -26, 18);
   };
 
   const angleL = isLive ? dbToAngle(leftDb) : -26;

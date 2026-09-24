@@ -39,6 +39,18 @@ export class LibraryStorage {
     }
   }
 
+  public static addTrack(track: Track): void {
+    const tracks = this.loadTracks();
+    const updated = [track, ...tracks.filter((t) => t.id !== track.id)];
+    this.saveTracks(updated);
+  }
+
+  public static removeTrack(trackId: string): void {
+    const tracks = this.loadTracks();
+    const updated = tracks.filter((t) => t.id !== trackId);
+    this.saveTracks(updated);
+  }
+
   public static loadAlbums(): Album[] {
     try {
       const data = localStorage.getItem(STORAGE_KEYS.ALBUMS);
