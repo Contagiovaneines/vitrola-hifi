@@ -79,7 +79,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </span>
           </div>
           <span className="font-mono text-[11px] text-primary font-bold">
-            24b / 96k
+            32b-Float
           </span>
         </div>
 

@@ -111,7 +111,7 @@ export const SourcesView: React.FC<SourcesViewProps> = ({ onPlayTrack }) => {
               <span>Autônomo &amp; Sem Dependências Externas</span>
             </span>
             <span className="font-mono text-[10px] text-outline">
-              Bit-Perfect WASAPI
+              WASAPI / Web Audio API
             </span>
           </div>
         </div>

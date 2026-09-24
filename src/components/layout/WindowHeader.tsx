@@ -81,7 +81,7 @@ export const WindowHeader: React.FC<WindowHeaderProps> = ({
             }`}
           ></span>
           <span className="font-mono text-[10px] text-secondary tracking-widest uppercase font-bold">
-            DSP 24b/96k
+            DSP 32b-Float
           </span>
         </div>
 

@@ -333,7 +333,9 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
                     </span>
                     <div className="flex items-center gap-1 mt-1">
                       <span className="px-1.5 py-0.2 rounded bg-surface-container-high text-primary font-mono text-[9px] border border-outline-variant/20 font-bold">
-                        FLAC 192k/24b
+                        {selectedAlbum.tracks[0]?.format
+                          ? `${selectedAlbum.tracks[0].format.codec} ${selectedAlbum.tracks[0].format.sampleRate / 1000}k`
+                          : selectedAlbum.isHiRes ? 'FLAC Hi-Res' : 'Stereo PCM'}
                       </span>
                       <span className="font-mono text-[9px] text-outline">
                         DR 14dB

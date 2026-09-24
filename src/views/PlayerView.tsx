@@ -82,8 +82,8 @@ export const PlayerView: React.FC<PlayerViewProps> = ({
             <span className="text-outline-variant font-mono text-[10px]">/</span>
             <span className="font-mono text-xs text-on-surface-variant font-bold">
               {currentTrack?.format
-                ? `${currentTrack.format.codec} ${currentTrack.format.sampleRate / 1000}kHz · ${currentTrack.format.bitDepth || 24}-bit Direct Master`
-                : 'FLAC 192kHz · 24-bit Direct Master'}
+                ? `${currentTrack.format.codec} ${currentTrack.format.sampleRate / 1000}kHz · ${currentTrack.format.bitDepth || 16}-bit`
+                : 'Aguardando seleção de áudio'}
             </span>
           </div>
 

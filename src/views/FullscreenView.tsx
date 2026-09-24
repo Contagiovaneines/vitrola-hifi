@@ -52,11 +52,17 @@ export const FullscreenView: React.FC<FullscreenViewProps> = ({
           </div>
 
           <div className="hidden lg:flex items-center gap-2 font-mono text-[10px] text-on-surface-variant">
-            <span className="text-primary font-bold">FLAC DIRECT MASTER</span>
+            <span className="text-primary font-bold">
+              {currentTrack?.format?.codec || 'PCM STEREO'}
+            </span>
             <span>•</span>
-            <span>192kHz / 24-bit</span>
+            <span>
+              {currentTrack?.format?.sampleRate
+                ? `${currentTrack.format.sampleRate / 1000}kHz / ${currentTrack.format.bitDepth || 16}-bit`
+                : 'Web Audio DSP 32b-Float'}
+            </span>
             <span>•</span>
-            <span className="text-secondary font-bold">BIT-PERFECT DSD ENGINE</span>
+            <span className="text-secondary font-bold">VALVULADO 12AX7 STAGE</span>
           </div>
         </div>
 

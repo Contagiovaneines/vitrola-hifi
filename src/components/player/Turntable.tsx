@@ -169,7 +169,7 @@ export const Turntable: React.FC<TurntableProps> = ({
               Signal Processing
             </span>
             <span className="font-mono text-[10px] text-primary font-bold">
-              Bit-Perfect RIAA Curve
+              DSP EQ &amp; Tube Saturation
             </span>
           </div>
           <div className="w-9 h-9 rounded-lg bg-surface-container-lowest flex items-center justify-center shadow-inner border border-outline-variant/30 text-secondary">
