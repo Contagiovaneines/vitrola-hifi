@@ -339,11 +339,36 @@ export const SourcesView: React.FC<SourcesViewProps> = ({ onPlayTrack }) => {
               Em estrita conformidade com os Termos de Serviço da API do YouTube (Seção III.A.1 e III.E), o Vitrola <strong>não extrai áudio isolado nem reproduz em segundo plano com vídeo oculto</strong>. A reprodução é realizada com o player IFrame oficial visível.
             </p>
 
-            <div className="p-space-xs bg-surface-container-lowest rounded-lg mt-space-sm border border-outline-variant/20 text-xs font-headline flex items-center gap-2 text-on-surface-variant">
-              <AlertCircle size={15} className="text-[#ff3333] shrink-0" />
-              <span className="text-[10px]">
-                <strong>YouTube Music:</strong> Indisponível para reprodutores de terceiros (não há API pública aberta de áudio).
-              </span>
+            {/* YouTube Music Integration & Companion Options */}
+            <div className="p-space-sm bg-surface-container-lowest rounded-lg mt-space-sm border border-outline-variant/20 text-xs font-headline flex flex-col gap-2.5 text-on-surface-variant">
+              <div className="flex items-center justify-between">
+                <span className="font-display text-xs text-primary font-bold">
+                  Integração com YouTube Music &amp; Conta Google
+                </span>
+                <button
+                  onClick={() => window.open('https://music.youtube.com', '_blank', 'width=1080,height=720,menubar=no,toolbar=no')}
+                  className="px-3 py-1 rounded bg-[#ff3333] text-white font-headline text-[11px] font-bold hover:bg-[#ff4d4d] transition-colors flex items-center gap-1.5 shadow-sm"
+                  title="Abrir YouTube Music em janela dedicada para fazer login na sua conta Google"
+                >
+                  <ExternalLink size={12} />
+                  <span>Abrir YouTube Music Logado</span>
+                </button>
+              </div>
+
+              <p className="text-[11px] text-on-surface-variant leading-relaxed">
+                Por restrições de segurança do Google (cabeçalhos <em>X-Frame-Options</em> e proteção contra clickjacking), a página de login do Google não pode ser renderizada dentro de um iframe. Você tem duas formas diretas de ouvir suas músicas:
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px] text-outline">
+                <div className="p-2 rounded bg-surface-container border border-outline-variant/20">
+                  <strong className="text-on-surface block mb-1">1. Playlists Pessoais no Vitrola:</strong>
+                  No YouTube Music, defina sua playlist como <em>"Não listada"</em> ou <em>"Pública"</em>, copie o link (<code className="text-secondary">music.youtube.com/playlist?list=...</code>) e cole no monitor abaixo para tocar em sequência no console.
+                </div>
+                <div className="p-2 rounded bg-surface-container border border-outline-variant/20">
+                  <strong className="text-on-surface block mb-1">2. Desktop App Companion:</strong>
+                  Execute <code className="text-secondary">iniciar-youtube-music.bat</code> na raiz do Vitrola para abrir o YouTube Music em janela dedicada com sua conta Google e alta fidelidade ativa.
+                </div>
+              </div>
             </div>
 
             {/* Embedded Compliant Player Monitor Preview */}
