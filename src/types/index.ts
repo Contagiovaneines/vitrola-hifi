@@ -72,8 +72,25 @@ export interface ProviderCapabilities {
   restrictionsNotice?: string;
 }
 
+export interface PlaybackProvider {
+  readonly id: AudioSourceType;
+  readonly name: string;
+  readonly capabilities: ProviderCapabilities;
+
+  initialize(): Promise<void>;
+  loadTrack(track: Track, fileBlob?: Blob): Promise<void>;
+  play(): Promise<void>;
+  pause(): Promise<void>;
+  seek(positionSec: number): Promise<void>;
+  setVolume(volume: number): void;
+  setSpeedPitch(rpm: 33 | 45, pitchRatio?: number): void;
+  stop(): Promise<void>;
+  destroy(): Promise<void>;
+}
+
 export type PlayerPlaybackState = 'empty' | 'playing' | 'paused' | 'buffering' | 'ended' | 'error';
 
 export type NavigationTab = 'inicio' | 'biblioteca' | 'playlists' | 'fontes' | 'aparencia';
 
 export type ThemePreset = 'classica' | 'pretodourado' | 'neonmoderno';
+

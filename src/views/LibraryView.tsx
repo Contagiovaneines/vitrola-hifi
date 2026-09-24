@@ -4,13 +4,15 @@ import { Search, Grid, LayoutGrid, List, Play, Disc, Layers } from 'lucide-react
 
 interface LibraryViewProps {
   albums: Album[];
-  onPlayTrack: (track: Track) => void;
+  onPlayTrack: (track: Track, fileBlob?: Blob) => void;
   onInspectAlbum?: (album: Album) => void;
+  onImportFiles?: (files: FileList) => void;
 }
 
 export const LibraryView: React.FC<LibraryViewProps> = ({
   albums,
   onPlayTrack,
+  onImportFiles,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'shelf' | 'crate' | 'list'>('shelf');
@@ -18,6 +20,12 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
   const [selectedAlbum, setSelectedAlbum] = useState<Album | null>(
     albums.length > 0 ? albums[0] : null
   );
+
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0 && onImportFiles) {
+      onImportFiles(e.target.files);
+    }
+  };
 
   // Filtro
   const filteredAlbums = albums.filter((alb) => {
@@ -51,40 +59,53 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
           </div>
 
           {/* View Selector Buttons */}
-          <div className="flex items-center bg-surface-container-lowest p-1 rounded-lg shadow-[inset_0_2px_4px_rgba(0,0,0,0.9)] border border-outline-variant/30">
-            <button
-              onClick={() => setViewMode('shelf')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded font-headline text-xs font-semibold transition-all ${
-                viewMode === 'shelf'
-                  ? 'bg-surface-container-high text-primary shadow-[0_2px_6px_rgba(0,0,0,0.6)]'
-                  : 'text-outline hover:text-on-surface'
-              }`}
-            >
-              <LayoutGrid size={15} />
-              <span>Estante</span>
-            </button>
-            <button
-              onClick={() => setViewMode('crate')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded font-headline text-xs font-semibold transition-all ${
-                viewMode === 'crate'
-                  ? 'bg-surface-container-high text-primary shadow-[0_2px_6px_rgba(0,0,0,0.6)]'
-                  : 'text-outline hover:text-on-surface'
-              }`}
-            >
-              <Disc size={15} />
-              <span>Caixote (Digging)</span>
-            </button>
-            <button
-              onClick={() => setViewMode('list')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded font-headline text-xs font-semibold transition-all ${
-                viewMode === 'list'
-                  ? 'bg-surface-container-high text-primary shadow-[0_2px_6px_rgba(0,0,0,0.6)]'
-                  : 'text-outline hover:text-on-surface'
-              }`}
-            >
-              <List size={15} />
-              <span>Prateleira</span>
-            </button>
+          <div className="flex items-center gap-2">
+            <label className="flex items-center gap-1.5 px-3 py-1.5 rounded font-headline text-xs font-bold bg-primary text-on-primary shadow-md hover:bg-primary-fixed transition-all cursor-pointer">
+              <span>+ Importar Músicas</span>
+              <input
+                type="file"
+                multiple
+                accept=".mp3,.flac,.wav,.ogg,.m4a,.aac,audio/*"
+                className="hidden"
+                onChange={handleFileInput}
+              />
+            </label>
+
+            <div className="flex items-center bg-surface-container-lowest p-1 rounded-lg shadow-[inset_0_2px_4px_rgba(0,0,0,0.9)] border border-outline-variant/30">
+              <button
+                onClick={() => setViewMode('shelf')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded font-headline text-xs font-semibold transition-all ${
+                  viewMode === 'shelf'
+                    ? 'bg-surface-container-high text-primary shadow-[0_2px_6px_rgba(0,0,0,0.6)]'
+                    : 'text-outline hover:text-on-surface'
+                }`}
+              >
+                <LayoutGrid size={15} />
+                <span>Estante</span>
+              </button>
+              <button
+                onClick={() => setViewMode('crate')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded font-headline text-xs font-semibold transition-all ${
+                  viewMode === 'crate'
+                    ? 'bg-surface-container-high text-primary shadow-[0_2px_6px_rgba(0,0,0,0.6)]'
+                    : 'text-outline hover:text-on-surface'
+                }`}
+              >
+                <Disc size={15} />
+                <span>Caixote (Digging)</span>
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded font-headline text-xs font-semibold transition-all ${
+                  viewMode === 'list'
+                    ? 'bg-surface-container-high text-primary shadow-[0_2px_6px_rgba(0,0,0,0.6)]'
+                    : 'text-outline hover:text-on-surface'
+                }`}
+              >
+                <List size={15} />
+                <span>Prateleira</span>
+              </button>
+            </div>
           </div>
         </div>
 

@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   NavigationTab,
   PlayerPlaybackState,
   Track,
   ThemePreset,
   AudioSourceType,
+  Album,
+  Playlist,
 } from './types';
 import { WindowHeader } from './components/layout/WindowHeader';
 import { Sidebar } from './components/layout/Sidebar';
@@ -15,7 +17,11 @@ import { SourcesView } from './views/SourcesView';
 import { CustomizationView } from './views/CustomizationView';
 import { FullscreenView } from './views/FullscreenView';
 import { MiniPlayerWidget } from './components/widget/MiniPlayerWidget';
-import { initialAlbums, initialPlaylists, initialTracks } from './data/mockData';
+import { LibraryStorage } from './services/library/LibraryStorage';
+import { AudioTagReader } from './services/library/AudioTagReader';
+import { LocalPlaybackProvider } from './services/providers/LocalPlaybackProvider';
+import { AudioEngine } from './services/audio/AudioEngine';
+import { MediaSessionService } from './services/windows/MediaSessionService';
 
 export const App: React.FC = () => {
   // Navigation
@@ -23,27 +29,37 @@ export const App: React.FC = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isMiniWidgetOpen, setIsMiniWidgetOpen] = useState(false);
 
+  // Stored Library
+  const [tracks, setTracks] = useState<Track[]>(() => LibraryStorage.loadTracks());
+  const [albums, setAlbums] = useState<Album[]>(() => LibraryStorage.loadAlbums());
+  const [playlists, setPlaylists] = useState<Playlist[]>(() => LibraryStorage.loadPlaylists());
+
+  // Stored Settings
+  const savedSettings = LibraryStorage.loadSettings();
+
   // Playback state
-  const [playbackState, setPlaybackState] = useState<PlayerPlaybackState>('playing');
-  const [speed, setSpeed] = useState<33 | 45>(33);
-  const [currentTrack, setCurrentTrack] = useState<Track | null>(initialTracks[0]);
-  const [currentTimeSec, setCurrentTimeSec] = useState<number>(222); // 03:42
-  const [durationSec, setDurationSec] = useState<number>(562); // 09:22
-  const [queue, setQueue] = useState<Track[]>(initialTracks.slice(1));
+  const [playbackState, setPlaybackState] = useState<PlayerPlaybackState>('empty');
+  const [speed, setSpeed] = useState<33 | 45>(savedSettings.speed || 33);
+  const [currentTrack, setCurrentTrack] = useState<Track | null>(tracks[0] || null);
+  const [currentTimeSec, setCurrentTimeSec] = useState<number>(0);
+  const [durationSec, setDurationSec] = useState<number>(tracks[0]?.durationSec || 0);
+  const [queue, setQueue] = useState<Track[]>(tracks.slice(1));
   const [currentSource, setSource] = useState<AudioSourceType>('local');
 
   // Preamp & Audio Knobs
-  const [bassDb, setBassDb] = useState(2.0);
-  const [trebleDb, setTrebleDb] = useState(-1.0);
-  const [tubeDrive, setTubeDrive] = useState(4.5);
-  const [volume, setVolume] = useState(78);
+  const [bassDb, setBassDb] = useState(savedSettings.bassDb ?? 2.0);
+  const [trebleDb, setTrebleDb] = useState(savedSettings.trebleDb ?? -1.0);
+  const [tubeDrive, setTubeDrive] = useState(savedSettings.tubeDrive ?? 4.5);
+  const [volume, setVolume] = useState(savedSettings.volume ?? 78);
 
   // VUs
-  const [vuLeftDb, setVuLeftDb] = useState(-4.2);
-  const [vuRightDb, setVuRightDb] = useState(-3.8);
+  const [vuLeftDb, setVuLeftDb] = useState(-40);
+  const [vuRightDb, setVuRightDb] = useState(-40);
 
   // Themes & Materials
-  const [currentTheme, setCurrentTheme] = useState<ThemePreset>('classica');
+  const [currentTheme, setCurrentTheme] = useState<ThemePreset>(
+    (savedSettings.theme as ThemePreset) || 'classica'
+  );
   const [selectedWood, setSelectedWood] = useState('mogno');
   const [selectedMetal, setSelectedMetal] = useState('latao');
   const [selectedCloth, setSelectedCloth] = useState('tweed');
@@ -51,64 +67,172 @@ export const App: React.FC = () => {
   const [colorTempK, setColorTempK] = useState(2700);
   const [isVuBacklightOn, setIsVuBacklightOn] = useState(true);
 
-  // Apply theme to document element
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', currentTheme);
-  }, [currentTheme]);
+  // Local Playback Provider reference
+  const providerRef = useRef<LocalPlaybackProvider | null>(null);
+  const fileBlobsRef = useRef<Map<string, Blob>>(new Map());
 
-  // Escape key exits fullscreen
+  // 1. Initialize LocalPlaybackProvider
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isFullscreen) {
-        setIsFullscreen(false);
+    const provider = new LocalPlaybackProvider({
+      onStateChange: (state) => {
+        setPlaybackState(state);
+        MediaSessionService.setPlaybackState(state === 'playing' ? 'playing' : 'paused');
+      },
+      onTimeUpdate: (cur, dur) => {
+        setCurrentTimeSec(cur);
+        if (dur > 0) setDurationSec(dur);
+      },
+      onTrackEnded: () => {
+        handleNextTrack();
+      },
+      onError: (msg) => {
+        console.error('Erro de reprodução de áudio:', msg);
       }
-      if (e.code === 'Space' && e.target === document.body) {
-        e.preventDefault();
-        setPlaybackState((prev) => (prev === 'playing' ? 'paused' : 'playing'));
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isFullscreen]);
+    });
 
-  // Simulated ticker for playing progress & organic VU needle ballistics
-  useEffect(() => {
-    if (playbackState !== 'playing') {
-      setVuLeftDb(-26);
-      setVuRightDb(-26);
-      return;
+    providerRef.current = provider;
+    provider.setVolume(volume / 100);
+    provider.setSpeedPitch(speed);
+
+    // Initial default track load
+    if (currentTrack) {
+      provider.loadTrack(currentTrack);
+      MediaSessionService.updateMetadata(currentTrack);
     }
 
-    const interval = setInterval(() => {
-      // Advance playback time
-      setCurrentTimeSec((prev) => {
-        if (durationSec > 0 && prev >= durationSec) {
-          return 0;
-        }
-        return prev + 1;
-      });
+    // Windows SMTC Setup
+    MediaSessionService.setupActionHandlers({
+      onPlay: () => providerRef.current?.play(),
+      onPause: () => providerRef.current?.pause(),
+      onPrev: () => handlePrevTrack(),
+      onNext: () => handleNextTrack(),
+      onSeek: (pos) => providerRef.current?.seek(pos),
+    });
 
-      // Organic ballistics needle movement
-      const jitterL = -6 + Math.random() * 5.5;
-      const jitterR = -5.5 + Math.random() * 5.2;
-      setVuLeftDb(jitterL);
-      setVuRightDb(jitterR);
-    }, 1000);
+    return () => {
+      provider.destroy();
+    };
+  }, []);
 
-    return () => clearInterval(interval);
-  }, [playbackState, durationSec]);
+  // 2. Real-time PCM VU Meter Loop
+  useEffect(() => {
+    let animId: number;
+
+    const updateVus = () => {
+      if (playbackState === 'playing') {
+        const levels = AudioEngine.getInstance().getVuMeterLevels();
+        setVuLeftDb(levels.leftDb);
+        setVuRightDb(levels.rightDb);
+      } else {
+        setVuLeftDb(-40);
+        setVuRightDb(-40);
+      }
+      animId = requestAnimationFrame(updateVus);
+    };
+
+    animId = requestAnimationFrame(updateVus);
+    return () => cancelAnimationFrame(animId);
+  }, [playbackState]);
+
+  // 3. Apply theme to document
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    LibraryStorage.saveSettings({ theme: currentTheme });
+  }, [currentTheme]);
+
+  // 4. Update Engine parameters when knobs change
+  useEffect(() => {
+    const engine = AudioEngine.getInstance();
+    engine.setBassGain(bassDb);
+    LibraryStorage.saveSettings({ bassDb });
+  }, [bassDb]);
+
+  useEffect(() => {
+    const engine = AudioEngine.getInstance();
+    engine.setTrebleGain(trebleDb);
+    LibraryStorage.saveSettings({ trebleDb });
+  }, [trebleDb]);
+
+  useEffect(() => {
+    const engine = AudioEngine.getInstance();
+    engine.setTubeDrive(tubeDrive);
+    LibraryStorage.saveSettings({ tubeDrive });
+  }, [tubeDrive]);
+
+  useEffect(() => {
+    if (providerRef.current) {
+      providerRef.current.setVolume(volume / 100);
+    }
+    LibraryStorage.saveSettings({ volume });
+  }, [volume]);
+
+  useEffect(() => {
+    if (providerRef.current) {
+      providerRef.current.setSpeedPitch(speed);
+    }
+    LibraryStorage.saveSettings({ speed });
+  }, [speed]);
+
+  // 5. Global Keyboard Shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+
+      if (e.key === 'Escape' && isFullscreen) {
+        setIsFullscreen(false);
+      } else if (e.code === 'Space') {
+        e.preventDefault();
+        handlePlayToggle();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        handleSeek(currentTimeSec + 5);
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        handleSeek(currentTimeSec - 5);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setVolume((v) => Math.min(100, v + 5));
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setVolume((v) => Math.max(0, v - 5));
+      } else if (e.key.toLowerCase() === 'm') {
+        setVolume((v) => (v > 0 ? 0 : 75));
+      } else if (e.key === '1') {
+        setCurrentTab('inicio');
+      } else if (e.key === '2') {
+        setCurrentTab('biblioteca');
+      } else if (e.key === '3') {
+        setCurrentTab('playlists');
+      } else if (e.key === '4') {
+        setCurrentTab('fontes');
+      } else if (e.key === '5') {
+        setCurrentTab('aparencia');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isFullscreen, currentTimeSec, playbackState]);
 
   // Handlers
   const handlePlayToggle = () => {
+    if (!providerRef.current) return;
     if (playbackState === 'playing') {
-      setPlaybackState('paused');
+      providerRef.current.pause();
     } else {
-      setPlaybackState('playing');
+      providerRef.current.play();
     }
   };
 
   const handlePrevTrack = () => {
-    setCurrentTimeSec(0);
+    if (currentTimeSec > 3) {
+      providerRef.current?.seek(0);
+    } else {
+      // Volta para faixa anterior se houver
+      providerRef.current?.seek(0);
+    }
   };
 
   const handleNextTrack = () => {
@@ -118,31 +242,98 @@ export const App: React.FC = () => {
       if (currentTrack) {
         remaining.push(currentTrack);
       }
-      setCurrentTrack(next);
+      handleSelectTrack(next);
       setQueue(remaining);
-      setCurrentTimeSec(0);
-      setDurationSec(next.durationSec);
-      setPlaybackState('playing');
     } else {
-      setCurrentTimeSec(0);
+      providerRef.current?.seek(0);
     }
   };
 
   const handleEject = () => {
+    providerRef.current?.stop();
     setPlaybackState('empty');
   };
 
-  const handleSelectTrack = (track: Track) => {
+  const handleSelectTrack = async (track: Track, fileBlob?: Blob) => {
     setCurrentTrack(track);
     setCurrentTimeSec(0);
-    setDurationSec(track.durationSec);
-    setPlaybackState('playing');
-    // Switch to player view to show track loaded on platter
+    setDurationSec(track.durationSec || 180);
+
+    const blob = fileBlob || fileBlobsRef.current.get(track.id);
+    if (providerRef.current) {
+      await providerRef.current.loadTrack(track, blob);
+      await providerRef.current.play();
+    }
+
+    MediaSessionService.updateMetadata(track);
     setCurrentTab('inicio');
   };
 
   const handleSeek = (pos: number) => {
     setCurrentTimeSec(pos);
+    providerRef.current?.seek(pos);
+  };
+
+  // Import local files
+  const handleImportFiles = async (files: FileList) => {
+    const newTracks: Track[] = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const { track } = await AudioTagReader.parseAudioFile(file);
+      const fullTrack: Track = {
+        id: track.id || `track-${Date.now()}-${i}`,
+        source: 'local',
+        title: track.title || file.name,
+        artist: track.artist || 'Artista Local',
+        album: track.album || 'Importadas',
+        durationSec: track.durationSec || 180,
+        uri: '',
+        format: track.format || {
+          codec: 'FLAC',
+          sampleRate: 96000,
+          bitDepth: 24,
+          channels: 2,
+          isLossless: true,
+        },
+        addedAt: new Date().toISOString(),
+        playCount: 0,
+        labelInfo: {
+          recordLabel: 'DIRECT MASTER ARCHIVE',
+          matrixRpm: 33,
+        }
+      };
+
+      // Guarda o arquivo Blob na memória
+      fileBlobsRef.current.set(fullTrack.id, file);
+      newTracks.push(fullTrack);
+    }
+
+    if (newTracks.length > 0) {
+      const updatedTracks = [...newTracks, ...tracks];
+      setTracks(updatedTracks);
+      LibraryStorage.saveTracks(updatedTracks);
+
+      // Agrupa álbum importado
+      const newAlbum: Album = {
+        id: `album-${Date.now()}`,
+        title: newTracks[0].album || 'Álbum Importado',
+        artist: newTracks[0].artist || 'Vários Artistas',
+        year: new Date().getFullYear(),
+        trackCount: newTracks.length,
+        totalDurationSec: newTracks.reduce((acc, t) => acc + t.durationSec, 0),
+        tracks: newTracks,
+        isHiRes: true,
+        source: 'local',
+      };
+
+      const updatedAlbums = [newAlbum, ...albums];
+      setAlbums(updatedAlbums);
+      LibraryStorage.saveAlbums(updatedAlbums);
+
+      // Coloca a primeira faixa importada no prato imediatamente
+      handleSelectTrack(newTracks[0], fileBlobsRef.current.get(newTracks[0].id));
+    }
   };
 
   return (
@@ -175,7 +366,7 @@ export const App: React.FC = () => {
         onMaximize={() => setIsFullscreen(!isFullscreen)}
         onMinimize={() => setIsMiniWidgetOpen(true)}
         onClose={() => {
-          if (confirm('Deseja minimizar a Vitrola para a barra de tarefas?')) {
+          if (confirm('Deseja recolher a Vitrola para o Mini Widget?')) {
             setIsMiniWidgetOpen(true);
           }
         }}
@@ -225,14 +416,15 @@ export const App: React.FC = () => {
 
           {currentTab === 'biblioteca' && (
             <LibraryView
-              albums={initialAlbums}
+              albums={albums}
               onPlayTrack={handleSelectTrack}
+              onImportFiles={handleImportFiles}
             />
           )}
 
           {currentTab === 'playlists' && (
             <PlaylistsView
-              playlists={initialPlaylists}
+              playlists={playlists}
               onPlayTrack={handleSelectTrack}
             />
           )}
@@ -261,7 +453,7 @@ export const App: React.FC = () => {
         </main>
       </div>
 
-      {/* Floating Mini Player Widget (When activated) */}
+      {/* Floating Mini Player Widget */}
       {isMiniWidgetOpen && (
         <div className="fixed bottom-6 right-6 z-50 animate-in fade-in slide-in-from-bottom-4 duration-300">
           <MiniPlayerWidget
@@ -274,7 +466,7 @@ export const App: React.FC = () => {
             onNextTrack={handleNextTrack}
             onRestoreMain={() => setIsMiniWidgetOpen(false)}
             onClose={() => setIsMiniWidgetOpen(false)}
-            vuDb={vuLeftDb}
+            vuDb={(vuLeftDb + vuRightDb) / 2}
           />
         </div>
       )}
