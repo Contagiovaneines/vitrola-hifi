@@ -1,12 +1,13 @@
 import React from 'react';
 import { VitrolaLogo } from '../../assets/VitrolaLogo';
 import { NavigationTab } from '../../types';
-import { Minus, Square, X, Music } from 'lucide-react';
+import { Minus, Square, X, Music, PictureInPicture2 } from 'lucide-react';
 
 interface WindowHeaderProps {
   currentTab: NavigationTab;
   onTabChange: (tab: NavigationTab) => void;
   isAudioOnline?: boolean;
+  onToggleMiniWidget?: () => void;
   onMinimize?: () => void;
   onMaximize?: () => void;
   onClose?: () => void;
@@ -16,6 +17,7 @@ export const WindowHeader: React.FC<WindowHeaderProps> = ({
   currentTab,
   onTabChange,
   isAudioOnline = true,
+  onToggleMiniWidget,
   onMinimize,
   onMaximize,
   onClose
@@ -85,6 +87,16 @@ export const WindowHeader: React.FC<WindowHeaderProps> = ({
 
         {/* Windows Standard Title Bar Buttons */}
         <div className="flex items-center gap-1 ml-2">
+          {onToggleMiniWidget && (
+            <button
+              onClick={onToggleMiniWidget}
+              aria-label="Destacar Mini Widget Flutuante"
+              title="Destacar Mini Widget Flutuante"
+              className="w-7 h-7 rounded bg-surface-container-high/70 hover:bg-surface-bright flex items-center justify-center text-secondary hover:text-primary transition-colors"
+            >
+              <PictureInPicture2 size={13} />
+            </button>
+          )}
           <button
             onClick={onMinimize}
             aria-label="Minimizar janela"

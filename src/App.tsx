@@ -363,6 +363,7 @@ export const App: React.FC = () => {
         currentTab={currentTab}
         onTabChange={setCurrentTab}
         isAudioOnline={playbackState === 'playing'}
+        onToggleMiniWidget={() => setIsMiniWidgetOpen(!isMiniWidgetOpen)}
         onMaximize={() => setIsFullscreen(!isFullscreen)}
         onMinimize={() => setIsMiniWidgetOpen(true)}
         onClose={() => {
@@ -457,20 +458,20 @@ export const App: React.FC = () => {
 
       {/* Floating Mini Player Widget */}
       {isMiniWidgetOpen && (
-        <div className="fixed bottom-6 right-6 z-50 animate-in fade-in slide-in-from-bottom-4 duration-300">
-          <MiniPlayerWidget
-            playbackState={playbackState}
-            currentTrack={currentTrack}
-            currentTimeSec={currentTimeSec}
-            durationSec={durationSec}
-            onPlayToggle={handlePlayToggle}
-            onPrevTrack={handlePrevTrack}
-            onNextTrack={handleNextTrack}
-            onRestoreMain={() => setIsMiniWidgetOpen(false)}
-            onClose={() => setIsMiniWidgetOpen(false)}
-            vuDb={(vuLeftDb + vuRightDb) / 2}
-          />
-        </div>
+        <MiniPlayerWidget
+          playbackState={playbackState}
+          currentTrack={currentTrack}
+          currentTimeSec={currentTimeSec}
+          durationSec={durationSec}
+          currentSource={currentSource}
+          onPlayToggle={handlePlayToggle}
+          onPrevTrack={handlePrevTrack}
+          onNextTrack={handleNextTrack}
+          onSeek={handleSeek}
+          onRestoreMain={() => setIsMiniWidgetOpen(false)}
+          onClose={() => setIsMiniWidgetOpen(false)}
+          vuDb={(vuLeftDb + vuRightDb) / 2}
+        />
       )}
     </div>
   );
