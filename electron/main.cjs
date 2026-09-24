@@ -77,11 +77,24 @@ function createWindow() {
 
   if (isDev) {
     mainWindow.loadURL('http://localhost:5173');
-  } else if (fs.existsSync(distIndexPath)) {
-    mainWindow.loadFile(distIndexPath);
   } else {
-    mainWindow.loadURL('http://localhost:5173');
+    mainWindow.loadFile(distIndexPath).catch((err) => {
+      console.warn('Falha ao carregar dist/index.html, tentando localhost:', err.message);
+      mainWindow.loadURL('http://localhost:5173');
+    });
   }
+
+  // F12 para abrir DevTools se necessário
+  mainWindow.webContents.on('before-input-event', (event, input) => {
+    if (input.key === 'F12' && input.type === 'keyDown') {
+      mainWindow.webContents.toggleDevTools();
+      event.preventDefault();
+    }
+  });
+
+  mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
+    console.error('Erro de carregamento da página:', errorCode, errorDescription, validatedURL);
+  });
 
   // Windows Taskbar Thumbnail Toolbar (Volta, Pausa/Play, Passa pra Frente)
   mainWindow.once('ready-to-show', () => {
