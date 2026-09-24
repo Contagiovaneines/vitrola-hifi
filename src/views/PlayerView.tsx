@@ -9,6 +9,7 @@ import { PreampKnobs } from '../components/player/PreampKnobs';
 import { SourceSelector } from '../components/player/SourceSelector';
 import { NextTracks } from '../components/player/NextTracks';
 import { YouTubePlayerMonitor } from '../components/player/YouTubePlayerMonitor';
+import { Maximize2 } from 'lucide-react';
 
 interface PlayerViewProps {
   playbackState: PlayerPlaybackState;
@@ -25,6 +26,7 @@ interface PlayerViewProps {
   onEject: () => void;
   queue: Track[];
   onSelectTrack: (track: Track) => void;
+  onToggleFullscreen?: () => void;
   // EQ & Knobs
   bassDb: number;
   setBassDb: (v: number) => void;
@@ -56,6 +58,7 @@ export const PlayerView: React.FC<PlayerViewProps> = ({
   onEject,
   queue,
   onSelectTrack,
+  onToggleFullscreen,
   bassDb,
   setBassDb,
   trebleDb,
@@ -94,10 +97,23 @@ export const PlayerView: React.FC<PlayerViewProps> = ({
           </div>
         </div>
 
-        {/* Live Playback State Badge */}
-        <div className="flex items-center gap-2 px-3 py-1 rounded-lg bg-surface-container-lowest font-headline text-[10px] uppercase tracking-wider font-bold border border-outline-variant/30 text-on-surface-variant">
-          <span>STATUS:</span>
-          <span className="text-secondary font-mono">{playbackState === 'playing' ? 'TOCANDO' : playbackState === 'paused' ? 'PAUSADO' : 'SEM DISCO'}</span>
+        {/* Live Playback State Badge & Tela Cheia Button */}
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 px-3 py-1 rounded-lg bg-surface-container-lowest font-headline text-[10px] uppercase tracking-wider font-bold border border-outline-variant/30 text-on-surface-variant">
+            <span>STATUS:</span>
+            <span className="text-secondary font-mono">{playbackState === 'playing' ? 'TOCANDO' : playbackState === 'paused' ? 'PAUSADO' : 'SEM DISCO'}</span>
+          </div>
+
+          {onToggleFullscreen && (
+            <button
+              onClick={onToggleFullscreen}
+              className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-primary-container text-on-primary-container hover:bg-primary font-headline text-[10px] uppercase tracking-wider font-bold shadow-sm transition-all"
+              title="Entrar em Tela Cheia [F ou F11]"
+            >
+              <Maximize2 size={12} />
+              <span>Tela Cheia</span>
+            </button>
+          )}
         </div>
       </div>
 

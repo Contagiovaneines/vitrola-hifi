@@ -182,6 +182,9 @@ export const App: React.FC = () => {
 
       if (e.key === 'Escape' && isFullscreen) {
         setIsFullscreen(false);
+      } else if (e.key.toLowerCase() === 'f' || e.key === 'F11') {
+        e.preventDefault();
+        setIsFullscreen((prev) => !prev);
       } else if (e.code === 'Space') {
         e.preventDefault();
         handlePlayToggle();
@@ -349,23 +352,15 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-surface text-on-surface flex flex-col font-body selection:bg-primary-container selection:text-on-primary-container">
-      {/* Fullscreen Mode (Audiophile Theatre OSD) */}
+      {/* Fullscreen Mode (Pure Vitrola Vinyl Immersion) */}
       {isFullscreen && (
         <FullscreenView
           playbackState={playbackState}
           speed={speed}
           onSpeedChange={setSpeed}
           currentTrack={currentTrack}
-          currentTimeSec={currentTimeSec}
-          durationSec={durationSec}
-          onSeek={handleSeek}
-          onPlayToggle={handlePlayToggle}
-          onPrevTrack={handlePrevTrack}
-          onNextTrack={handleNextTrack}
-          onEject={handleEject}
           onExitFullscreen={() => setIsFullscreen(false)}
-          vuLeftDb={vuLeftDb}
-          vuRightDb={vuRightDb}
+          onPlayToggle={handlePlayToggle}
         />
       )}
 
@@ -423,6 +418,7 @@ export const App: React.FC = () => {
               setSource={setSource}
               vuLeftDb={vuLeftDb}
               vuRightDb={vuRightDb}
+              onToggleFullscreen={() => setIsFullscreen(!isFullscreen)}
             />
           )}
 

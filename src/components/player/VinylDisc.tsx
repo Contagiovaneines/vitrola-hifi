@@ -61,21 +61,30 @@ export const VinylDisc: React.FC<VinylDiscProps> = ({
 
               {/* Center Album Label */}
               <div
-                className="relative z-10 w-[38%] aspect-square rounded-full bg-gradient-to-tr from-[#1f2839] via-[#2f3e5b] to-[#151c2a] shadow-[0_4px_14px_rgba(0,0,0,0.9),inset_0_1px_2px_rgba(255,255,255,0.25)] flex flex-col items-center justify-center p-2 text-center border-[3px] border-[#a57f43]"
+                className="relative z-10 w-[42%] aspect-square rounded-full bg-gradient-to-tr from-[#1b1714] via-[#2d221a] to-[#120f0d] shadow-[0_4px_16px_rgba(0,0,0,0.95),inset_0_1px_2px_rgba(255,255,255,0.25)] flex flex-col items-center justify-center p-2.5 text-center border-[3px] border-[#a57f43]"
                 style={{
                   backgroundColor: currentTrack?.source === 'local' ? undefined : '#221d19'
                 }}
               >
                 {/* Archival Label Text */}
-                <span className="font-headline text-[7px] text-[#ffddbb] uppercase tracking-widest font-extrabold leading-tight opacity-90">
+                <span className="font-headline text-[7px] text-[#ffddbb]/80 uppercase tracking-widest font-extrabold leading-tight">
                   {currentTrack?.labelInfo?.recordLabel || 'ORIGINAL MASTER RECORDING'}
                 </span>
-                <span className="font-display text-[11px] text-primary-fixed font-bold leading-tight mt-0.5 drop-shadow-sm truncate max-w-[90%]">
-                  {currentTrack?.album || 'ÁLBUM DESCONHECIDO'}
+
+                {/* THE MUSIC / TRACK TITLE PROMINENTLY IN THE CENTER */}
+                <span className="font-display text-[12px] sm:text-[13px] text-primary-fixed font-black tracking-wide leading-tight drop-shadow-md truncate max-w-[94%] my-0.5">
+                  {currentTrack?.title || 'FAIXA EM REPRODUÇÃO'}
                 </span>
-                <span className="font-headline text-[9px] text-tertiary-fixed font-semibold tracking-wider uppercase -mt-0.5 truncate max-w-[90%]">
+
+                {/* ARTIST & ALBUM */}
+                <span className="font-headline text-[8px] sm:text-[9px] text-tertiary-fixed font-bold tracking-wider uppercase truncate max-w-[90%] -mt-0.5">
                   {currentTrack?.artist || 'ARTISTA DESCONHECIDO'}
                 </span>
+                {currentTrack?.album && (
+                  <span className="font-mono text-[7px] text-on-surface-variant/80 truncate max-w-[88%] italic">
+                    {currentTrack.album}
+                  </span>
+                )}
 
                 <div className="my-0.5 px-2 py-[1px] bg-surface-container-lowest/80 rounded font-mono text-[8px] text-secondary font-bold border border-outline-variant/30">
                   LADO 1 · {speed} RPM
