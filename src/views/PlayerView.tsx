@@ -190,9 +190,10 @@ export const PlayerView: React.FC<PlayerViewProps> = ({
               currentVideoId={
                 currentTrack?.source === 'youtube'
                   ? currentTrack.uri.replace('youtube-', '')
-                  : 'jfKfPfyJRdk'
+                  : ''
               }
-              isCompact={true}
+              onPlayTrack={onSelectTrack}
+              isCompact={false}
             />
           )}
 
