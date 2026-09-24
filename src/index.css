@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-surface: #161311;
+    --color-surface-dim: #161311;
+    --color-surface-bright: #3c3836;
+    --color-surface-container-lowest: #100e0c;
+    --color-surface-container-low: #1e1b19;
+    --color-surface-container: #221f1d;
+    --color-surface-container-high: #2d2927;
+    --color-surface-container-highest: #383432;
+    --color-on-surface: #e9e1dd;
+    --color-on-surface-variant: #d4c4b5;
+    --color-outline: #9d8e81;
+    --color-outline-variant: #50453a;
+    --color-primary: #fec486;
+    --color-primary-container: #e0a96d;
+    --color-on-primary: #482900;
+    --color-on-primary-container: #633d09;
+    --color-secondary: #ffb95f;
+    --color-secondary-container: #ee9800;
+    --color-plinth-bg: #20150d;
+    --color-glow: rgba(255, 185, 95, 0.15);
+  }
+
+  [data-theme="pretodourado"] {
+    --color-surface: #0e0d0c;
+    --color-surface-dim: #0a0908;
+    --color-surface-bright: #282522;
+    --color-surface-container-lowest: #080706;
+    --color-surface-container-low: #141210;
+    --color-surface-container: #1a1816;
+    --color-surface-container-high: #24211e;
+    --color-surface-container-highest: #322e2a;
+    --color-on-surface: #f7f3ee;
+    --color-on-surface-variant: #c8bfb5;
+    --color-outline: #8c8072;
+    --color-outline-variant: #423b34;
+    --color-primary: #ffd875;
+    --color-primary-container: #e6b422;
+    --color-on-primary: #3b2b00;
+    --color-on-primary-container: #4a3800;
+    --color-secondary: #ffd700;
+    --color-secondary-container: #b8860b;
+    --color-plinth-bg: #12100f;
+    --color-glow: rgba(255, 215, 0, 0.15);
+  }
+
+  [data-theme="neonmoderno"] {
+    --color-surface: #10141a;
+    --color-surface-dim: #0a0d12;
+    --color-surface-bright: #242c38;
+    --color-surface-container-lowest: #07090d;
+    --color-surface-container-low: #141a22;
+    --color-surface-container: #1a222c;
+    --color-surface-container-high: #242e3b;
+    --color-surface-container-highest: #323f50;
+    --color-on-surface: #e6f1f8;
+    --color-on-surface-variant: #b0c4d4;
+    --color-outline: #728a9e;
+    --color-outline-variant: #3a4957;
+    --color-primary: #00f0ff;
+    --color-primary-container: #00b4d8;
+    --color-on-primary: #00323a;
+    --color-on-primary-container: #002228;
+    --color-secondary: #ff007f;
+    --color-secondary-container: #d9046c;
+    --color-plinth-bg: #111822;
+    --color-glow: rgba(0, 240, 255, 0.18);
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+    overflow-x: hidden;
+  }
+
+  /* Scrollbars refinados discretos */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgba(16, 14, 12, 0.6);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(157, 142, 129, 0.3);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(254, 196, 134, 0.5);
+  }
+}
+
+/* Animação do disco de vinil */
+@keyframes spin-vinyl-33 {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin-vinyl-45 {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-vinyl-33 {
+  animation: spin-vinyl-33 1.818s linear infinite;
+}
+
+.animate-vinyl-45 {
+  animation: spin-vinyl-45 1.333s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-vinyl-33,
+  .animate-vinyl-45 {
+    animation-duration: 12s !important;
+  }
+}
+
+/* Grooves do vinil */
+.vinyl-grooves-pattern {
+  background: repeating-radial-gradient(
+    circle at 50% 50%,
+    rgba(25, 22, 19, 0.95) 0px,
+    rgba(12, 10, 9, 0.98) 2px,
+    rgba(32, 28, 24, 0.92) 3px,
+    rgba(8, 7, 6, 1) 5px
+  );
+}
+
+.vinyl-sheen-conic {
+  background: conic-gradient(
+    from 45deg at 50% 50%,
+    transparent 0deg,
+    rgba(255, 221, 187, 0.12) 25deg,
+    transparent 60deg,
+    transparent 180deg,
+    rgba(255, 221, 187, 0.12) 205deg,
+    transparent 240deg
+  );
+}
+
+.tweed-grille-pattern {
+  background-image: 
+    radial-gradient(#3a312a 1.5px, transparent 1.5px),
+    radial-gradient(#201b17 1.5px, #16120f 1.5px);
+  background-size: 6px 6px;
+  background-position: 0 0, 3px 3px;
+}
