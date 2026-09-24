@@ -26,6 +26,7 @@ export const WindowHeader: React.FC<WindowHeaderProps> = ({
     { id: 'inicio', label: 'Início' },
     { id: 'biblioteca', label: 'Biblioteca' },
     { id: 'playlists', label: 'Playlists' },
+    { id: 'ytmusic', label: 'YouTube Music' },
     { id: 'fontes', label: 'Fontes' },
     { id: 'aparencia', label: 'Aparência' },
   ];

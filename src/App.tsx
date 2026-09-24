@@ -15,6 +15,7 @@ import { LibraryView } from './views/LibraryView';
 import { PlaylistsView } from './views/PlaylistsView';
 import { SourcesView } from './views/SourcesView';
 import { CustomizationView } from './views/CustomizationView';
+import { YouTubeMusicView } from './views/YouTubeMusicView';
 import { FullscreenView } from './views/FullscreenView';
 import { MiniPlayerWidget } from './components/widget/MiniPlayerWidget';
 import { LibraryStorage } from './services/library/LibraryStorage';
@@ -203,6 +204,89 @@ export const App: React.FC = () => {
     LibraryStorage.saveSettings({ speed });
   }, [speed]);
 
+  // Fullscreen Handlers (Native Browser Fullscreen API)
+  const handleToggleFullscreen = async () => {
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+        setIsFullscreen(true);
+      } else {
+        await document.exitFullscreen();
+        setIsFullscreen(false);
+      }
+    } catch {
+      setIsFullscreen((prev) => !prev);
+    }
+  };
+
+  const handleExitFullscreen = async () => {
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+      }
+    } catch {}
+    setIsFullscreen(false);
+  };
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
+
+  // Sincronização Dinâmica do Nome Real da Música em Reprodução no YouTube
+  useEffect(() => {
+    const handleYouTubeMessage = (event: MessageEvent) => {
+      try {
+        let payload = event.data;
+        if (typeof payload === 'string') {
+          payload = JSON.parse(payload);
+        }
+
+        if (payload?.event === 'infoDelivery' && payload?.info?.videoData) {
+          const vd = payload.info.videoData;
+          const rawTitle = vd.title;
+          const author = vd.author || 'YouTube Music';
+          const videoId = vd.video_id;
+
+          if (rawTitle && rawTitle.trim()) {
+            let songTitle = rawTitle.trim();
+            let songArtist = author;
+
+            // Remove sufixos como (Official Video), (Audio), [Official Music Video], etc.
+            songTitle = songTitle
+              .replace(/\s*[\(\[](?:Official\s*(?:Music\s*)?Video|Audio|Clip Oficial|Clipe Oficial|HD|4K|Lyrics|Visualizer)[\)\]]/gi, '')
+              .trim();
+
+            if (songTitle.includes(' - ')) {
+              const parts = songTitle.split(' - ');
+              songArtist = parts[0].trim();
+              songTitle = parts.slice(1).join(' - ').trim();
+            }
+
+            setCurrentTrack((prev) => {
+              if (!prev || prev.source !== 'youtube') return prev;
+              if (prev.title === songTitle && prev.artist === songArtist) return prev;
+
+              return {
+                ...prev,
+                title: songTitle,
+                artist: songArtist,
+                coverUri: videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : prev.coverUri,
+                uri: videoId ? `youtube-${videoId}` : prev.uri,
+              };
+            });
+          }
+        }
+      } catch {}
+    };
+
+    window.addEventListener('message', handleYouTubeMessage);
+    return () => window.removeEventListener('message', handleYouTubeMessage);
+  }, []);
+
   // 5. Global Keyboard Shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -211,10 +295,11 @@ export const App: React.FC = () => {
       }
 
       if (e.key === 'Escape' && isFullscreen) {
-        setIsFullscreen(false);
+        e.preventDefault();
+        handleExitFullscreen();
       } else if (e.key.toLowerCase() === 'f' || e.key === 'F11') {
         e.preventDefault();
-        setIsFullscreen((prev) => !prev);
+        handleToggleFullscreen();
       } else if (e.code === 'Space') {
         e.preventDefault();
         handlePlayToggle();
@@ -239,8 +324,10 @@ export const App: React.FC = () => {
       } else if (e.key === '3') {
         setCurrentTab('playlists');
       } else if (e.key === '4') {
-        setCurrentTab('fontes');
+        setCurrentTab('ytmusic');
       } else if (e.key === '5') {
+        setCurrentTab('fontes');
+      } else if (e.key === '6') {
         setCurrentTab('aparencia');
       }
     };
@@ -560,7 +647,7 @@ export const App: React.FC = () => {
           speed={speed}
           onSpeedChange={setSpeed}
           currentTrack={currentTrack}
-          onExitFullscreen={() => setIsFullscreen(false)}
+          onExitFullscreen={handleExitFullscreen}
           onPlayToggle={handlePlayToggle}
         />
       )}
@@ -571,7 +658,7 @@ export const App: React.FC = () => {
         onTabChange={setCurrentTab}
         isAudioOnline={playbackState === 'playing'}
         onToggleMiniWidget={() => setIsMiniWidgetOpen(!isMiniWidgetOpen)}
-        onMaximize={() => setIsFullscreen(!isFullscreen)}
+        onMaximize={handleToggleFullscreen}
         onMinimize={() => setIsMiniWidgetOpen(true)}
         onClose={() => {
           if (confirm('Deseja recolher a Vitrola para o Mini Widget?')) {
@@ -619,7 +706,7 @@ export const App: React.FC = () => {
               setSource={setSource}
               vuLeftDb={vuLeftDb}
               vuRightDb={vuRightDb}
-              onToggleFullscreen={() => setIsFullscreen(!isFullscreen)}
+              onToggleFullscreen={handleToggleFullscreen}
             />
           )}
 
@@ -638,6 +725,13 @@ export const App: React.FC = () => {
             <PlaylistsView
               playlists={playlists}
               onPlayTrack={handleSelectTrack}
+            />
+          )}
+
+          {currentTab === 'ytmusic' && (
+            <YouTubeMusicView
+              onPlayTrack={handleSelectTrack}
+              currentTrack={currentTrack}
             />
           )}
 

@@ -90,7 +90,7 @@ export interface PlaybackProvider {
 
 export type PlayerPlaybackState = 'empty' | 'playing' | 'paused' | 'buffering' | 'ended' | 'error';
 
-export type NavigationTab = 'inicio' | 'biblioteca' | 'playlists' | 'fontes' | 'aparencia';
+export type NavigationTab = 'inicio' | 'biblioteca' | 'playlists' | 'fontes' | 'aparencia' | 'ytmusic';
 
 export type ThemePreset = 'classica' | 'pretodourado' | 'neonmoderno';
 

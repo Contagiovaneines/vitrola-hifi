@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavigationTab } from '../../types';
-import { Disc, Layers, Radio, Palette, Sliders } from 'lucide-react';
+import { Disc, Layers, Radio, Palette, Sliders, Tv } from 'lucide-react';
 
 interface SidebarProps {
   currentTab: NavigationTab;
@@ -19,8 +19,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'inicio', num: '01', label: 'Início', icon: <Disc size={18} /> },
     { id: 'biblioteca', num: '02', label: 'Biblioteca', icon: <Layers size={18} /> },
     { id: 'playlists', num: '03', label: 'Playlists', icon: <Radio size={18} /> },
-    { id: 'fontes', num: '04', label: 'Fontes', icon: <Sliders size={18} /> },
-    { id: 'aparencia', num: '05', label: 'Aparência', icon: <Palette size={18} /> },
+    { id: 'ytmusic', num: '04', label: 'YouTube Music', icon: <Tv size={18} /> },
+    { id: 'fontes', num: '05', label: 'Fontes', icon: <Sliders size={18} /> },
+    { id: 'aparencia', num: '06', label: 'Aparência', icon: <Palette size={18} /> },
   ];
 
   return (

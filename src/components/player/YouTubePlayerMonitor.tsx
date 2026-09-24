@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Tv, ShieldCheck, ExternalLink, Play, AlertCircle, ListMusic, Disc } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Tv, ShieldCheck, ExternalLink, AlertCircle, ListMusic, Disc, Globe } from 'lucide-react';
 import { YouTubePlaybackProvider } from '../../services/providers/youtube/YouTubePlaybackProvider';
 import { Track } from '../../types';
 
@@ -18,10 +18,12 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
 }) => {
   const [inputUrl, setInputUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [activeMedia, setActiveMedia] = useState<{ type: 'video' | 'playlist'; id: string }>({
+  const [activeMedia, setActiveMedia] = useState<{ type: 'video' | 'playlist'; id: string; videoId?: string }>({
     type: 'video',
     id: currentVideoId,
   });
+
+  const lastTrackTitleRef = useRef<string>('');
 
   useEffect(() => {
     if (currentVideoId && currentVideoId !== activeMedia.id) {
@@ -33,10 +35,89 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
     }
   }, [currentVideoId]);
 
+  // Listener para capturar o nome REAL da música tocando no YouTube IFrame Player
+  useEffect(() => {
+    const handleWindowMessage = (event: MessageEvent) => {
+      try {
+        let payload = event.data;
+        if (typeof payload === 'string') {
+          payload = JSON.parse(payload);
+        }
+
+        // O player do YouTube emite infoDelivery com os dados reais do vídeo/música em reprodução
+        if (payload?.event === 'infoDelivery' && payload?.info?.videoData) {
+          const vd = payload.info.videoData;
+          const rawTitle = vd.title;
+          const author = vd.author || 'YouTube Music';
+          const videoId = vd.video_id;
+
+          if (rawTitle && rawTitle.trim()) {
+            let songTitle = rawTitle.trim();
+            let songArtist = author;
+
+            // Remove sufixos como (Official Video), (Audio), [Official Music Video], etc.
+            songTitle = songTitle
+              .replace(/\s*[\(\[](?:Official\s*(?:Music\s*)?Video|Audio|Clip Oficial|Clipe Oficial|HD|4K|Lyrics|Visualizer)[\)\]]/gi, '')
+              .trim();
+
+            // Se o título for no padrão "Artista - Nome da Música", separa com elegância
+            if (songTitle.includes(' - ')) {
+              const parts = songTitle.split(' - ');
+              songArtist = parts[0].trim();
+              songTitle = parts.slice(1).join(' - ').trim();
+            }
+
+            // Evita disparos redundantes para o mesmo título
+            if (lastTrackTitleRef.current === songTitle) return;
+            lastTrackTitleRef.current = songTitle;
+
+            const coverUrl = videoId
+              ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+              : undefined;
+
+            if (onPlayTrack) {
+              onPlayTrack({
+                id: `yt-${videoId || 'current'}`,
+                source: 'youtube',
+                title: songTitle,
+                artist: songArtist,
+                album: 'YouTube Music Master',
+                durationSec: payload.info.duration ? Math.round(payload.info.duration) : 240,
+                uri: videoId ? `youtube-${videoId}` : '',
+                coverUri: coverUrl,
+                format: {
+                  codec: 'AAC',
+                  sampleRate: 48000,
+                  bitDepth: 24,
+                  channels: 2,
+                  isLossless: false,
+                },
+                labelInfo: {
+                  recordLabel: 'YOUTUBE MUSIC MASTER ARCHIVE',
+                  matrixRpm: 33,
+                  catalogNumber: videoId ? `YTM-${videoId.slice(0, 8).toUpperCase()}` : 'YTM-LIVE',
+                },
+                addedAt: new Date().toISOString(),
+                playCount: 0,
+              });
+            }
+          }
+        }
+      } catch {
+        // Ignora mensagens que não sejam do YouTube
+      }
+    };
+
+    window.addEventListener('message', handleWindowMessage);
+    return () => window.removeEventListener('message', handleWindowMessage);
+  }, [onPlayTrack]);
+
   const handleLoad = async () => {
     const rawInput = inputUrl.trim();
     if (!rawInput) return;
 
+    // Detecta se a URL contém um vídeo específico mesmo dentro de uma playlist (watch?v=...&list=...)
+    const vMatch = rawInput.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
     const extracted = YouTubePlaybackProvider.extractMedia(rawInput);
     if (!extracted) {
       alert('Por favor, informe uma URL ou ID válido de vídeo ou playlist do YouTube/YouTube Music.');
@@ -47,31 +128,46 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
     setActiveMedia(extracted);
     if (onVideoChange) onVideoChange(extracted.id);
 
-    let title = extracted.type === 'playlist' ? 'Playlist YouTube Music' : 'Música YouTube';
+    let title = 'Música em Reprodução';
     let artist = 'YouTube Music';
+    let coverUrl: string | undefined = undefined;
 
-    // Se for vídeo único, busca o título e autor oficial via YouTube oEmbed
-    if (extracted.type === 'video') {
+    // Se temos o ID do vídeo (direto ou na playlist), busca metadados oficiais via oEmbed
+    const targetVideoId = (extracted.type === 'video' ? extracted.id : vMatch ? vMatch[1] : null);
+    if (targetVideoId) {
+      coverUrl = `https://img.youtube.com/vi/${targetVideoId}/hqdefault.jpg`;
       try {
-        const res = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${extracted.id}&format=json`);
+        const res = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${targetVideoId}&format=json`);
         if (res.ok) {
           const data = await res.json();
-          if (data.title) title = data.title;
-          if (data.author_name) artist = data.author_name;
+          if (data.title) {
+            let t = data.title.replace(/\s*[\(\[](?:Official\s*(?:Music\s*)?Video|Audio|Clip Oficial|Clipe Oficial|HD|4K|Lyrics)[\)\]]/gi, '').trim();
+            if (t.includes(' - ')) {
+              const parts = t.split(' - ');
+              artist = parts[0].trim();
+              title = parts.slice(1).join(' - ').trim();
+            } else {
+              title = t;
+              if (data.author_name) artist = data.author_name;
+            }
+          }
         }
       } catch (err) {
         console.warn('oEmbed fetch error:', err);
       }
     }
 
+    lastTrackTitleRef.current = title;
+
     const track: Track = {
-      id: `yt-${extracted.id}`,
+      id: `yt-${targetVideoId || extracted.id}`,
       source: 'youtube',
       title: title,
       artist: artist,
       album: extracted.type === 'playlist' ? 'Seleção YouTube Music' : 'Transmissão Analógica Oficial',
       durationSec: 240,
-      uri: extracted.id,
+      uri: targetVideoId ? `youtube-${targetVideoId}` : extracted.id,
+      coverUri: coverUrl,
       format: {
         codec: 'AAC',
         sampleRate: 48000,
@@ -82,7 +178,7 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
       labelInfo: {
         recordLabel: 'YOUTUBE MUSIC MASTER ARCHIVE',
         matrixRpm: 33,
-        catalogNumber: `YTM-${extracted.id.slice(0, 8).toUpperCase()}`,
+        catalogNumber: targetVideoId ? `YTM-${targetVideoId.slice(0, 8).toUpperCase()}` : `YTM-PL`,
       },
       addedAt: new Date().toISOString(),
       playCount: 0,
@@ -199,18 +295,18 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#ff3333] text-white font-headline text-[11px] font-bold hover:bg-[#e62e2e] transition-all shadow-md shrink-0 cursor-pointer"
             title="Abrir o YouTube Music como navegador para fazer login na sua conta Google"
           >
-            <ExternalLink size={12} />
+            <Globe size={13} />
             <span>Abrir Navegador YouTube Music</span>
           </button>
         </div>
 
         <div className="flex items-center justify-between text-[10px] font-headline text-on-surface-variant pt-1 border-t border-outline-variant/10">
           <div className="flex items-center gap-2">
-            <span className="flex items-center gap-1 text-secondary">
-              <span>● Toca no prato com vinil girando</span>
+            <span className="flex items-center gap-1 text-secondary font-bold">
+              <span>● Música atual refletida no centro do vinil</span>
             </span>
             <span className="text-outline hidden sm:inline">
-              (Suporta músicas e playlists do YouTube Music)
+              (Sincronização dinâmica de título)
             </span>
           </div>
           <a
