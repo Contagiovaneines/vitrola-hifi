@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&amp;family=Space+Mono:wght@400;700&amp;family=Syne:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "outline-variant": "#50453a", "secondary-fixed": "#ffddb8", "tertiary-fixed-dim": "#ffb595", "surface-container-lowest": "#100e0c", "on-primary": "#482900", "on-primary-fixed": "#2b1700", "surface-container-low": "#1e1b19", "on-tertiary-fixed-variant": "#7c2e00", "primary": "#fec486", "surface-container-high": "#2d2927", "on-error": "#690005", "inverse-surface": "#e9e1dd", "secondary-container": "#ee9800", "on-secondary-fixed-variant": "#653e00", "tertiary-fixed": "#ffdbcc", "error": "#ffb4ab", "secondary-fixed-dim": "#ffb95f", "on-tertiary": "#571e00", "error-container": "#93000a", "on-surface-variant": "#d4c4b5", "primary-fixed": "#ffddbb", "surface-tint": "#f5bc7e", "inverse-primary": "#805521", "surface-bright": "#3c3836", "on-primary-fixed-variant": "#653e0b", "background": "#161311", "on-error-container": "#ffdad6", "primary-container": "#e0a96d", "surface-dim": "#161311", "on-tertiary-fixed": "#351000", "inverse-on-surface": "#33302d", "on-surface": "#e9e1dd", "surface-variant": "#383432", "surface": "#161311", "on-primary-container": "#633d09", "surface-container": "#221f1d", "outline": "#9d8e81", "primary-fixed-dim": "#f5bc7e", "surface-container-highest": "#383432", "on-secondary-fixed": "#2a1700", "tertiary": "#ffc2a7", "on-secondary-container": "#5b3800", "on-tertiary-container": "#7a2d00", "tertiary-container": "#ff9a6b", "on-secondary": "#472a00", "secondary": "#ffb95f", "on-background": "#e9e1dd" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "gutter-loose": "1.5rem", "margin-window": "0.75rem", "space-sm": "0.5rem", "space-xs": "0.25rem", "gutter": "1rem", "space-xl": "2.5rem", "gutter-compact": "0.5rem", "margin": "1.5rem", "space-md": "1rem", "space-lg": "1.5rem" }, "fontFamily": { "headline-lg": [ "Syne" ], "headline-md": [ "Plus Jakarta Sans" ], "body-lg": [ "Plus Jakarta Sans" ], "body-sm": [ "Plus Jakarta Sans" ], "label-technical": [ "Space Mono" ], "display-md": [ "Syne" ], "label-hardware": [ "Plus Jakarta Sans" ], "body-md": [ "Plus Jakarta Sans" ], "display-lg": [ "Syne" ], "headline-sm": [ "Plus Jakarta Sans" ], "label-meter": [ "Space Mono" ] }, "fontSize": { "headline-lg": [ "28px", { "lineHeight": "36px", "letterSpacing": "0em", "fontWeight": "600" } ], "headline-md": [ "20px", { "lineHeight": "28px", "letterSpacing": "0em", "fontWeight": "600" } ], "body-lg": [ "16px", { "lineHeight": "24px", "fontWeight": "400" } ], "body-sm": [ "12px", { "lineHeight": "18px", "fontWeight": "400" } ], "label-technical": [ "11px", { "lineHeight": "14px", "letterSpacing": "0.08em", "fontWeight": "400" } ], "display-md": [ "36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "600" } ], "label-hardware": [ "10px", { "lineHeight": "12px", "letterSpacing": "0.15em", "fontWeight": "700" } ], "body-md": [ "14px", { "lineHeight": "20px", "fontWeight": "400" } ], "display-lg": [ "48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" } ], "headline-sm": [ "16px", { "lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600" } ], "label-meter": [ "13px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" } ] } } } };</script></head><body class="bg-surface text-on-surface font-body-md text-body-md select-none"><header class="fixed top-0 left-0 right-0 h-16 z-50 bg-surface-container-lowest/95 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.85)] flex items-center justify-between px-space-md"><div class="flex items-center gap-space-md h-full"><div class="flex items-center gap-space-sm"><img alt="Vitrola Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Vv0I-jtmM1NIKcrsfcizMMHvI8POASKktVHJpJEtz5u2rRLL4syMezMXKuZ5lG5t6qA6chf9a49kcB14x2DqP-jmwctMnN68DQpKY8dkYNTTozTnXCxEy8cQwYuFXhNNY8veGhy2qqkH1-91VSZq_Ce2Rqc71lxHI4fZ36ZM0DkmtQNgat96NkynsQ8kexQKs0fEbkWVIdnjxAwn6miFhb2iPJSL3l1KODW3lnOZfOOxXRT3UDBlqK5A"/><span class="font-display-md text-headline-sm text-primary tracking-wider uppercase font-bold">VITROLA</span></div><div class="h-4 w-[1px] bg-outline-variant/40 hidden sm:block"></div><span class="font-label-technical text-label-technical text-on-surface-variant/80 hidden sm:inline-block tracking-widest uppercase">Hi-Fi Turntable Console</span></div><nav class="hidden md:flex items-center gap-space-sm bg-surface-container-low/80 p-space-xs rounded-full shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)]" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded-lg"><a class="px-space-md py-space-xs rounded-lg font-headline-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="inicio" href="#">Início</a><a class="px-space-md py-space-xs rounded-lg font-headline-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="biblioteca" href="#">Biblioteca</a><a class="px-space-md py-space-xs rounded-lg font-headline-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="playlists" href="#">Playlists</a><a class="px-space-md py-space-xs rounded-lg font-headline-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="fontes" href="#">Fontes</a><a class="px-space-md py-space-xs rounded-lg font-headline-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="aparencia" href="#">Aparência</a></nav><div class="flex items-center gap-space-md"><div class="hidden lg:flex items-center gap-space-sm px-space-sm py-space-xs bg-surface-container-high/60 rounded-lg shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)]"><span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#ffb95f]"></span><span class="font-label-technical text-label-technical text-secondary tracking-widest">ASIO 96k</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex items-center gap-space-xs"><button aria-label="Minimizar" class="w-7 h-7 rounded bg-surface-container-high/70 hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[14px]">remove</span></button><button aria-label="Maximizar" class="w-7 h-7 rounded bg-surface-container-high/70 hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[14px]">check_box_outline_blank</span></button><button aria-label="Fechar" class="w-7 h-7 rounded bg-surface-container-high/70 hover:bg-error-container hover:text-on-error-container flex items-center justify-center text-on-surface-variant transition-colors"><span class="material-symbols-outlined text-[14px]">close</span></button></div></div></header><aside class="fixed left-0 top-16 bottom-0 w-72 bg-surface-container-lowest/90 backdrop-blur-md z-40 flex flex-col justify-between p-space-md shadow-[4px_0_24px_rgba(0,0,0,0.7)]"><div class="flex flex-col gap-space-lg"><div class="px-space-sm pt-space-xs"><div class="font-label-hardware text-label-hardware text-outline uppercase tracking-widest">Deck Controls</div><div class="font-headline-md text-headline-sm text-primary-fixed-dim font-bold mt-space-xs">Console Rack</div></div><nav class="flex flex-col gap-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.5)]"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all font-headline-sm text-body-md" data-path="inicio" href="#"><span class="tracking-wide">Início</span><span class="font-label-technical text-label-technical text-outline">01</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all font-headline-sm text-body-md" data-path="biblioteca" href="#"><span class="tracking-wide">Biblioteca</span><span class="font-label-technical text-label-technical text-outline">02</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all font-headline-sm text-body-md" data-path="playlists" href="#"><span class="tracking-wide">Playlists</span><span class="font-label-technical text-label-technical text-outline">03</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all font-headline-sm text-body-md" data-path="fontes" href="#"><span class="tracking-wide">Fontes</span><span class="font-label-technical text-label-technical text-outline">04</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all font-headline-sm text-body-md" data-path="aparencia" href="#"><span class="tracking-wide">Aparência</span><span class="font-label-technical text-label-technical text-outline">05</span></a></nav></div><div class="flex flex-col gap-space-md p-space-md rounded-xl bg-surface-container-low shadow-[inset_0_2px_4px_rgba(0,0,0,0.7)]"><div class="flex items-center justify-between"><div class="flex items-center gap-space-xs"><span class="w-2.5 h-2.5 rounded-full bg-secondary shadow-[0_0_10px_#ffb95f,0_0_2px_#ffffff]"></span><span class="font-label-hardware text-label-hardware text-secondary tracking-widest uppercase">LIVE FEED</span></div><span class="font-label-technical text-label-technical text-outline-variant font-bold">24b / 96k</span></div><div class="flex flex-col gap-space-xs"><div class="font-label-hardware text-label-hardware text-outline uppercase tracking-wider">Output Engine</div><div class="px-space-sm py-space-xs rounded bg-surface-container-high shadow-[inset_0_1px_2px_rgba(0,0,0,0.6)] font-label-technical text-label-technical text-primary truncate">ASIO Direct / Tube Amp</div></div><div class="flex items-center justify-between pt-space-xs"><div class="flex flex-col"><span class="font-label-hardware text-label-hardware text-outline uppercase">Master Attn</span><span class="font-label-meter text-label-meter text-primary-fixed">-14.5 dB</span></div><div class="w-10 h-10 rounded-full bg-surface-bright flex items-center justify-center shadow-[0_4px_10px_rgba(0,0,0,0.8),inset_0_1px_2px_rgba(255,221,187,0.3)] relative"><div class="w-1.5 h-1.5 rounded-full bg-secondary absolute top-1.5"></div><div class="w-5 h-5 rounded-full bg-surface-container-lowest shadow-inner"></div></div></div></div></aside><div class="pl-72"><main class="relative pt-16 min-h-screen w-full px-gutter-loose bg-surface shadow-[inset_0_20px_40px_rgba(0,0,0,0.8)]"><div class="flex flex-col w-full">
+<!-- Sub-header Breadcrumb and Stage Control Bar -->
+<div class="flex items-center justify-between py-space-sm mb-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="font-label-technical text-label-technical text-outline uppercase tracking-widest">Ateliê Acústico</span>
+<span class="text-outline-variant">/</span>
+<span class="font-headline-sm text-headline-sm text-primary font-bold">Personalização &amp; Mini Widget</span>
+<span class="px-space-xs py-0.5 rounded bg-primary-container text-on-primary-container font-label-technical text-label-technical font-semibold ml-space-xs">CHASSIS STUDIO v2.4</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded bg-surface-container-high hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]" id="resetPresetBtn">
+<span class="material-symbols-outlined text-[16px]">restart_alt</span>
+<span class="font-label-technical text-label-technical uppercase tracking-wider">Restaurar</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded bg-primary-container text-on-primary-container hover:bg-primary font-headline-sm text-body-sm font-semibold transition-all shadow-[0_4px_12px_rgba(245,188,126,0.25)]" id="saveConfigBtn">
+<span class="material-symbols-outlined text-[16px]">save</span>
+<span>Salvar Perfil (.vtla)</span>
+</button>
+</div>
+</div>
+<!-- Primary Studio 16-Column Layout Grid -->
+<div class="grid grid-cols-12 xl:grid-cols-16 gap-space-lg">
+<!-- LEFT / CENTER COLUMN: Physical Turntable Simulation Stage & Presets (10 cols) -->
+<div class="col-span-12 xl:col-span-10 flex flex-col gap-space-lg">
+<!-- Interactive Turntable Render Canvas Bay -->
+<div class="relative w-full rounded-xl bg-surface-container-lowest p-space-md shadow-[inset_0_2px_8px_rgba(0,0,0,0.9),0_12px_32px_rgba(0,0,0,0.7)] overflow-hidden">
+<!-- Overhead Lighting Simulation Glow -->
+<div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[720px] h-96 rounded-full bg-secondary/15 blur-[120px] pointer-events-none transition-all duration-700" id="ambientGlow"></div>
+<!-- Top Tool Strip for 3D Camera & Hotspot Inspection -->
+<div class="relative z-10 flex items-center justify-between pb-space-sm mb-space-sm border-b border-outline-variant/20">
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#ffb95f]"></span>
+<span class="font-label-hardware text-label-hardware text-on-surface-variant uppercase tracking-widest">Módulo 3D Físico Ativo</span>
+</div>
+<div class="flex items-center gap-space-xs font-label-technical text-label-technical text-outline">
+<span>FOV:</span>
+<span class="text-primary-fixed-dim font-bold">42° PERSPECTIVA DINÂMICA</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-sm py-1 rounded bg-surface-container-high text-on-surface text-body-sm hover:bg-surface-bright flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[15px] text-primary">3d_rotation</span>
+<span class="font-label-technical text-label-technical">Vista Topo/Frontal</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container-high text-on-surface-variant text-body-sm hover:bg-surface-bright flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[15px]">zoom_in</span>
+<span class="font-label-technical text-label-technical">Foco Agulha</span>
+</button>
+</div>
+</div>
+<!-- Physical Turntable Simulation Stage Plate -->
+<div class="relative w-full h-[460px] rounded-xl bg-surface-container-low transition-all duration-500 flex items-center justify-center p-space-lg shadow-[inset_0_2px_4px_rgba(255,221,187,0.08),inset_0_20px_50px_rgba(0,0,0,0.9),0_10px_30px_rgba(0,0,0,0.8)] overflow-hidden" id="turntablePlinth">
+<!-- Plinth Texture Overlay for Wood/Metal Simulation -->
+<div class="absolute inset-0 bg-gradient-to-br from-amber-950/30 via-transparent to-black/70 mix-blend-overlay pointer-events-none transition-all duration-700" id="plinthSurfaceOverlay"></div>
+<!-- Turntable Deck Assembly (Physical Layout: Platter on left, Tonearm on right, Control plate at bottom) -->
+<div class="relative w-full max-w-[820px] h-full flex items-center justify-between z-10 px-space-md">
+<!-- LEFT: Platter Bay with Micro-grooves and Vinyl Record -->
+<div class="relative flex items-center justify-center">
+<!-- Sub-platter Brass Rim Accent -->
+<div class="absolute w-[330px] h-[330px] rounded-full bg-gradient-to-tr from-on-secondary-fixed-variant via-secondary to-primary-fixed shadow-[0_0_35px_rgba(0,0,0,0.85)] flex items-center justify-center transition-all duration-500" id="subPlatterRing">
+<!-- Strobe dots marking perimeter -->
+<div class="w-full h-full rounded-full opacity-60 bg-[radial-gradient(circle_at_center,_transparent_64%,_#161311_65%,_transparent_66%)]"></div>
+</div>
+<!-- Main Vinyl Disc with Concentric Micro-Grooves -->
+<div class="relative w-[304px] h-[304px] rounded-full bg-[#0d0b0a] shadow-[0_15px_35px_rgba(0,0,0,0.95)] flex items-center justify-center group cursor-pointer transition-all duration-500 overflow-hidden" id="vinylDisc">
+<!-- Radial Grooves CSS Lines -->
+<div class="absolute inset-0 rounded-full bg-[radial-gradient(ellipse_at_center,_transparent_28%,_rgba(255,255,255,0.05)_30%,_transparent_32%,_rgba(255,255,255,0.04)_42%,_transparent_44%,_rgba(255,255,255,0.06)_56%,_transparent_58%,_rgba(255,255,255,0.03)_72%,_transparent_74%)]"></div>
+<!-- Dual Specular Light Refraction Angles -->
+<div class="absolute inset-0 rounded-full opacity-40 bg-[conic-gradient(from_45deg_at_50%_50%,_transparent_0deg,_rgba(255,255,255,0.18)_40deg,_transparent_80deg,_transparent_180deg,_rgba(255,255,255,0.18)_220deg,_transparent_260deg)] pointer-events-none"></div>
+<!-- Center LP Spindle & Paper Label -->
+<div class="relative z-10 w-28 h-28 rounded-full bg-secondary-container flex flex-col items-center justify-center text-center p-2 shadow-[inset_0_2px_4px_rgba(0,0,0,0.6),0_2px_8px_rgba(0,0,0,0.8)] border border-primary-container/40" id="recordLabel">
+<div class="w-2.5 h-2.5 rounded-full bg-surface-container-lowest mb-1 shadow-inner"></div>
+<span class="font-headline-sm text-[9px] leading-tight text-on-secondary-container font-bold uppercase tracking-wider">BLUE NOTE</span>
+<span class="font-label-technical text-[8px] text-on-secondary-container/90 mt-0.5">MILES DAVIS</span>
+<span class="font-label-hardware text-[7px] text-on-secondary-container/70 tracking-widest mt-0.5">33⅓ RPM STEREO</span>
+</div>
+<!-- Interactive Hotspot: Platter Material -->
+<div class="absolute top-4 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded bg-surface-container-lowest/90 backdrop-blur text-primary text-[10px] font-label-technical opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 shadow-md">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+<span>Prato de Alumínio Fundido</span>
+</div>
+</div>
+<!-- Speed Selector Strobe Light Pillar -->
+<div class="absolute -left-6 bottom-4 flex flex-col items-center gap-1 bg-surface-container-high/80 p-1.5 rounded-md shadow-md">
+<div class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_10px_#ffb95f]"></div>
+<span class="font-label-hardware text-[8px] text-outline">STROBE</span>
+</div>
+</div>
+<!-- RIGHT: Tonearm, Gimbal Housing & Mechanical Cue Lever -->
+<div class="relative w-72 h-[340px] flex flex-col justify-between items-end">
+<!-- Tonearm Pivot Gimbal Assembly -->
+<div class="relative w-28 h-28 flex items-center justify-center">
+<!-- Gimbal Brass Turret Base -->
+<div class="w-20 h-20 rounded-full bg-gradient-to-b from-primary-fixed via-primary-container to-surface-container-high p-1 shadow-[0_8px_16px_rgba(0,0,0,0.8)] flex items-center justify-center transition-all duration-500" id="gimbalTurret">
+<!-- Counterweight Ring -->
+<div class="w-14 h-14 rounded-full bg-surface-container-lowest flex items-center justify-center shadow-inner">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed shadow-[inset_0_1px_2px_rgba(255,255,255,0.4)]" id="counterWeightCore"></div>
+</div>
+</div>
+<!-- Tonearm Wand: Precision S-shaped Chrome/Brass Rod -->
+<div class="absolute top-10 right-10 w-2 h-56 origin-top rotate-[24deg] transition-transform duration-700 ease-out group cursor-pointer" id="tonearmWand">
+<!-- Wand Tube -->
+<div class="w-full h-full bg-gradient-to-r from-primary-fixed via-secondary-fixed-dim to-on-primary-fixed-variant shadow-[2px_4px_8px_rgba(0,0,0,0.7)] rounded-full"></div>
+<!-- Headshell & Cartridge with Ruby Stylus -->
+<div class="absolute -bottom-4 -left-3 w-8 h-12 bg-surface-container-highest rounded-sm shadow-md flex flex-col items-center justify-end pb-1 border-t border-primary/40">
+<span class="w-1.5 h-1.5 rounded-full bg-error shadow-[0_0_6px_#ffb4ab]"></span>
+<span class="font-label-technical text-[7px] text-primary mt-0.5">MC-9</span>
+</div>
+<!-- Hotspot Pin -->
+<div class="absolute top-24 -left-20 px-2 py-0.5 rounded bg-surface-container-lowest/90 backdrop-blur text-primary text-[10px] font-label-technical opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-md">
+<span>Braço J-Shape Balanceado</span>
+</div>
+</div>
+</div>
+<!-- Turntable Deck Acoustic Grille Strip (Speaker Cloth Accent) -->
+<div class="w-full h-24 rounded-lg bg-surface-container-high p-2 shadow-inner transition-all duration-500 relative overflow-hidden flex items-center justify-between" id="deckGrillePanel">
+<!-- Woven Texture Pattern -->
+<div class="absolute inset-0 opacity-40 bg-[radial-gradient(#e0a96d_1px,transparent_1px)] [background-size:6px_6px] pointer-events-none" id="grillePatternOverlay"></div>
+<div class="relative z-10 flex flex-col">
+<span class="font-label-hardware text-label-hardware text-outline uppercase tracking-wider">Monitor Integrado</span>
+<span class="font-headline-sm text-body-sm text-primary font-bold" id="grilleBadgeLabel">Tweed Vintage 1974</span>
+</div>
+<div class="relative z-10 flex items-center gap-space-sm">
+<!-- Pitch fader mini representation -->
+<div class="flex flex-col items-center gap-1">
+<span class="font-label-technical text-[8px] text-outline">PITCH</span>
+<div class="w-1.5 h-12 bg-surface-container-lowest rounded-full relative">
+<div class="absolute top-5 -left-1.5 w-4.5 h-2 rounded bg-primary-fixed shadow-md"></div>
+</div>
+</div>
+<!-- 33 / 45 RPM Metal Buttons -->
+<div class="flex flex-col gap-1">
+<button class="w-8 h-6 rounded bg-surface-bright text-primary text-[10px] font-label-technical font-bold shadow-sm hover:bg-primary-container hover:text-on-primary-container">33</button>
+<button class="w-8 h-6 rounded bg-surface-container-lowest text-outline text-[10px] font-label-technical hover:text-on-surface">45</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Status Telemetry Inside Plinth -->
+<div class="absolute bottom-3 left-space-md right-space-md flex items-center justify-between text-outline text-label-technical font-label-technical z-10">
+<div class="flex items-center gap-space-sm">
+<span class="flex items-center gap-1 text-secondary"><span class="material-symbols-outlined text-[14px]">tune</span> CALIBRAÇÃO DIRETA</span>
+<span>•</span>
+<span id="activePresetBadge">PRESET: JACARANDÁ CLÁSSICO</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<span>FORÇA VERTICAL: 1.85g</span>
+<span>•</span>
+<span>ANTI-SKATING: ATIVO</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Presets Selector: 3 Master Physical Styles -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-hardware text-label-hardware text-outline uppercase tracking-widest">Estéticas Curadas</span>
+<span class="font-headline-md text-headline-sm text-on-surface font-bold">Temas Mestres de Fábrica</span>
+</div>
+<span class="font-label-technical text-label-technical text-on-surface-variant">Selecione uma base acústica para afinação</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- Master Theme Card 1: Madeira Clássica -->
+<div class="theme-card active cursor-pointer p-space-md rounded-xl bg-surface-container-high transition-all duration-300 relative group shadow-[0_4px_16px_rgba(0,0,0,0.6)]" data-preset="classica">
+<div class="absolute top-2 right-2 w-3 h-3 rounded-full bg-secondary shadow-[0_0_8px_#ffb95f]"></div>
+<div class="flex items-center gap-space-sm mb-space-sm">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-900 to-amber-950 flex items-center justify-center shadow-[inset_0_1px_2px_rgba(255,255,255,0.3)]">
+<span class="material-symbols-outlined text-primary text-[20px]">forest</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-md text-primary font-bold">Madeira Clássica</span>
+<span class="font-label-technical text-label-technical text-outline">Nostalgia 1974</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md leading-relaxed">
+              Jacarandá avermelhado de veio nobre, ferragens em latão torneado, sarja bege tweed e iluminação âmbar 2700K.
+            </p>
+<div class="flex items-center justify-between pt-space-xs border-t border-outline-variant/30">
+<div class="flex items-center gap-1.5">
+<span class="w-4 h-4 rounded-full bg-amber-900 border border-outline-variant/50"></span>
+<span class="w-4 h-4 rounded-full bg-primary-fixed border border-outline-variant/50"></span>
+<span class="w-4 h-4 rounded-full bg-[#d6c7b2] border border-outline-variant/50"></span>
+</div>
+<span class="font-label-technical text-label-technical text-secondary uppercase font-semibold">Padrão Hi-Fi</span>
+</div>
+</div>
+<!-- Master Theme Card 2: Preto e Dourado -->
+<div class="theme-card cursor-pointer p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-all duration-300 relative group shadow-[0_4px_16px_rgba(0,0,0,0.4)]" data-preset="pretodourado">
+<div class="flex items-center gap-space-sm mb-space-sm">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-neutral-900 to-black flex items-center justify-center shadow-[inset_0_1px_2px_rgba(255,255,255,0.2)]">
+<span class="material-symbols-outlined text-secondary-fixed text-[20px]">workspace_premium</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-md text-on-surface font-bold group-hover:text-primary transition-colors">Preto &amp; Ouro 24K</span>
+<span class="font-label-technical text-label-technical text-outline">Concerto Royale</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md leading-relaxed">
+              Ebanizado piano black fosco, detalhes nobres banhados a ouro 24k, disco fumê espelhado e trama em carbono puro.
+            </p>
+<div class="flex items-center justify-between pt-space-xs border-t border-outline-variant/30">
+<div class="flex items-center gap-1.5">
+<span class="w-4 h-4 rounded-full bg-black border border-outline-variant/50"></span>
+<span class="w-4 h-4 rounded-full bg-secondary-container border border-outline-variant/50"></span>
+<span class="w-4 h-4 rounded-full bg-neutral-800 border border-outline-variant/50"></span>
+</div>
+<span class="font-label-technical text-label-technical text-outline uppercase font-semibold">Exclusivo</span>
+</div>
+</div>
+<!-- Master Theme Card 3: Neon Moderno -->
+<div class="theme-card cursor-pointer p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-all duration-300 relative group shadow-[0_4px_16px_rgba(0,0,0,0.4)]" data-preset="neonmoderno">
+<div class="flex items-center gap-space-sm mb-space-sm">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-zinc-900 to-cyan-950 flex items-center justify-center shadow-[inset_0_1px_2px_rgba(0,255,255,0.2)]">
+<span class="material-symbols-outlined text-cyan-400 text-[20px]">fluorescent</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-md text-on-surface font-bold group-hover:text-primary transition-colors">Neon Moderno</span>
+<span class="font-label-technical text-label-technical text-outline">Cyber Audiophile</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md leading-relaxed">
+              Chassis mineral grafite jateado, alumínio e titânio usinado, anel sub-prato com iluminação ciano e magenta.
+            </p>
+<div class="flex items-center justify-between pt-space-xs border-t border-outline-variant/30">
+<div class="flex items-center gap-1.5">
+<span class="w-4 h-4 rounded-full bg-zinc-800 border border-outline-variant/50"></span>
+<span class="w-4 h-4 rounded-full bg-cyan-400 border border-outline-variant/50"></span>
+<span class="w-4 h-4 rounded-full bg-fuchsia-500 border border-outline-variant/50"></span>
+</div>
+<span class="font-label-technical text-label-technical text-outline uppercase font-semibold">Estúdio Pro</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Granular Controls Panel: Materials, Metals & Acoustic Grille -->
+<div class="p-space-lg rounded-xl bg-surface-container-low shadow-[inset_0_2px_4px_rgba(0,0,0,0.7)] flex flex-col gap-space-md">
+<div class="flex items-center justify-between pb-space-xs border-b border-outline-variant/20">
+<div class="flex items-center gap-space-sm">
+<span class="font-headline-sm text-body-lg text-primary font-bold">Laboratório de Texturas Físicas</span>
+<span class="font-label-technical text-label-technical text-outline">AJUSTES DETALHADOS</span>
+</div>
+<span class="font-label-technical text-label-technical text-secondary">Tempo de Resposta Motor: 0.18s</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
+<!-- Control 1: Wood Selection -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-hardware text-label-hardware text-outline uppercase tracking-wider">1. Madeira do Gabinete</span>
+<span class="font-label-technical text-label-technical text-primary font-bold" id="selectedWoodLabel">Mogno Imperial</span>
+</div>
+<div class="grid grid-cols-2 gap-space-xs mt-1">
+<button class="wood-btn active flex items-center gap-2 p-2 rounded bg-surface-container-high text-left hover:bg-surface-bright transition-all shadow-sm" data-wood="mogno">
+<span class="w-3.5 h-3.5 rounded-full bg-amber-900 shrink-0"></span>
+<span class="font-body-sm text-body-sm text-on-surface truncate">Mogno Imperial</span>
+</button>
+<button class="wood-btn flex items-center gap-2 p-2 rounded bg-surface-container text-left hover:bg-surface-bright transition-all shadow-sm" data-wood="carvalho">
+<span class="w-3.5 h-3.5 rounded-full bg-[#3d271d] shrink-0"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Carvalho Escuro</span>
+</button>
+<button class="wood-btn flex items-center gap-2 p-2 rounded bg-surface-container text-left hover:bg-surface-bright transition-all shadow-sm" data-wood="nogueira">
+<span class="w-3.5 h-3.5 rounded-full bg-[#56382d] shrink-0"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Nogueira Walnut</span>
+</button>
+<button class="wood-btn flex items-center gap-2 p-2 rounded bg-surface-container text-left hover:bg-surface-bright transition-all shadow-sm" data-wood="bambu">
+<span class="w-3.5 h-3.5 rounded-full bg-[#a38053] shrink-0"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Bambu Tratado</span>
+</button>
+</div>
+</div>
+<!-- Control 2: Metal Finishes -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-hardware text-label-hardware text-outline uppercase tracking-wider">2. Acabamento dos Metais</span>
+<span class="font-label-technical text-label-technical text-primary font-bold" id="selectedMetalLabel">Latão Escovado</span>
+</div>
+<div class="grid grid-cols-2 gap-space-xs mt-1">
+<button class="metal-btn active flex items-center gap-2 p-2 rounded bg-surface-container-high text-left hover:bg-surface-bright transition-all shadow-sm" data-metal="latao">
+<span class="w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-amber-600 to-yellow-200 shrink-0 shadow-sm"></span>
+<span class="font-body-sm text-body-sm text-on-surface truncate">Latão Escovado</span>
+</button>
+<button class="metal-btn flex items-center gap-2 p-2 rounded bg-surface-container text-left hover:bg-surface-bright transition-all shadow-sm" data-metal="cobre">
+<span class="w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-orange-700 to-amber-400 shrink-0 shadow-sm"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Cobre Polido</span>
+</button>
+<button class="metal-btn flex items-center gap-2 p-2 rounded bg-surface-container text-left hover:bg-surface-bright transition-all shadow-sm" data-metal="cromo">
+<span class="w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-zinc-700 to-slate-300 shrink-0 shadow-sm"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Cromo Fumê</span>
+</button>
+<button class="metal-btn flex items-center gap-2 p-2 rounded bg-surface-container text-left hover:bg-surface-bright transition-all shadow-sm" data-metal="ouro">
+<span class="w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-yellow-700 to-amber-300 shrink-0 shadow-sm"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Ouro Envelhecido</span>
+</button>
+</div>
+</div>
+<!-- Control 3: Acoustic Grille Cloth -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-hardware text-label-hardware text-outline uppercase tracking-wider">3. Tecido da Grade</span>
+<span class="font-label-technical text-label-technical text-primary font-bold" id="selectedClothLabel">Bege Tweed</span>
+</div>
+<div class="flex flex-col gap-space-xs mt-1">
+<button class="cloth-btn active flex items-center justify-between p-2 rounded bg-surface-container-high hover:bg-surface-bright transition-all shadow-sm" data-cloth="tweed">
+<div class="flex items-center gap-2 truncate">
+<span class="w-4 h-4 rounded bg-[#cfc3ab] shrink-0 border border-outline-variant/40"></span>
+<span class="font-body-sm text-body-sm text-on-surface truncate">Sarja Tweed Vintage</span>
+</div>
+<span class="font-label-technical text-[10px] text-secondary">PADRÃO</span>
+</button>
+<button class="cloth-btn flex items-center justify-between p-2 rounded bg-surface-container hover:bg-surface-bright transition-all shadow-sm" data-cloth="dourada">
+<div class="flex items-center gap-2 truncate">
+<span class="w-4 h-4 rounded bg-[#9c7d42] shrink-0 border border-outline-variant/40"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Malha Metálica Dourada</span>
+</div>
+<span class="font-label-technical text-[10px] text-outline">ALTA RIGIDEZ</span>
+</button>
+<button class="cloth-btn flex items-center justify-between p-2 rounded bg-surface-container hover:bg-surface-bright transition-all shadow-sm" data-cloth="charcoal">
+<div class="flex items-center gap-2 truncate">
+<span class="w-4 h-4 rounded bg-[#1f1d1c] shrink-0 border border-outline-variant/40"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Tecido Charcoal Pro</span>
+</div>
+<span class="font-label-technical text-[10px] text-outline">ESTÚDIO</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Ambient Lighting Hardware Potentiometers Bar -->
+<div class="mt-space-sm pt-space-md border-t border-outline-variant/20 grid grid-cols-1 md:grid-cols-3 gap-space-lg items-center">
+<!-- Potentiometer 1: Arm Lamp Brightness -->
+<div class="flex items-center justify-between gap-space-md bg-surface-container-highest/40 p-space-sm rounded-lg">
+<div class="flex flex-col">
+<span class="font-label-hardware text-label-hardware text-outline uppercase tracking-wider">Luz do Braço Tonearm</span>
+<span class="font-label-meter text-label-meter text-primary font-bold" id="lampValueDisplay">78%</span>
+</div>
+<div class="flex items-center gap-space-sm flex-1 max-w-[130px]">
+<input class="w-full accent-primary h-1.5 bg-surface-container-lowest rounded cursor-pointer" id="lampSlider" max="100" min="0" type="range" value="78"/>
+</div>
+</div>
+<!-- Potentiometer 2: Color Temp Dial (2200K - 4000K) -->
+<div class="flex items-center justify-between gap-space-md bg-surface-container-highest/40 p-space-sm rounded-lg">
+<div class="flex flex-col">
+<span class="font-label-hardware text-label-hardware text-outline uppercase tracking-wider">Temperatura Filamento</span>
+<span class="font-label-meter text-label-meter text-secondary font-bold" id="tempValueDisplay">2700K (Âmbar)</span>
+</div>
+<div class="flex items-center gap-space-sm flex-1 max-w-[130px]">
+<input class="w-full accent-secondary h-1.5 bg-surface-container-lowest rounded cursor-pointer" id="tempSlider" max="4000" min="2200" step="100" type="range" value="2700"/>
+</div>
+</div>
+<!-- Potentiometer 3: VU Brightness & Mechanical Switch -->
+<div class="flex items-center justify-between gap-space-md bg-surface-container-highest/40 p-space-sm rounded-lg">
+<div class="flex flex-col">
+<span class="font-label-hardware text-label-hardware text-outline uppercase tracking-wider">Iluminação VU Meter</span>
+<span class="font-label-technical text-label-technical text-on-surface-variant">Lâmpadas Incandescentes</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-sm py-1 rounded bg-secondary-container text-on-secondary-container font-label-technical text-label-technical font-bold shadow-sm transition-all" id="vuToggleBtn">LIGADO</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: Windows Desktop Mini Widget Configuration & Live Preview (6 cols) -->
+<div class="col-span-12 xl:col-span-6 flex flex-col gap-space-lg">
+<!-- Section Header -->
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[18px]">desktop_windows</span>
+<span class="font-label-hardware text-label-hardware text-outline uppercase tracking-widest">Windows 11 Gadget</span>
+</div>
+<span class="font-headline-md text-headline-sm text-on-surface font-bold">Mini Widget Flutuante</span>
+</div>
+<span class="px-space-xs py-0.5 rounded bg-surface-container-high font-label-technical text-[10px] text-primary">WASAPI Direct</span>
+</div>
+<!-- Live Windows Desktop Preview Frame -->
+<div class="relative w-full h-[370px] rounded-xl overflow-hidden shadow-[0_16px_36px_rgba(0,0,0,0.85)] flex flex-col justify-between p-space-md">
+<!-- Wallpaper Background Image Simulation -->
+<div class="absolute inset-0 bg-cover bg-center transition-all duration-700" data-alt="A moody, high-end architectural desktop wallpaper showing dark minimalist concrete and warm atmospheric amber lighting reflections, photographed in ultra-high resolution with soft focal depth, matching warm walnut hi-fi aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBzsOoR9UCQWHQFggqzt9qaiD6uKMOZVNwbD4nCWEcgaBm_qdQyPTIIclFY0xGePPmlcDOJNndqRsN_DaOUpN6bsiYmawkWR0gfY0glOy3p5rOLEQ81w7wN8IYDnMfOuQRyHTsdP_YzcJbheQpabU2Tw74xqRtq-W9GRGt8pnCk0gXKj-vKw-0w2wy8YoHIM_SpGGSr7-otOYJdDjxNHr5Lv26ov5Ph8Fy511qsdGrKry5CX3Eo0psQ')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/80 via-transparent to-surface-container-lowest/40 pointer-events-none"></div>
+<!-- Desktop Simulation Top Bar -->
+<div class="relative z-10 flex items-center justify-between text-on-surface/70 text-label-technical font-label-technical drop-shadow">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary/70"></span>
+<span>Área de Trabalho (Monitor 1)</span>
+</div>
+<span class="tracking-widest">1440 × 900 • 120Hz</span>
+</div>
+<!-- The Real Desktop Floating Mini Widget -->
+<div class="relative z-20 self-center w-full max-w-[370px] p-space-sm rounded-xl bg-surface-container-lowest/85 backdrop-blur-xl border-t border-primary/20 shadow-[0_12px_32px_rgba(0,0,0,0.8),inset_0_1px_2px_rgba(255,221,187,0.2)] flex flex-col gap-space-xs transition-all duration-300" id="desktopMiniWidget">
+<!-- Widget Window Drag Handle and Windows Controls -->
+<div class="flex items-center justify-between pb-1 border-b border-outline-variant/20 cursor-move">
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary shadow-[0_0_6px_#ffb95f]"></span>
+<span class="font-label-technical text-[9px] text-primary uppercase font-bold tracking-widest">VITROLA MINI DECK</span>
+</div>
+<div class="flex items-center gap-1">
+<button aria-label="Fixar no topo" class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[13px]">push_pin</span>
+</button>
+<button aria-label="Esconder" class="text-outline hover:text-error transition-colors">
+<span class="material-symbols-outlined text-[13px]">close</span>
+</button>
+</div>
+</div>
+<!-- Widget Core Audio Row: Circular Rotating Disc + Meta + Playback Controls -->
+<div class="flex items-center gap-space-sm py-1">
+<!-- Mini Vinyl Spinning Disc with Album Artwork -->
+<div class="relative w-14 h-14 rounded-full bg-surface-container-lowest shadow-[0_4px_10px_rgba(0,0,0,0.9)] flex items-center justify-center shrink-0 border border-primary-container/30">
+<div class="w-full h-full rounded-full bg-[#110e0c] flex items-center justify-center animate-[spin_6s_linear_infinite] overflow-hidden" id="widgetSpinningDisc">
+<!-- Grooves on mini disc -->
+<div class="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,_transparent_35%,_rgba(255,255,255,0.06)_37%,_transparent_40%,_rgba(255,255,255,0.08)_60%,_transparent_63%)]"></div>
+<!-- Mini Album Cover Inside -->
+<div class="w-6 h-6 rounded-full bg-secondary-container flex items-center justify-center text-[7px] font-bold text-on-secondary-container shadow-inner">
+                  MD
+                </div>
+</div>
+<!-- Mini Tonearm Over Disc -->
+<div class="absolute -top-1 -right-0.5 w-1 h-7 bg-primary-fixed rounded origin-top rotate-[32deg] shadow-sm pointer-events-none"></div>
+</div>
+<!-- Song Info & Progress -->
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-body-md text-primary font-bold truncate">So What</span>
+<span class="font-label-technical text-[10px] text-secondary shrink-0 ml-1">FLAC 96k</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Miles Davis — Kind of Blue</span>
+<!-- Live Progress Scrubber -->
+<div class="w-full h-1 bg-surface-container-highest rounded-full mt-1.5 overflow-hidden flex items-center">
+<div class="w-2/5 h-full bg-primary shadow-[0_0_8px_#fec486]"></div>
+</div>
+</div>
+</div>
+<!-- Widget Transport Controls & Quick Volume Strip -->
+<div class="flex items-center justify-between pt-1 border-t border-outline-variant/20">
+<div class="flex items-center gap-1">
+<button aria-label="Faixa anterior" class="w-7 h-7 rounded bg-surface-container-high/80 hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[16px]">skip_previous</span>
+</button>
+<button aria-label="Tocar ou Pausar" class="w-8 h-8 rounded-full bg-primary-container hover:bg-primary text-on-primary-container flex items-center justify-center shadow-[0_2px_8px_rgba(245,188,126,0.3)] transition-all" id="widgetPlayPauseBtn">
+<span class="material-symbols-outlined text-[18px]">pause</span>
+</button>
+<button aria-label="Próxima faixa" class="w-7 h-7 rounded bg-surface-container-high/80 hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[16px]">skip_next</span>
+</button>
+</div>
+<!-- VU Dynamic Mini Meter Visualization -->
+<div class="flex items-center gap-1 px-2 py-1 rounded bg-surface-container-high/70 shadow-inner">
+<span class="font-label-hardware text-[8px] text-outline">CH-L</span>
+<div class="flex items-end gap-0.5 h-3">
+<span class="w-1 h-1.5 bg-secondary rounded-xs"></span>
+<span class="w-1 h-2 bg-secondary rounded-xs"></span>
+<span class="w-1 h-3 bg-secondary rounded-xs animate-pulse"></span>
+<span class="w-1 h-1 bg-outline-variant rounded-xs"></span>
+</div>
+<span class="font-label-technical text-[9px] text-primary-fixed font-bold ml-1">-6dB</span>
+</div>
+<!-- Volume Mute Mini Stud -->
+<div class="flex items-center gap-1">
+<button class="w-6 h-6 rounded bg-surface-container-high hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[14px]">volume_up</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Windows Taskbar Simulated Bottom Edge -->
+<div class="relative z-10 flex items-center justify-between text-outline text-[11px] font-label-technical">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px] text-primary">lock</span>
+<span>Fixado na barra de tarefas</span>
+</div>
+<span>Arrastável com botão esquerdo</span>
+</div>
+</div>
+<!-- Widget Controls & Customization Bay -->
+<div class="p-space-md rounded-xl bg-surface-container-low shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)] flex flex-col gap-space-md">
+<!-- Size Form-factor Switcher -->
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-hardware text-label-hardware text-outline uppercase tracking-wider">Tamanho &amp; Formato do Widget</span>
+<div class="grid grid-cols-3 gap-space-xs">
+<button class="widget-size-btn p-2 rounded bg-surface-container text-left hover:bg-surface-bright transition-all" data-size="compacto">
+<div class="font-headline-sm text-body-sm text-on-surface-variant font-bold">Compacto</div>
+<div class="font-label-technical text-[10px] text-outline">Fita Barra Tarefas</div>
+</button>
+<button class="widget-size-btn active p-2 rounded bg-surface-container-high text-left shadow-sm transition-all" data-size="medio">
+<div class="font-headline-sm text-body-sm text-primary font-bold">Médio</div>
+<div class="font-label-technical text-[10px] text-secondary">Mini Deck (Padrão)</div>
+</button>
+<button class="widget-size-btn p-2 rounded bg-surface-container text-left hover:bg-surface-bright transition-all" data-size="estendido">
+<div class="font-headline-sm text-body-sm text-on-surface-variant font-bold">Estendido</div>
+<div class="font-label-technical text-[10px] text-outline">Capa &amp; VU Duplo</div>
+</button>
+</div>
+</div>
+<!-- Background Material & Acrylic Windows Opacity -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-hardware text-label-hardware text-outline uppercase tracking-wider">Material de Fundo (Acrílico Mica Win 11)</span>
+<span class="font-label-meter text-label-meter text-primary font-bold" id="opacityDisplay">85% Opaco</span>
+</div>
+<input class="w-full accent-primary h-1.5 bg-surface-container-lowest rounded cursor-pointer" id="opacitySlider" max="100" min="30" type="range" value="85"/>
+</div>
+<!-- Quick Toggles for Windows Behavior -->
+<div class="grid grid-cols-2 gap-space-sm pt-space-xs border-t border-outline-variant/20">
+<!-- Toggle 1: Always on Top -->
+<label class="flex items-center justify-between p-2 rounded bg-surface-container-high/60 cursor-pointer hover:bg-surface-bright transition-colors">
+<span class="font-body-sm text-body-sm text-on-surface">Sempre no Topo</span>
+<input checked="" class="accent-secondary w-4 h-4 rounded cursor-pointer" type="checkbox"/>
+</label>
+<!-- Toggle 2: Synchronize Theme -->
+<label class="flex items-center justify-between p-2 rounded bg-surface-container-high/60 cursor-pointer hover:bg-surface-bright transition-colors">
+<span class="font-body-sm text-body-sm text-on-surface">Sincronizar Madeira</span>
+<input checked="" class="accent-secondary w-4 h-4 rounded cursor-pointer" id="syncWoodToggle" type="checkbox"/>
+</label>
+</div>
+<!-- Windows Action Buttons -->
+<div class="flex items-center gap-space-sm pt-space-xs">
+<button class="flex-1 py-space-xs px-space-md rounded bg-secondary hover:bg-secondary-fixed text-on-secondary font-headline-sm text-body-md font-bold transition-all flex items-center justify-center gap-2 shadow-[0_4px_14px_rgba(255,185,95,0.3)]" id="launchWidgetBtn">
+<span class="material-symbols-outlined text-[18px]">open_in_new</span>
+<span>Destacar Widget no Desktop</span>
+</button>
+</div>
+</div>
+<!-- Lossless Audio Stream Badges Card -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)] flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-technical text-label-technical text-on-surface-variant">BIT-PERFECT OUTPUT</span>
+<span class="font-headline-sm text-body-sm text-primary font-bold">DSP 64-bit Flutuante Ativo</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded bg-surface-container-high font-label-technical text-[10px] text-secondary font-bold">24-BIT</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high font-label-technical text-[10px] text-primary font-bold">96.0 kHz</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function initChassisStudio() {
+    const plinth = document.getElementById('turntablePlinth');
+    const plinthOverlay = document.getElementById('plinthSurfaceOverlay');
+    const subPlatterRing = document.getElementById('subPlatterRing');
+    const tonearmWand = document.getElementById('tonearmWand');
+    const gimbalTurret = document.getElementById('gimbalTurret');
+    const deckGrille = document.getElementById('deckGrillePanel');
+    const grilleBadge = document.getElementById('grilleBadgeLabel');
+    const ambientGlow = document.getElementById('ambientGlow');
+    const activePresetBadge = document.getElementById('activePresetBadge');
+
+    const lampSlider = document.getElementById('lampSlider');
+    const lampValueDisplay = document.getElementById('lampValueDisplay');
+    const tempSlider = document.getElementById('tempSlider');
+    const tempValueDisplay = document.getElementById('tempValueDisplay');
+    const vuToggleBtn = document.getElementById('vuToggleBtn');
+
+    const desktopMiniWidget = document.getElementById('desktopMiniWidget');
+    const opacitySlider = document.getElementById('opacitySlider');
+    const opacityDisplay = document.getElementById('opacityDisplay');
+    const widgetPlayPauseBtn = document.getElementById('widgetPlayPauseBtn');
+    const widgetSpinningDisc = document.getElementById('widgetSpinningDisc');
+    const launchWidgetBtn = document.getElementById('launchWidgetBtn');
+    const saveConfigBtn = document.getElementById('saveConfigBtn');
+
+    // 1. Presets Logic
+    const themeCards = document.querySelectorAll('.theme-card');
+    themeCards.forEach(card => {
+      card.addEventListener('click', () => {
+        themeCards.forEach(c => {
+          c.classList.remove('active', 'bg-surface-container-high');
+          c.classList.add('bg-surface-container-low');
+          const dot = c.querySelector('.w-3.h-3');
+          if (dot) dot.remove();
+        });
+
+        card.classList.add('active', 'bg-surface-container-high');
+        card.classList.remove('bg-surface-container-low');
+
+        const indicator = document.createElement('div');
+        indicator.className = 'absolute top-2 right-2 w-3 h-3 rounded-full bg-secondary shadow-[0_0_8px_#ffb95f]';
+        card.appendChild(indicator);
+
+        const preset = card.getAttribute('data-preset');
+        applyPreset(preset);
+      });
+    });
+
+    function applyPreset(preset) {
+      if (preset === 'classica') {
+        plinth.style.backgroundColor = '#2b1b14';
+        plinthOverlay.style.background = 'radial-gradient(circle, rgba(140,50,20,0.25) 0%, rgba(0,0,0,0.85) 100%)';
+        subPlatterRing.style.background = 'linear-gradient(to top right, #653e00, #ffb95f, #ffddbb)';
+        gimbalTurret.style.background = 'linear-gradient(to bottom, #ffddbb, #e0a96d, #2d2927)';
+        deckGrille.style.backgroundColor = '#383432';
+        grilleBadge.textContent = 'Tweed Vintage 1974';
+        ambientGlow.style.backgroundColor = 'rgba(255, 185, 95, 0.2)';
+        activePresetBadge.textContent = 'PRESET: JACARANDÁ CLÁSSICO';
+        tempSlider.value = 2700;
+        tempValueDisplay.textContent = '2700K (Âmbar)';
+      } else if (preset === 'pretodourado') {
+        plinth.style.backgroundColor = '#100e0c';
+        plinthOverlay.style.background = 'radial-gradient(circle, rgba(238,152,0,0.15) 0%, rgba(0,0,0,0.95) 100%)';
+        subPlatterRing.style.background = 'linear-gradient(to top right, #ee9800, #ffddb8, #ee9800)';
+        gimbalTurret.style.background = 'linear-gradient(to bottom, #ffddb8, #ee9800, #100e0c)';
+        deckGrille.style.backgroundColor = '#161311';
+        grilleBadge.textContent = 'Trama Carbono Royale';
+        ambientGlow.style.backgroundColor = 'rgba(238, 152, 0, 0.25)';
+        activePresetBadge.textContent = 'PRESET: PRETO & OURO 24K';
+        tempSlider.value = 3200;
+        tempValueDisplay.textContent = '3200K (Ouro Neutro)';
+      } else if (preset === 'neonmoderno') {
+        plinth.style.backgroundColor = '#181e24';
+        plinthOverlay.style.background = 'radial-gradient(circle, rgba(34,211,238,0.2) 0%, rgba(10,12,16,0.95) 100%)';
+        subPlatterRing.style.background = 'linear-gradient(to top right, #06b6d4, #a855f7, #06b6d4)';
+        gimbalTurret.style.background = 'linear-gradient(to bottom, #94a3b8, #475569, #0f172a)';
+        deckGrille.style.backgroundColor = '#0f172a';
+        grilleBadge.textContent = 'Malha Aeroespacial';
+        ambientGlow.style.backgroundColor = 'rgba(6, 182, 212, 0.25)';
+        activePresetBadge.textContent = 'PRESET: NEON MODERNO';
+        tempSlider.value = 3800;
+        tempValueDisplay.textContent = '3800K (Estúdio Frio)';
+      }
+    }
+
+    // 2. Granular Wood Buttons
+    const woodBtns = document.querySelectorAll('.wood-btn');
+    const selectedWoodLabel = document.getElementById('selectedWoodLabel');
+    woodBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        woodBtns.forEach(b => {
+          b.classList.remove('bg-surface-container-high');
+          b.classList.add('bg-surface-container');
+        });
+        btn.classList.add('bg-surface-container-high');
+        btn.classList.remove('bg-surface-container');
+        const woodName = btn.querySelector('span:last-child').textContent;
+        selectedWoodLabel.textContent = woodName;
+
+        const woodType = btn.getAttribute('data-wood');
+        if (woodType === 'mogno') plinth.style.backgroundColor = '#381e14';
+        if (woodType === 'carvalho') plinth.style.backgroundColor = '#231812';
+        if (woodType === 'nogueira') plinth.style.backgroundColor = '#30221c';
+        if (woodType === 'bambu') plinth.style.backgroundColor = '#423624';
+      });
+    });
+
+    // 3. Granular Metals Buttons
+    const metalBtns = document.querySelectorAll('.metal-btn');
+    const selectedMetalLabel = document.getElementById('selectedMetalLabel');
+    metalBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        metalBtns.forEach(b => {
+          b.classList.remove('bg-surface-container-high');
+          b.classList.add('bg-surface-container');
+        });
+        btn.classList.add('bg-surface-container-high');
+        btn.classList.remove('bg-surface-container');
+        const metalName = btn.querySelector('span:last-child').textContent;
+        selectedMetalLabel.textContent = metalName;
+
+        const metalType = btn.getAttribute('data-metal');
+        if (metalType === 'latao') subPlatterRing.style.background = 'linear-gradient(to top right, #653e00, #ffb95f, #ffddbb)';
+        if (metalType === 'cobre') subPlatterRing.style.background = 'linear-gradient(to top right, #7c2e00, #ff9a6b, #ffdbcc)';
+        if (metalType === 'cromo') subPlatterRing.style.background = 'linear-gradient(to top right, #334155, #94a3b8, #f8fafc)';
+        if (metalType === 'ouro') subPlatterRing.style.background = 'linear-gradient(to top right, #854d0e, #facc15, #fef08a)';
+      });
+    });
+
+    // 4. Cloth Buttons
+    const clothBtns = document.querySelectorAll('.cloth-btn');
+    const selectedClothLabel = document.getElementById('selectedClothLabel');
+    clothBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        clothBtns.forEach(b => {
+          b.classList.remove('bg-surface-container-high');
+          b.classList.add('bg-surface-container');
+        });
+        btn.classList.add('bg-surface-container-high');
+        btn.classList.remove('bg-surface-container');
+        const clothName = btn.querySelector('span:last-child').textContent;
+        selectedClothLabel.textContent = clothName;
+
+        const clothType = btn.getAttribute('data-cloth');
+        if (clothType === 'tweed') {
+          deckGrille.style.backgroundColor = '#383432';
+          grilleBadge.textContent = 'Sarja Tweed Vintage';
+        } else if (clothType === 'dourada') {
+          deckGrille.style.backgroundColor = '#45351a';
+          grilleBadge.textContent = 'Malha Metálica Dourada';
+        } else if (clothType === 'charcoal') {
+          deckGrille.style.backgroundColor = '#161311';
+          grilleBadge.textContent = 'Tecido Acústico Preto';
+        }
+      });
+    });
+
+    // 5. Lighting Dials
+    lampSlider.addEventListener('input', (e) => {
+      const val = e.target.value;
+      lampValueDisplay.textContent = val + '%';
+      ambientGlow.style.opacity = (val / 100).toString();
+    });
+
+    tempSlider.addEventListener('input', (e) => {
+      const val = e.target.value;
+      let label = 'Âmbar';
+      if (val > 3000) label = 'Neutro';
+      if (val > 3600) label = 'Estúdio';
+      tempValueDisplay.textContent = `${val}K (${label})`;
+    });
+
+    let vuActive = true;
+    vuToggleBtn.addEventListener('click', () => {
+      vuActive = !vuActive;
+      if (vuActive) {
+        vuToggleBtn.textContent = 'LIGADO';
+        vuToggleBtn.classList.remove('bg-surface-container-high', 'text-outline');
+        vuToggleBtn.classList.add('bg-secondary-container', 'text-on-secondary-container');
+      } else {
+        vuToggleBtn.textContent = 'DESLIGADO';
+        vuToggleBtn.classList.add('bg-surface-container-high', 'text-outline');
+        vuToggleBtn.classList.remove('bg-secondary-container', 'text-on-secondary-container');
+      }
+    });
+
+    // 6. Widget Desktop Controls
+    opacitySlider.addEventListener('input', (e) => {
+      const val = e.target.value;
+      opacityDisplay.textContent = val + '% Opaco';
+      desktopMiniWidget.style.backgroundColor = `rgba(16, 14, 12, ${val / 100})`;
+    });
+
+    const sizeBtns = document.querySelectorAll('.widget-size-btn');
+    sizeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        sizeBtns.forEach(b => {
+          b.classList.remove('bg-surface-container-high');
+          b.classList.add('bg-surface-container');
+        });
+        btn.classList.add('bg-surface-container-high');
+        btn.classList.remove('bg-surface-container');
+
+        const size = btn.getAttribute('data-size');
+        if (size === 'compacto') {
+          desktopMiniWidget.style.maxWidth = '280px';
+        } else if (size === 'medio') {
+          desktopMiniWidget.style.maxWidth = '370px';
+        } else if (size === 'estendido') {
+          desktopMiniWidget.style.maxWidth = '460px';
+        }
+      });
+    });
+
+    let isPlaying = true;
+    widgetPlayPauseBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      const icon = widgetPlayPauseBtn.querySelector('.material-symbols-outlined');
+      if (isPlaying) {
+        icon.textContent = 'pause';
+        widgetSpinningDisc.style.animationPlayState = 'running';
+      } else {
+        icon.textContent = 'play_arrow';
+        widgetSpinningDisc.style.animationPlayState = 'paused';
+      }
+    });
+
+    launchWidgetBtn.addEventListener('click', () => {
+      launchWidgetBtn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">sync</span><span>Sincronizando no Windows...</span>';
+      setTimeout(() => {
+        launchWidgetBtn.innerHTML = '<span class="material-symbols-outlined text-[18px]">check_circle</span><span>Widget Ativo na Área de Trabalho</span>';
+        setTimeout(() => {
+          launchWidgetBtn.innerHTML = '<span class="material-symbols-outlined text-[18px]">open_in_new</span><span>Destacar Widget no Desktop</span>';
+        }, 2200);
+      }, 700);
+    });
+
+    saveConfigBtn.addEventListener('click', () => {
+      saveConfigBtn.classList.add('scale-95');
+      setTimeout(() => saveConfigBtn.classList.remove('scale-95'), 150);
+    });
+  })();
+</script></main></div></body></html>

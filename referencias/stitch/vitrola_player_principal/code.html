@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&amp;family=Space+Mono:wght@400;700&amp;family=Syne:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "outline-variant": "#50453a", "secondary-fixed": "#ffddb8", "tertiary-fixed-dim": "#ffb595", "surface-container-lowest": "#100e0c", "on-primary": "#482900", "on-primary-fixed": "#2b1700", "surface-container-low": "#1e1b19", "on-tertiary-fixed-variant": "#7c2e00", "primary": "#fec486", "surface-container-high": "#2d2927", "on-error": "#690005", "inverse-surface": "#e9e1dd", "secondary-container": "#ee9800", "on-secondary-fixed-variant": "#653e00", "tertiary-fixed": "#ffdbcc", "error": "#ffb4ab", "secondary-fixed-dim": "#ffb95f", "on-tertiary": "#571e00", "error-container": "#93000a", "on-surface-variant": "#d4c4b5", "primary-fixed": "#ffddbb", "surface-tint": "#f5bc7e", "inverse-primary": "#805521", "surface-bright": "#3c3836", "on-primary-fixed-variant": "#653e0b", "background": "#161311", "on-error-container": "#ffdad6", "primary-container": "#e0a96d", "surface-dim": "#161311", "on-tertiary-fixed": "#351000", "inverse-on-surface": "#33302d", "on-surface": "#e9e1dd", "surface-variant": "#383432", "surface": "#161311", "on-primary-container": "#633d09", "surface-container": "#221f1d", "outline": "#9d8e81", "primary-fixed-dim": "#f5bc7e", "surface-container-highest": "#383432", "on-secondary-fixed": "#2a1700", "tertiary": "#ffc2a7", "on-secondary-container": "#5b3800", "on-tertiary-container": "#7a2d00", "tertiary-container": "#ff9a6b", "on-secondary": "#472a00", "secondary": "#ffb95f", "on-background": "#e9e1dd" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "gutter-loose": "1.5rem", "margin-window": "0.75rem", "space-sm": "0.5rem", "space-xs": "0.25rem", "gutter": "1rem", "space-xl": "2.5rem", "gutter-compact": "0.5rem", "margin": "1.5rem", "space-md": "1rem", "space-lg": "1.5rem" }, "fontFamily": { "headline-lg": [ "Syne" ], "headline-md": [ "Plus Jakarta Sans" ], "body-lg": [ "Plus Jakarta Sans" ], "body-sm": [ "Plus Jakarta Sans" ], "label-technical": [ "Space Mono" ], "display-md": [ "Syne" ], "label-hardware": [ "Plus Jakarta Sans" ], "body-md": [ "Plus Jakarta Sans" ], "display-lg": [ "Syne" ], "headline-sm": [ "Plus Jakarta Sans" ], "label-meter": [ "Space Mono" ] }, "fontSize": { "headline-lg": [ "28px", { "lineHeight": "36px", "letterSpacing": "0em", "fontWeight": "600" } ], "headline-md": [ "20px", { "lineHeight": "28px", "letterSpacing": "0em", "fontWeight": "600" } ], "body-lg": [ "16px", { "lineHeight": "24px", "fontWeight": "400" } ], "body-sm": [ "12px", { "lineHeight": "18px", "fontWeight": "400" } ], "label-technical": [ "11px", { "lineHeight": "14px", "letterSpacing": "0.08em", "fontWeight": "400" } ], "display-md": [ "36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "600" } ], "label-hardware": [ "10px", { "lineHeight": "12px", "letterSpacing": "0.15em", "fontWeight": "700" } ], "body-md": [ "14px", { "lineHeight": "20px", "fontWeight": "400" } ], "display-lg": [ "48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" } ], "headline-sm": [ "16px", { "lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600" } ], "label-meter": [ "13px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" } ] } } } };</script></head><body class="bg-surface text-on-surface font-body-md text-body-md select-none"><header class="fixed top-0 left-0 right-0 h-16 z-50 bg-surface-container-lowest/95 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.85)] flex items-center justify-between px-space-md"><div class="flex items-center gap-space-md h-full"><div class="flex items-center gap-space-sm"><img alt="Vitrola Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Vv0I-jtmM1NIKcrsfcizMMHvI8POASKktVHJpJEtz5u2rRLL4syMezMXKuZ5lG5t6qA6chf9a49kcB14x2DqP-jmwctMnN68DQpKY8dkYNTTozTnXCxEy8cQwYuFXhNNY8veGhy2qqkH1-91VSZq_Ce2Rqc71lxHI4fZ36ZM0DkmtQNgat96NkynsQ8kexQKs0fEbkWVIdnjxAwn6miFhb2iPJSL3l1KODW3lnOZfOOxXRT3UDBlqK5A"/><span class="font-display-md text-headline-sm text-primary tracking-wider uppercase font-bold">VITROLA</span></div><div class="h-4 w-[1px] bg-outline-variant/40 hidden sm:block"></div><span class="font-label-technical text-label-technical text-on-surface-variant/80 hidden sm:inline-block tracking-widest uppercase">Hi-Fi Turntable Console</span></div><nav class="hidden md:flex items-center gap-space-sm bg-surface-container-low/80 p-space-xs rounded-full shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)]" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded-lg"><a class="px-space-md py-space-xs rounded-lg font-headline-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="inicio" href="#">Início</a><a class="px-space-md py-space-xs rounded-lg font-headline-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="biblioteca" href="#">Biblioteca</a><a class="px-space-md py-space-xs rounded-lg font-headline-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="playlists" href="#">Playlists</a><a class="px-space-md py-space-xs rounded-lg font-headline-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="fontes" href="#">Fontes</a><a class="px-space-md py-space-xs rounded-lg font-headline-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="aparencia" href="#">Aparência</a></nav><div class="flex items-center gap-space-md"><div class="hidden lg:flex items-center gap-space-sm px-space-sm py-space-xs bg-surface-container-high/60 rounded-lg shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)]"><span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#ffb95f]"></span><span class="font-label-technical text-label-technical text-secondary tracking-widest">ASIO 96k</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex items-center gap-space-xs"><button aria-label="Minimizar" class="w-7 h-7 rounded bg-surface-container-high/70 hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[14px]">remove</span></button><button aria-label="Maximizar" class="w-7 h-7 rounded bg-surface-container-high/70 hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[14px]">check_box_outline_blank</span></button><button aria-label="Fechar" class="w-7 h-7 rounded bg-surface-container-high/70 hover:bg-error-container hover:text-on-error-container flex items-center justify-center text-on-surface-variant transition-colors"><span class="material-symbols-outlined text-[14px]">close</span></button></div></div></header><aside class="fixed left-0 top-16 bottom-0 w-72 bg-surface-container-lowest/90 backdrop-blur-md z-40 flex flex-col justify-between p-space-md shadow-[4px_0_24px_rgba(0,0,0,0.7)]"><div class="flex flex-col gap-space-lg"><div class="px-space-sm pt-space-xs"><div class="font-label-hardware text-label-hardware text-outline uppercase tracking-widest">Deck Controls</div><div class="font-headline-md text-headline-sm text-primary-fixed-dim font-bold mt-space-xs">Console Rack</div></div><nav class="flex flex-col gap-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.5)]"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all font-headline-sm text-body-md" data-path="inicio" href="#"><span class="tracking-wide">Início</span><span class="font-label-technical text-label-technical text-outline">01</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all font-headline-sm text-body-md" data-path="biblioteca" href="#"><span class="tracking-wide">Biblioteca</span><span class="font-label-technical text-label-technical text-outline">02</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all font-headline-sm text-body-md" data-path="playlists" href="#"><span class="tracking-wide">Playlists</span><span class="font-label-technical text-label-technical text-outline">03</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all font-headline-sm text-body-md" data-path="fontes" href="#"><span class="tracking-wide">Fontes</span><span class="font-label-technical text-label-technical text-outline">04</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all font-headline-sm text-body-md" data-path="aparencia" href="#"><span class="tracking-wide">Aparência</span><span class="font-label-technical text-label-technical text-outline">05</span></a></nav></div><div class="flex flex-col gap-space-md p-space-md rounded-xl bg-surface-container-low shadow-[inset_0_2px_4px_rgba(0,0,0,0.7)]"><div class="flex items-center justify-between"><div class="flex items-center gap-space-xs"><span class="w-2.5 h-2.5 rounded-full bg-secondary shadow-[0_0_10px_#ffb95f,0_0_2px_#ffffff]"></span><span class="font-label-hardware text-label-hardware text-secondary tracking-widest uppercase">LIVE FEED</span></div><span class="font-label-technical text-label-technical text-outline-variant font-bold">24b / 96k</span></div><div class="flex flex-col gap-space-xs"><div class="font-label-hardware text-label-hardware text-outline uppercase tracking-wider">Output Engine</div><div class="px-space-sm py-space-xs rounded bg-surface-container-high shadow-[inset_0_1px_2px_rgba(0,0,0,0.6)] font-label-technical text-label-technical text-primary truncate">ASIO Direct / Tube Amp</div></div><div class="flex items-center justify-between pt-space-xs"><div class="flex flex-col"><span class="font-label-hardware text-label-hardware text-outline uppercase">Master Attn</span><span class="font-label-meter text-label-meter text-primary-fixed">-14.5 dB</span></div><div class="w-10 h-10 rounded-full bg-surface-bright flex items-center justify-center shadow-[0_4px_10px_rgba(0,0,0,0.8),inset_0_1px_2px_rgba(255,221,187,0.3)] relative"><div class="w-1.5 h-1.5 rounded-full bg-secondary absolute top-1.5"></div><div class="w-5 h-5 rounded-full bg-surface-container-lowest shadow-inner"></div></div></div></div></aside><div class="pl-72"><main class="relative pt-16 min-h-screen w-full px-gutter-loose bg-surface shadow-[inset_0_20px_40px_rgba(0,0,0,0.8)]"><div class="flex flex-col w-full pb-space-xl">
+<!-- Status Banner & Lossless Stream Telemetry -->
+<div class="w-full flex flex-wrap items-center justify-between gap-space-md py-space-sm mb-space-md">
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-surface-container-low shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)]">
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#ffb95f]"></span>
+<span class="font-label-hardware text-label-hardware text-secondary tracking-widest uppercase">ENGINE ONLINE</span>
+<span class="text-outline-variant font-label-technical text-label-technical">/</span>
+<span class="font-label-technical text-label-technical text-on-surface-variant font-bold">FLAC 192kHz · 24-bit Direct Master</span>
+</div>
+<div class="hidden xl:flex items-center gap-space-xs text-outline font-label-technical text-label-technical">
+<span>WOW &amp; FLUTTER: &lt;0.025%</span>
+<span>•</span>
+<span>S/N RATIO: 108 dB</span>
+</div>
+</div>
+<!-- State Quick Toggle Pills (Interactive Demo State Switcher) -->
+<div class="flex items-center gap-space-xs bg-surface-container-lowest p-space-xs rounded-xl shadow-[inset_0_2px_6px_rgba(0,0,0,0.9)]">
+<button class="px-space-md py-space-xs rounded-lg font-label-hardware text-label-hardware uppercase tracking-wider transition-all duration-200 bg-secondary-container text-on-secondary-container font-bold shadow-[0_2px_6px_rgba(0,0,0,0.6)]" id="btn-state-play" onclick="setVitrolaState('playing')">
+        Tocando
+      </button>
+<button class="px-space-md py-space-xs rounded-lg font-label-hardware text-label-hardware uppercase tracking-wider transition-all duration-200 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high" id="btn-state-pause" onclick="setVitrolaState('paused')">
+        Pausado
+      </button>
+<button class="px-space-md py-space-xs rounded-lg font-label-hardware text-label-hardware uppercase tracking-wider transition-all duration-200 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high" id="btn-state-empty" onclick="setVitrolaState('empty')">
+        Sem Disco
+      </button>
+</div>
+</div>
+<!-- Primary 16-Column Hi-Fi Deck Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 xl:grid-cols-16 gap-space-lg w-full">
+<!-- LEFT / MAIN CONSOLE: Physical Turntable Module (Walnut Plinth & Platter) (Col 1-10 on xl) -->
+<div class="lg:col-span-7 xl:col-span-10 flex flex-col gap-space-lg">
+<!-- THE WALNUT & BRASS TURNTABLE CHASSIS -->
+<div class="relative w-full rounded-xl bg-[#20150d] p-space-lg shadow-[inset_0_1px_2px_rgba(255,221,187,0.12),inset_0_20px_45px_rgba(0,0,0,0.95),0_16px_36px_rgba(0,0,0,0.9)] overflow-hidden">
+<!-- Physical Screws in 4 Corners -->
+<div class="absolute top-3 left-3 w-3 h-3 rounded-full bg-gradient-to-br from-primary-fixed to-outline-variant shadow-inner flex items-center justify-center">
+<div class="w-2 h-0.5 bg-surface-container-lowest rotate-45"></div>
+</div>
+<div class="absolute top-3 right-3 w-3 h-3 rounded-full bg-gradient-to-br from-primary-fixed to-outline-variant shadow-inner flex items-center justify-center">
+<div class="w-2 h-0.5 bg-surface-container-lowest -rotate-45"></div>
+</div>
+<div class="absolute bottom-3 left-3 w-3 h-3 rounded-full bg-gradient-to-br from-primary-fixed to-outline-variant shadow-inner flex items-center justify-center">
+<div class="w-2 h-0.5 bg-surface-container-lowest rotate-12"></div>
+</div>
+<div class="absolute bottom-3 right-3 w-3 h-3 rounded-full bg-gradient-to-br from-primary-fixed to-outline-variant shadow-inner flex items-center justify-center">
+<div class="w-2 h-0.5 bg-surface-container-lowest -rotate-12"></div>
+</div>
+<!-- Upper Recessed Brushed Metal Deck Bed -->
+<div class="relative w-full rounded-lg bg-gradient-to-b from-surface-container-highest/80 via-surface-container/90 to-surface-container-lowest p-space-md shadow-[inset_0_3px_8px_rgba(0,0,0,0.95),0_1px_1px_rgba(254,196,134,0.15)]">
+<!-- Top Meta Bar inside Deck: Strobe Calibration & Model Plaque -->
+<div class="flex items-center justify-between pb-space-sm mb-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="px-space-sm py-0.5 rounded bg-surface-container-lowest font-label-hardware text-label-hardware text-primary font-bold shadow-inner">
+                MODEL 79-PRO
+              </span>
+<span class="font-label-technical text-label-technical text-outline">DIRECT DRIVE SUSPENDED CHASSIS</span>
+</div>
+<!-- Optical Neon Stroboscope 33 / 45 Indicator -->
+<div class="flex items-center gap-space-sm bg-surface-container-lowest/80 px-space-sm py-1 rounded">
+<span class="font-label-hardware text-label-hardware text-outline uppercase tracking-wider">STROBE 60Hz</span>
+<div class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary shadow-[0_0_6px_#ffb95f]" id="strobe-1"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary/40" id="strobe-2"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary shadow-[0_0_6px_#ffb95f]" id="strobe-3"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary/40" id="strobe-4"></span>
+</div>
+</div>
+</div>
+<!-- THE PLATTER & TONEARM ASSEMBLY STAGE -->
+<div class="relative w-full aspect-[16/11] max-h-[480px] flex items-center justify-center overflow-visible">
+<!-- Circular Recessed Platter Well -->
+<div class="relative w-[340px] sm:w-[410px] md:w-[440px] xl:w-[460px] aspect-square rounded-full bg-surface-container-lowest shadow-[inset_0_10px_30px_rgba(0,0,0,0.95),0_1px_2px_rgba(254,196,134,0.1)] flex items-center justify-center">
+<!-- Aluminum Chamfered Bezel with Strobe Dots Rim -->
+<div class="relative w-[96%] aspect-square rounded-full bg-gradient-to-tr from-[#3a342e] via-[#655d54] to-[#25211e] p-[5px] shadow-[0_6px_16px_rgba(0,0,0,0.85)] flex items-center justify-center">
+<!-- Strobe dots ring simulation -->
+<div class="absolute inset-0 rounded-full border-dashed border-outline-variant/30 [border-width:2px]"></div>
+<!-- RUBBER FELT MAT / VINYL DISC LAYER -->
+<div class="relative w-full aspect-square rounded-full bg-[#0d0c0b] shadow-2xl flex items-center justify-center overflow-hidden transition-transform duration-700 ease-out" id="vinyl-disc-container">
+<!-- VINYL GROOVES MICRO-TEXTURE (Concentric Gradient Rings) -->
+<div class="absolute inset-0 rounded-full bg-[radial-gradient(ellipse_at_center,_rgba(40,36,33,1)_0%,_rgba(15,13,11,1)_40%,_rgba(28,24,20,1)_55%,_rgba(10,9,8,1)_72%,_rgba(22,18,15,1)_88%,_rgba(6,5,4,1)_100%)] opacity-95" id="vinyl-surface"></div>
+<!-- Realistic Grooves Refraction Sheen (Dual Specular Light Cones) -->
+<div class="absolute inset-0 rounded-full pointer-events-none mix-blend-screen opacity-20 bg-[conic-gradient(from_45deg_at_50%_50%,_transparent_0deg,_rgba(255,221,187,0.8)_25deg,_transparent_60deg,_transparent_180deg,_rgba(255,221,187,0.8)_205deg,_transparent_240deg)]" id="vinyl-sheen"></div>
+<!-- Empty Mat Pattern (Visible when in Empty State) -->
+<div class="hidden absolute inset-0 rounded-full bg-[#181412] flex items-center justify-center" id="empty-felt-mat">
+<div class="w-3/4 aspect-square rounded-full border border-dashed border-outline-variant/20 flex items-center justify-center">
+<div class="text-center">
+<span class="font-display-md text-headline-sm text-outline-variant/40 uppercase tracking-widest block font-bold">VITROLA</span>
+<span class="font-label-technical text-label-technical text-outline/40">ANTI-STATIC MAT</span>
+</div>
+</div>
+</div>
+<!-- CENTER ALBUM LABEL (Kind of Blue - Miles Davis) -->
+<div class="relative z-10 w-[38%] aspect-square rounded-full bg-gradient-to-tr from-[#1b253b] via-[#2a3c5a] to-[#141b2b] shadow-[0_4px_14px_rgba(0,0,0,0.9),inset_0_1px_2px_rgba(255,255,255,0.25)] flex flex-col items-center justify-center p-space-xs text-center border-[3px] border-[#9c783e]" id="vinyl-label">
+<!-- Sound System Arch Archival Text -->
+<span class="font-label-hardware text-[7px] text-[#ffddbb] uppercase tracking-widest font-bold opacity-90 leading-tight">
+                      COLUMBIA STEREO 6-EYE
+                    </span>
+<span class="font-headline-lg text-body-sm text-primary-fixed font-bold leading-tight mt-0.5 drop-shadow-sm">
+                      KIND OF BLUE
+                    </span>
+<span class="font-body-sm text-[10px] text-tertiary-fixed font-semibold tracking-wider uppercase -mt-0.5">
+                      MILES DAVIS
+                    </span>
+<div class="my-0.5 px-space-xs py-[1px] bg-surface-container-lowest/80 rounded font-label-technical text-[8px] text-secondary font-bold">
+                      SIDE 1 · 33⅓ RPM
+                    </div>
+<span class="font-label-technical text-[7px] text-on-surface-variant/70 tracking-tighter">
+                      CL 1355 / XSM 47326
+                    </span>
+<!-- Metal Center Spindle Pin -->
+<div class="absolute inset-0 m-auto w-4 h-4 rounded-full bg-gradient-to-br from-on-surface via-outline to-surface-container-lowest shadow-[0_2px_6px_rgba(0,0,0,0.9)] flex items-center justify-center">
+<div class="w-1.5 h-1.5 rounded-full bg-surface-bright"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- TONEARM MECHANICAL APPARATUS (Pivoting Right-Hand Structure) -->
+<div class="absolute right-2 sm:right-6 xl:right-10 top-2 bottom-4 w-32 sm:w-40 pointer-events-none flex flex-col items-center justify-start z-20">
+<!-- Tonearm Gimbal & Heavy Counterweight Base -->
+<div class="relative w-16 h-16 rounded-full bg-gradient-to-br from-[#4d443c] via-[#221e1a] to-[#141210] shadow-[0_8px_18px_rgba(0,0,0,0.9),inset_0_2px_3px_rgba(254,196,134,0.3)] flex items-center justify-center">
+<!-- Massive Brass Counterweight Ring -->
+<div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-primary-container shadow-md flex items-center justify-center">
+<div class="w-4 h-4 rounded-full bg-surface-container-lowest"></div>
+</div>
+<!-- Anti-Skating Micro-Dial -->
+<div class="absolute -left-2 top-2 px-1 py-0.5 rounded bg-surface-container-lowest font-label-technical text-[7px] text-primary">
+                  1.75g
+                </div>
+</div>
+<!-- Tonearm Wand & Headshell (Rotates via CSS Class) -->
+<div class="relative w-2 h-72 sm:h-80 -mt-2 origin-top transition-transform duration-700 ease-out transform rotate-[21deg] flex flex-col items-center" id="tonearm-wand">
+<!-- Brushed Brass Tube -->
+<div class="w-2.5 h-full bg-gradient-to-r from-[#d99f60] via-[#ffd6a2] to-[#8d5e27] shadow-[2px_4px_10px_rgba(0,0,0,0.85)]"></div>
+<!-- Angled Headshell & Cartridge with Contact Filament Glow -->
+<div class="relative -mt-2 w-7 h-12 bg-gradient-to-b from-[#2e2926] to-[#12100f] rounded-t-sm shadow-xl flex flex-col items-center justify-between py-1 transform -rotate-[12deg]">
+<span class="font-label-technical text-[6px] text-secondary font-bold">SHURE</span>
+<div class="w-4 h-2 rounded bg-primary/30 flex items-center justify-center">
+<span class="w-1 h-1 rounded-full bg-primary"></span>
+</div>
+<!-- Cartridge Stylus Point & Dynamic Warm Amber Contact Glow -->
+<div class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_12px_#ffb95f,0_0_4px_#ffffff] animate-pulse" id="stylus-light"></div>
+</div>
+</div>
+<!-- Cueing Hydraulic Lift Bar Platform -->
+<div class="absolute top-24 right-4 flex flex-col items-center gap-1">
+<span class="font-label-hardware text-[8px] text-outline">LIFT</span>
+<div class="w-1.5 h-8 bg-surface-container-highest rounded shadow-inner"></div>
+</div>
+</div>
+<!-- Left Controls on Platter Deck: 33/45 Mechanical Pitch Toggle & Power Switch -->
+<div class="absolute left-2 sm:left-4 bottom-3 flex items-center gap-space-md bg-surface-container-lowest/80 p-space-sm rounded-lg backdrop-blur-sm shadow-lg">
+<!-- 33 / 45 Speed Selector Lever -->
+<div class="flex flex-col items-center gap-1">
+<span class="font-label-hardware text-label-hardware text-outline uppercase">Speed</span>
+<div class="flex items-center gap-1 bg-surface-container-high p-1 rounded">
+<button class="px-2 py-0.5 rounded font-label-technical text-label-technical font-bold bg-primary text-on-primary shadow-sm" id="btn-speed-33" onclick="setSpeed(33)">
+                    33
+                  </button>
+<button class="px-2 py-0.5 rounded font-label-technical text-label-technical font-bold text-on-surface-variant hover:text-on-surface" id="btn-speed-45" onclick="setSpeed(45)">
+                    45
+                  </button>
+</div>
+</div>
+<!-- Cue Lever Indicator -->
+<div class="flex flex-col items-center gap-1">
+<span class="font-label-hardware text-label-hardware text-outline uppercase">Cue Arm</span>
+<button class="px-space-sm py-1 rounded bg-surface-container-high hover:bg-surface-bright text-secondary font-label-technical text-label-technical font-bold flex items-center gap-1" id="btn-cue-toggle" onclick="toggleCueArm()">
+<span class="material-symbols-outlined text-[13px]">arrow_downward</span>
+<span id="cue-status-text">DOWN</span>
+</button>
+</div>
+<!-- Pitch Slider Micro Gauge -->
+<div class="hidden sm:flex flex-col items-center gap-1">
+<div class="flex items-center justify-between w-full font-label-technical text-[9px] text-outline">
+<span>PITCH</span>
+<span class="text-secondary font-bold">±0.0%</span>
+</div>
+<div class="w-20 h-1.5 rounded-full bg-surface-container-highest relative flex items-center">
+<div class="w-2.5 h-3 rounded bg-primary absolute left-1/2 -translate-x-1/2 shadow"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- LOWER SECTION OF PLINTH: Vintage Acoustic Grille Cloth & Copper Badge -->
+<div class="mt-space-md pt-space-md flex flex-col md:flex-row items-center justify-between gap-space-md">
+<!-- Realistic Woven Grille Texture Panel with Recessed Metallic Badge -->
+<div class="w-full md:w-3/5 h-14 rounded-lg bg-[radial-gradient(#3a312a_1.5px,transparent_1.5px),radial-gradient(#201b17_1.5px,#16120f_1.5px)] [background-size:6px_6px] [background-position:0_0,3px_3px] shadow-[inset_0_3px_8px_rgba(0,0,0,0.9)] flex items-center justify-between px-space-md">
+<div class="flex items-center gap-space-sm bg-surface-container-lowest/85 px-space-md py-1 rounded shadow-md">
+<span class="w-2 h-2 rounded-full bg-primary-fixed shadow-[0_0_6px_#fec486]"></span>
+<span class="font-label-technical text-label-technical text-primary-fixed tracking-widest font-bold">
+                CLASS-A TUBE STAGE · 12AX7 DUAL TRIODE
+              </span>
+</div>
+<div class="px-space-sm py-0.5 rounded bg-gradient-to-r from-secondary-container to-primary font-headline-sm text-[11px] text-on-primary font-bold shadow-md">
+              VITROLA HI-FI
+            </div>
+</div>
+<!-- Quick Lossless Badge & Signal Path -->
+<div class="w-full md:w-2/5 flex items-center justify-end gap-space-sm">
+<div class="flex flex-col text-right">
+<span class="font-label-hardware text-label-hardware text-outline uppercase">Signal Processing</span>
+<span class="font-label-technical text-label-technical text-primary font-bold">Bit-Perfect RIAA Curve</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest flex items-center justify-center shadow-inner">
+<span class="material-symbols-outlined text-secondary text-[22px]">graphic_eq</span>
+</div>
+</div>
+</div>
+</div>
+<!-- ANALOG MASTER TRANSPORT & SEEK PANEL -->
+<div class="w-full rounded-xl bg-surface-container-low p-space-md shadow-[0_4px_16px_rgba(0,0,0,0.6)] flex flex-col gap-space-md">
+<!-- Track Title Hierarchy & Artist Meta -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-sm">
+<span class="px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-label-technical text-[10px] font-bold">
+                TRACK 01
+              </span>
+<span class="font-label-technical text-label-technical text-outline font-medium">STEREO LP MASTERS 1959</span>
+</div>
+<h1 class="font-display-md text-headline-lg text-primary-fixed font-bold tracking-tight truncate mt-1" id="track-title">
+              So What
+            </h1>
+<p class="font-body-lg text-body-md text-on-surface-variant font-medium" id="artist-album">
+              Miles Davis — <span class="text-on-surface">Kind of Blue (1959 - Remaster 24-bit/192kHz)</span>
+</p>
+</div>
+<!-- Format Chip -->
+<div class="flex items-center gap-space-xs bg-surface-container-highest/80 px-space-md py-space-xs rounded-lg shadow-inner">
+<span class="material-symbols-outlined text-secondary text-[18px]">album</span>
+<div class="flex flex-col text-right">
+<span class="font-label-hardware text-[9px] text-outline uppercase">Cartridge Load</span>
+<span class="font-label-technical text-label-technical text-secondary font-bold">Moving Coil 47kΩ</span>
+</div>
+</div>
+</div>
+<!-- Heavy Brass Inset Scrub / Groove Progress Bar -->
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<div class="relative w-full h-4 bg-surface-container-lowest rounded-full p-0.5 shadow-[inset_0_2px_5px_rgba(0,0,0,0.9)] cursor-pointer" onclick="handleSeek(event)">
+<!-- Groove Fill Track -->
+<div class="h-full rounded-full bg-gradient-to-r from-primary-container via-secondary to-primary shadow-[0_0_8px_#ffb95f] relative" id="scrub-bar" style="width: 39.5%;">
+<!-- Machined Mechanical Brass Needle Indicator -->
+<div class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-4 h-6 rounded-sm bg-gradient-to-b from-[#ffd79d] via-[#d69f5c] to-[#6c4819] shadow-[0_2px_6px_rgba(0,0,0,0.95)] flex items-center justify-center">
+<div class="w-0.5 h-4 bg-surface-container-lowest"></div>
+</div>
+</div>
+</div>
+<!-- Rigid High-Contrast Monospace Time Readout -->
+<div class="flex items-center justify-between font-label-meter text-label-meter text-outline font-bold">
+<span class="text-primary-fixed" id="time-current">03:42</span>
+<div class="flex items-center gap-2">
+<span class="font-label-technical text-[10px] text-outline-variant uppercase">Groove Depth: 52µm</span>
+</div>
+<span class="text-on-surface-variant" id="time-total">09:22</span>
+</div>
+</div>
+<!-- Tactile Machined Transport Buttons -->
+<div class="flex flex-wrap items-center justify-between gap-space-md pt-space-xs">
+<div class="flex items-center gap-space-sm">
+<!-- Shuffle Lever Stud -->
+<button class="w-10 h-10 rounded-lg bg-surface-container-high hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface shadow-[0_2px_6px_rgba(0,0,0,0.7)] transition-all">
+<span class="material-symbols-outlined text-[18px]">shuffle</span>
+</button>
+<!-- Repeat Groove Lever Stud -->
+<button class="w-10 h-10 rounded-lg bg-surface-container-high hover:bg-surface-bright flex items-center justify-center text-on-surface-variant hover:text-on-surface shadow-[0_2px_6px_rgba(0,0,0,0.7)] transition-all">
+<span class="material-symbols-outlined text-[18px]">repeat</span>
+</button>
+</div>
+<!-- Center Transport Trio -->
+<div class="flex items-center gap-space-md">
+<!-- Previous Track (Brass Machined Square Button) -->
+<button class="w-12 h-12 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface active:translate-y-0.5 transition-all shadow-[0_4px_10px_rgba(0,0,0,0.7),inset_0_1px_1px_rgba(255,221,187,0.2)] flex items-center justify-center" onclick="prevTrack()">
+<span class="material-symbols-outlined text-[24px]">skip_previous</span>
+</button>
+<!-- PRIMARY PLAY/PAUSE: Heavy Turn-Machined Brass Button with Amber Glow Halo -->
+<button class="relative w-16 h-16 rounded-full bg-gradient-to-b from-[#fec486] via-[#e0a96d] to-[#805521] text-on-primary-fixed shadow-[0_8px_20px_rgba(0,0,0,0.85),0_0_16px_rgba(254,196,134,0.4)] active:translate-y-1 active:shadow-inner transition-all flex items-center justify-center group" id="btn-master-play" onclick="togglePlayState()">
+<!-- Outer Amber Glow Ring -->
+<div class="absolute inset-0 rounded-full border border-secondary shadow-[0_0_12px_#ffb95f] opacity-80 group-hover:opacity-100" id="play-halo"></div>
+<span class="material-symbols-outlined text-[32px] select-none text-on-primary font-bold" id="play-icon">
+                pause
+              </span>
+</button>
+<!-- Next Track (Brass Machined Square Button) -->
+<button class="w-12 h-12 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface active:translate-y-0.5 transition-all shadow-[0_4px_10px_rgba(0,0,0,0.7),inset_0_1px_1px_rgba(255,221,187,0.2)] flex items-center justify-center" onclick="nextTrack()">
+<span class="material-symbols-outlined text-[24px]">skip_next</span>
+</button>
+</div>
+<!-- Cue Arm & Tonearm Return Button -->
+<div class="flex items-center gap-space-sm">
+<button class="flex items-center gap-space-xs px-space-md py-space-sm rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface-variant hover:text-on-surface font-label-hardware text-label-hardware uppercase tracking-wider shadow-[0_2px_6px_rgba(0,0,0,0.7)] transition-all" onclick="ejectDiscAction()">
+<span class="material-symbols-outlined text-[16px] text-tertiary">eject</span>
+<span>Ejetar</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT CONSOLE: Analog VU Meters, Sound Stage Knobs, and Lossless Stream Sources (Col 11-16 on xl) -->
+<div class="lg:col-span-5 xl:col-span-6 flex flex-col gap-space-lg">
+<!-- ANALOG VU METERS (Dual Channel Warm Backlit Amber Gauges) -->
+<div class="w-full rounded-xl bg-surface-container-lowest p-space-md shadow-[inset_0_2px_8px_rgba(0,0,0,0.95),0_8px_20px_rgba(0,0,0,0.7)]">
+<div class="flex items-center justify-between pb-space-sm border-b border-outline-variant/20 mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#ffb95f]"></span>
+<span class="font-label-hardware text-label-hardware text-secondary tracking-widest uppercase">BALLISTIC VU METERS</span>
+</div>
+<span class="font-label-technical text-label-technical text-outline">PEAK BALLISTICS / 300ms</span>
+</div>
+<div class="grid grid-cols-2 gap-space-md">
+<!-- LEFT CHANNEL VU METER -->
+<div class="relative w-full aspect-[4/3] rounded-lg bg-gradient-to-b from-[#2d1f11] via-[#21160a] to-[#140e06] p-space-sm shadow-[inset_0_4px_12px_rgba(0,0,0,0.9),0_0_15px_rgba(255,185,95,0.12)] flex flex-col justify-between overflow-hidden">
+<div class="flex items-center justify-between text-[9px] font-label-technical text-primary-fixed/80">
+<span class="font-bold">CH 1 · LEFT</span>
+<span class="text-error font-bold">+3dB MAX</span>
+</div>
+<!-- Graphic Arc Gauge Calibration -->
+<div class="relative w-full h-20 flex items-center justify-center">
+<svg class="w-full h-full text-outline-variant overflow-visible" viewbox="0 0 160 80">
+<!-- Scale Arc -->
+<path d="M 20 75 A 65 65 0 0 1 140 75" fill="none" stroke="currentColor" stroke-dasharray="2,4" stroke-width="1.5"></path>
+<path d="M 115 25 A 65 65 0 0 1 140 75" fill="none" stroke="#ffb4ab" stroke-width="2.5"></path>
+<!-- Scale Numbers -->
+<text fill="#d4c4b5" font-family="Space Mono" font-size="8" x="24" y="68">-20</text>
+<text fill="#d4c4b5" font-family="Space Mono" font-size="8" x="45" y="44">-10</text>
+<text fill="#fec486" font-family="Space Mono" font-size="8" x="75" y="32">-3</text>
+<text fill="#fec486" font-family="Space Mono" font-size="8" x="100" y="32">0</text>
+<text fill="#ffb4ab" font-family="Space Mono" font-size="8" x="126" y="44">+3</text>
+<!-- Physical Needle Left -->
+<line class="transition-transform duration-150 origin-bottom" id="vu-needle-left" stroke="#ffb95f" stroke-linecap="round" stroke-width="2" x1="80" x2="68" y1="80" y2="22"></line>
+</svg>
+</div>
+<div class="flex items-center justify-between font-label-meter text-[11px] text-primary">
+<span class="text-outline-variant text-[9px]">RMS</span>
+<span id="vu-val-left">-4.2 VU</span>
+</div>
+</div>
+<!-- RIGHT CHANNEL VU METER -->
+<div class="relative w-full aspect-[4/3] rounded-lg bg-gradient-to-b from-[#2d1f11] via-[#21160a] to-[#140e06] p-space-sm shadow-[inset_0_4px_12px_rgba(0,0,0,0.9),0_0_15px_rgba(255,185,95,0.12)] flex flex-col justify-between overflow-hidden">
+<div class="flex items-center justify-between text-[9px] font-label-technical text-primary-fixed/80">
+<span class="font-bold">CH 2 · RIGHT</span>
+<span class="text-error font-bold">+3dB MAX</span>
+</div>
+<!-- Graphic Arc Gauge Calibration -->
+<div class="relative w-full h-20 flex items-center justify-center">
+<svg class="w-full h-full text-outline-variant overflow-visible" viewbox="0 0 160 80">
+<!-- Scale Arc -->
+<path d="M 20 75 A 65 65 0 0 1 140 75" fill="none" stroke="currentColor" stroke-dasharray="2,4" stroke-width="1.5"></path>
+<path d="M 115 25 A 65 65 0 0 1 140 75" fill="none" stroke="#ffb4ab" stroke-width="2.5"></path>
+<!-- Scale Numbers -->
+<text fill="#d4c4b5" font-family="Space Mono" font-size="8" x="24" y="68">-20</text>
+<text fill="#d4c4b5" font-family="Space Mono" font-size="8" x="45" y="44">-10</text>
+<text fill="#fec486" font-family="Space Mono" font-size="8" x="75" y="32">-3</text>
+<text fill="#fec486" font-family="Space Mono" font-size="8" x="100" y="32">0</text>
+<text fill="#ffb4ab" font-family="Space Mono" font-size="8" x="126" y="44">+3</text>
+<!-- Physical Needle Right -->
+<line class="transition-transform duration-150 origin-bottom" id="vu-needle-right" stroke="#ffb95f" stroke-linecap="round" stroke-width="2" x1="80" x2="88" y1="80" y2="21"></line>
+</svg>
+</div>
+<div class="flex items-center justify-between font-label-meter text-[11px] text-primary">
+<span class="text-outline-variant text-[9px]">RMS</span>
+<span id="vu-val-right">-3.8 VU</span>
+</div>
+</div>
+</div>
+</div>
+<!-- TACTILE ANALOG PREAMP POTENTIOMETERS (Rotary Knurled Knobs) -->
+<div class="w-full rounded-xl bg-surface-container-low p-space-md shadow-[0_4px_16px_rgba(0,0,0,0.6)]">
+<div class="flex items-center justify-between pb-space-sm mb-space-md border-b border-outline-variant/15">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-hardware text-label-hardware text-outline uppercase tracking-wider">TONE &amp; PREAMP STAGE</span>
+</div>
+<span class="font-label-technical text-label-technical text-secondary font-bold">ANALOG BYPASS: OFF</span>
+</div>
+<div class="grid grid-cols-4 gap-space-sm text-center">
+<!-- BASS KNOB -->
+<div class="flex flex-col items-center gap-space-xs">
+<div class="relative w-14 h-14 rounded-full bg-gradient-to-tr from-[#3b342e] via-[#6a6055] to-[#26211c] shadow-[0_6px_14px_rgba(0,0,0,0.8),inset_0_1px_2px_rgba(255,221,187,0.3)] flex items-center justify-center cursor-pointer group" onclick="tweakKnob('bass')">
+<!-- Knurled Outer Edge Ring -->
+<div class="w-11 h-11 rounded-full bg-surface-container-lowest shadow-inner flex items-center justify-center">
+<div class="w-8 h-8 rounded-full bg-gradient-to-b from-primary-fixed to-outline-variant relative transition-transform duration-200 transform rotate-[18deg]" id="knob-bass">
+<!-- Cream Indicator Notch -->
+<div class="w-1 h-3 rounded-full bg-surface-container-lowest absolute top-0.5 left-1/2 -translate-x-1/2"></div>
+</div>
+</div>
+</div>
+<span class="font-label-hardware text-label-hardware text-on-surface font-bold uppercase mt-1">Graves</span>
+<span class="font-label-meter text-label-technical text-primary" id="val-bass">+2.0 dB</span>
+</div>
+<!-- TREBLE KNOB -->
+<div class="flex flex-col items-center gap-space-xs">
+<div class="relative w-14 h-14 rounded-full bg-gradient-to-tr from-[#3b342e] via-[#6a6055] to-[#26211c] shadow-[0_6px_14px_rgba(0,0,0,0.8),inset_0_1px_2px_rgba(255,221,187,0.3)] flex items-center justify-center cursor-pointer group" onclick="tweakKnob('treble')">
+<div class="w-11 h-11 rounded-full bg-surface-container-lowest shadow-inner flex items-center justify-center">
+<div class="w-8 h-8 rounded-full bg-gradient-to-b from-primary-fixed to-outline-variant relative transition-transform duration-200 transform -rotate-[8deg]" id="knob-treble">
+<div class="w-1 h-3 rounded-full bg-surface-container-lowest absolute top-0.5 left-1/2 -translate-x-1/2"></div>
+</div>
+</div>
+</div>
+<span class="font-label-hardware text-label-hardware text-on-surface font-bold uppercase mt-1">Agudos</span>
+<span class="font-label-meter text-label-technical text-primary" id="val-treble">-1.0 dB</span>
+</div>
+<!-- TUBE DRIVE / ANALOG GAIN -->
+<div class="flex flex-col items-center gap-space-xs">
+<div class="relative w-14 h-14 rounded-full bg-gradient-to-tr from-[#523315] via-[#a86a2f] to-[#341e07] shadow-[0_6px_14px_rgba(0,0,0,0.8),inset_0_1px_2px_rgba(255,221,187,0.4)] flex items-center justify-center cursor-pointer group" onclick="tweakKnob('tube')">
+<div class="w-11 h-11 rounded-full bg-surface-container-lowest shadow-inner flex items-center justify-center">
+<div class="w-8 h-8 rounded-full bg-gradient-to-b from-secondary to-primary-container relative transition-transform duration-200 transform rotate-[35deg]" id="knob-tube">
+<div class="w-1 h-3 rounded-full bg-surface-container-lowest absolute top-0.5 left-1/2 -translate-x-1/2"></div>
+</div>
+</div>
+</div>
+<span class="font-label-hardware text-label-hardware text-secondary font-bold uppercase mt-1">Tubo Sat</span>
+<span class="font-label-meter text-label-technical text-secondary" id="val-tube">+4.5 dB</span>
+</div>
+<!-- MASTER ATTN / VOLUME -->
+<div class="flex flex-col items-center gap-space-xs">
+<div class="relative w-14 h-14 rounded-full bg-gradient-to-tr from-[#3b342e] via-[#6a6055] to-[#26211c] shadow-[0_6px_14px_rgba(0,0,0,0.8),inset_0_1px_2px_rgba(255,221,187,0.3)] flex items-center justify-center cursor-pointer group" onclick="tweakKnob('vol')">
+<div class="w-11 h-11 rounded-full bg-surface-container-lowest shadow-inner flex items-center justify-center">
+<div class="w-8 h-8 rounded-full bg-gradient-to-b from-primary-fixed to-outline-variant relative transition-transform duration-200 transform rotate-[42deg]" id="knob-vol">
+<div class="w-1 h-3 rounded-full bg-surface-container-lowest absolute top-0.5 left-1/2 -translate-x-1/2"></div>
+</div>
+</div>
+</div>
+<span class="font-label-hardware text-label-hardware text-on-surface font-bold uppercase mt-1">Volume</span>
+<span class="font-label-meter text-label-technical text-primary font-bold" id="val-vol">78%</span>
+</div>
+</div>
+</div>
+<!-- HORIZONTAL SOURCE SELECTOR (Metallic Ribbon & Pilot Lamps) -->
+<div class="w-full rounded-xl bg-surface-container-low p-space-md shadow-[0_4px_16px_rgba(0,0,0,0.6)]">
+<div class="flex items-center justify-between pb-space-sm mb-space-sm border-b border-outline-variant/15">
+<span class="font-label-hardware text-label-hardware text-outline uppercase tracking-wider">Audio Source Selector</span>
+<span class="font-label-technical text-label-technical text-on-surface-variant">4 BUS ROUTING</span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-sm">
+<!-- Source 1: Local FLAC (Active) -->
+<button class="flex flex-col items-center gap-space-xs p-space-sm rounded-lg bg-surface-container-high transition-all shadow-[inset_0_1px_2px_rgba(254,196,134,0.3)]" id="source-flac" onclick="selectSource('flac')">
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary shadow-[0_0_8px_#ffb95f]" id="lamp-flac"></span>
+<span class="font-label-hardware text-label-hardware uppercase text-primary font-bold">LOCAL</span>
+</div>
+<span class="font-label-technical text-[10px] text-on-surface font-medium truncate w-full text-center">FLAC / DSD</span>
+</button>
+<!-- Source 2: Spotify -->
+<button class="flex flex-col items-center gap-space-xs p-space-sm rounded-lg bg-surface-container-lowest opacity-70 hover:opacity-100 transition-all" id="source-spotify" onclick="selectSource('spotify')">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-surface-bright" id="lamp-spotify"></span>
+<span class="font-label-hardware text-label-hardware uppercase text-on-surface-variant font-bold">SPOTIFY</span>
+</div>
+<span class="font-label-technical text-[10px] text-outline truncate w-full text-center">Lossless Connect</span>
+</button>
+<!-- Source 3: Deezer -->
+<button class="flex flex-col items-center gap-space-xs p-space-sm rounded-lg bg-surface-container-lowest opacity-70 hover:opacity-100 transition-all" id="source-deezer" onclick="selectSource('deezer')">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-surface-bright" id="lamp-deezer"></span>
+<span class="font-label-hardware text-label-hardware uppercase text-on-surface-variant font-bold">DEEZER</span>
+</div>
+<span class="font-label-technical text-[10px] text-outline truncate w-full text-center">HiFi FLAC API</span>
+</button>
+<!-- Source 4: YouTube Music -->
+<button class="flex flex-col items-center gap-space-xs p-space-sm rounded-lg bg-surface-container-lowest opacity-70 hover:opacity-100 transition-all" id="source-ytmusic" onclick="selectSource('ytmusic')">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-surface-bright" id="lamp-ytmusic"></span>
+<span class="font-label-hardware text-label-hardware uppercase text-on-surface-variant font-bold">YT MUSIC</span>
+</div>
+<span class="font-label-technical text-[10px] text-outline truncate w-full text-center">Opus 256k Stream</span>
+</button>
+</div>
+</div>
+<!-- UP NEXT / QUEUE EXPANDER PREVIEW -->
+<div class="w-full rounded-xl bg-surface-container-low p-space-md shadow-[0_4px_16px_rgba(0,0,0,0.6)] flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-primary">queue_music</span>
+<span class="font-headline-sm text-body-md text-on-surface font-semibold">Próximas Faixas do Álbum</span>
+</div>
+<span class="font-label-technical text-label-technical text-outline">LADO A · KIND OF BLUE</span>
+</div>
+<div class="flex flex-col gap-1 mt-1">
+<!-- Active Row -->
+<div class="flex items-center justify-between px-space-sm py-2 rounded bg-surface-container-high shadow-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-1.5 h-6 rounded bg-primary"></div>
+<span class="font-label-technical text-label-technical text-primary font-bold">01</span>
+<div class="flex flex-col">
+<span class="font-body-md text-body-sm text-primary font-semibold">So What</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">Miles Davis · John Coltrane</span>
+</div>
+</div>
+<span class="font-label-meter text-[11px] text-primary">09:22</span>
+</div>
+<!-- Inactive Row 1 -->
+<div class="flex items-center justify-between px-space-sm py-2 rounded hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-space-sm">
+<div class="w-1.5 h-6 rounded bg-transparent"></div>
+<span class="font-label-technical text-label-technical text-outline">02</span>
+<div class="flex flex-col">
+<span class="font-body-md text-body-sm text-on-surface">Freddie Freeloader</span>
+<span class="font-body-sm text-[11px] text-outline">Wynton Kelly, piano</span>
+</div>
+</div>
+<span class="font-label-meter text-[11px] text-outline">09:49</span>
+</div>
+<!-- Inactive Row 2 -->
+<div class="flex items-center justify-between px-space-sm py-2 rounded hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-space-sm">
+<div class="w-1.5 h-6 rounded bg-transparent"></div>
+<span class="font-label-technical text-label-technical text-outline">03</span>
+<div class="flex flex-col">
+<span class="font-body-md text-body-sm text-on-surface">Blue in Green</span>
+<span class="font-body-sm text-[11px] text-outline">Bill Evans, piano</span>
+</div>
+</div>
+<span class="font-label-meter text-[11px] text-outline">05:37</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  let currentState = 'playing'; // 'playing' | 'paused' | 'empty'
+  let currentSpeed = 33;
+  let isCueDown = true;
+  let isPlaying = true;
+  let progressSec = 222; // 03:42
+  const totalSec = 562; // 09:22
+  let rotationDeg = 0;
+  let timerInterval = null;
+  let vuInterval = null;
+
+  function updateVisuals() {
+    const wand = document.getElementById('tonearm-wand');
+    const stylus = document.getElementById('stylus-light');
+    const vinylContainer = document.getElementById('vinyl-disc-container');
+    const emptyMat = document.getElementById('empty-felt-mat');
+    const vinylSurface = document.getElementById('vinyl-surface');
+    const vinylLabel = document.getElementById('vinyl-label');
+    const playIcon = document.getElementById('play-icon');
+    const playHalo = document.getElementById('play-halo');
+    const cueStatus = document.getElementById('cue-status-text');
+
+    // Reset button pill highlights
+    document.getElementById('btn-state-play').className = "px-space-md py-space-xs rounded-lg font-label-hardware text-label-hardware uppercase tracking-wider transition-all duration-200 text-on-surface-variant hover:text-on-surface";
+    document.getElementById('btn-state-pause').className = "px-space-md py-space-xs rounded-lg font-label-hardware text-label-hardware uppercase tracking-wider transition-all duration-200 text-on-surface-variant hover:text-on-surface";
+    document.getElementById('btn-state-empty').className = "px-space-md py-space-xs rounded-lg font-label-hardware text-label-hardware uppercase tracking-wider transition-all duration-200 text-on-surface-variant hover:text-on-surface";
+
+    if (currentState === 'playing') {
+      document.getElementById('btn-state-play').className = "px-space-md py-space-xs rounded-lg font-label-hardware text-label-hardware uppercase tracking-wider transition-all duration-200 bg-secondary-container text-on-secondary-container font-bold shadow-[0_2px_6px_rgba(0,0,0,0.6)]";
+      wand.style.transform = 'rotate(21deg)';
+      stylus.classList.remove('hidden');
+      stylus.classList.add('animate-pulse');
+      emptyMat.classList.add('hidden');
+      vinylSurface.classList.remove('hidden');
+      vinylLabel.classList.remove('hidden');
+      playIcon.innerText = 'pause';
+      playHalo.classList.remove('opacity-0');
+      cueStatus.innerText = 'DOWN';
+      isPlaying = true;
+    } else if (currentState === 'paused') {
+      document.getElementById('btn-state-pause').className = "px-space-md py-space-xs rounded-lg font-label-hardware text-label-hardware uppercase tracking-wider transition-all duration-200 bg-secondary-container text-on-secondary-container font-bold shadow-[0_2px_6px_rgba(0,0,0,0.6)]";
+      // Tonearm lifted via cueing mechanism slightly off the groove
+      wand.style.transform = 'rotate(13deg)';
+      stylus.classList.add('hidden');
+      emptyMat.classList.add('hidden');
+      vinylSurface.classList.remove('hidden');
+      vinylLabel.classList.remove('hidden');
+      playIcon.innerText = 'play_arrow';
+      playHalo.classList.add('opacity-0');
+      cueStatus.innerText = 'LIFTED';
+      isPlaying = false;
+    } else if (currentState === 'empty') {
+      document.getElementById('btn-state-empty').className = "px-space-md py-space-xs rounded-lg font-label-hardware text-label-hardware uppercase tracking-wider transition-all duration-200 bg-secondary-container text-on-secondary-container font-bold shadow-[0_2px_6px_rgba(0,0,0,0.6)]";
+      // Tonearm fully on the rest clamp
+      wand.style.transform = 'rotate(0deg)';
+      stylus.classList.add('hidden');
+      emptyMat.classList.remove('hidden');
+      vinylSurface.classList.add('hidden');
+      vinylLabel.classList.add('hidden');
+      playIcon.innerText = 'play_arrow';
+      playHalo.classList.add('opacity-0');
+      cueStatus.innerText = 'REST';
+      isPlaying = false;
+    }
+  }
+
+  function setVitrolaState(state) {
+    currentState = state;
+    updateVisuals();
+  }
+
+  function togglePlayState() {
+    if (currentState === 'playing') {
+      setVitrolaState('paused');
+    } else {
+      setVitrolaState('playing');
+    }
+  }
+
+  function toggleCueArm() {
+    if (currentState === 'playing') {
+      setVitrolaState('paused');
+    } else if (currentState === 'paused') {
+      setVitrolaState('playing');
+    }
+  }
+
+  function setSpeed(speed) {
+    currentSpeed = speed;
+    const btn33 = document.getElementById('btn-speed-33');
+    const btn45 = document.getElementById('btn-speed-45');
+    if (speed === 33) {
+      btn33.className = "px-2 py-0.5 rounded font-label-technical text-label-technical font-bold bg-primary text-on-primary shadow-sm";
+      btn45.className = "px-2 py-0.5 rounded font-label-technical text-label-technical font-bold text-on-surface-variant hover:text-on-surface";
+    } else {
+      btn45.className = "px-2 py-0.5 rounded font-label-technical text-label-technical font-bold bg-primary text-on-primary shadow-sm";
+      btn33.className = "px-2 py-0.5 rounded font-label-technical text-label-technical font-bold text-on-surface-variant hover:text-on-surface";
+    }
+  }
+
+  function ejectDiscAction() {
+    setVitrolaState('empty');
+  }
+
+  function selectSource(sourceId) {
+    const sources = ['flac', 'spotify', 'deezer', 'ytmusic'];
+    sources.forEach(s => {
+      const btn = document.getElementById('source-' + s);
+      const lamp = document.getElementById('lamp-' + s);
+      if (s === sourceId) {
+        btn.className = "flex flex-col items-center gap-space-xs p-space-sm rounded-lg bg-surface-container-high transition-all shadow-[inset_0_1px_2px_rgba(254,196,134,0.3)]";
+        lamp.className = "w-2.5 h-2.5 rounded-full bg-secondary shadow-[0_0_8px_#ffb95f]";
+      } else {
+        btn.className = "flex flex-col items-center gap-space-xs p-space-sm rounded-lg bg-surface-container-lowest opacity-70 hover:opacity-100 transition-all";
+        lamp.className = "w-2 h-2 rounded-full bg-surface-bright";
+      }
+    });
+  }
+
+  function tweakKnob(type) {
+    const knob = document.getElementById('knob-' + type);
+    const randomAngle = Math.floor(Math.random() * 80) - 40;
+    knob.style.transform = `rotate(${randomAngle}deg)`;
+  }
+
+  function handleSeek(event) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    const ratio = Math.max(0, Math.min(1, clickX / rect.width));
+    progressSec = Math.floor(ratio * totalSec);
+    updateProgressUI();
+  }
+
+  function formatTime(secs) {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+  }
+
+  function updateProgressUI() {
+    const pct = (progressSec / totalSec) * 100;
+    document.getElementById('scrub-bar').style.width = pct + '%';
+    document.getElementById('time-current').innerText = formatTime(progressSec);
+  }
+
+  // Animation Loop: Rotation and Dynamic Needle Ballistics
+  setInterval(() => {
+    if (currentState === 'playing') {
+      const rate = currentSpeed === 33 ? 1.6 : 2.2;
+      rotationDeg = (rotationDeg + rate) % 360;
+      const vinyl = document.getElementById('vinyl-disc-container');
+      if (vinyl) {
+        vinyl.style.transform = `rotate(${rotationDeg}deg)`;
+      }
+
+      // Ballistic needle jitter
+      const leftAngle = -10 + Math.random() * 22;
+      const rightAngle = -8 + Math.random() * 20;
+      const needleL = document.getElementById('vu-needle-left');
+      const needleR = document.getElementById('vu-needle-right');
+      if (needleL && needleR) {
+        needleL.style.transform = `rotate(${leftAngle}deg)`;
+        needleR.style.transform = `rotate(${rightAngle}deg)`;
+      }
+
+      // Progress Increment
+      progressSec = (progressSec + 1) % totalSec;
+      updateProgressUI();
+    } else {
+      // Resting needles
+      const needleL = document.getElementById('vu-needle-left');
+      const needleR = document.getElementById('vu-needle-right');
+      if (needleL && needleR) {
+        needleL.style.transform = `rotate(-28deg)`;
+        needleR.style.transform = `rotate(-28deg)`;
+      }
+    }
+  }, 1000);
+
+  function prevTrack() {
+    progressSec = 0;
+    updateProgressUI();
+  }
+
+  function nextTrack() {
+    progressSec = 0;
+    updateProgressUI();
+  }
+
+  // Initial State Setup
+  updateVisuals();
+</script></main></div></body></html>
