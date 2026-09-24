@@ -30,53 +30,65 @@ export const PlaylistsView: React.FC<PlaylistsViewProps> = ({
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg">
-        {playlists.map((pl) => (
-          <div
-            key={pl.id}
-            onClick={() => onSelectPlaylist?.(pl)}
-            className="group flex flex-col bg-surface-container-low rounded-xl p-space-md shadow-[0_12px_28px_rgba(0,0,0,0.85)] border border-outline-variant/30 hover:border-primary/50 transition-all cursor-pointer"
-          >
-            <div className="relative w-full aspect-video rounded-lg bg-surface-container-lowest p-3 flex items-center justify-between overflow-hidden border border-outline-variant/20">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary border border-secondary/30">
-                  {pl.isSmart ? <Sparkles size={24} /> : <Radio size={24} />}
+      {playlists.length === 0 ? (
+        <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-outline-variant/30 rounded-2xl bg-surface-container-low/50 my-6">
+          <Radio size={48} className="text-outline mb-3 opacity-60" />
+          <h3 className="font-display text-lg font-bold text-on-surface">
+            Nenhuma playlist criada
+          </h3>
+          <p className="font-headline text-xs text-on-surface-variant max-w-md mt-1">
+            Crie seleções personalizadas para agrupar suas faixas de vinil, fitas ou gravações diretas.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg">
+          {playlists.map((pl) => (
+            <div
+              key={pl.id}
+              onClick={() => onSelectPlaylist?.(pl)}
+              className="group flex flex-col bg-surface-container-low rounded-xl p-space-md shadow-[0_12px_28px_rgba(0,0,0,0.85)] border border-outline-variant/30 hover:border-primary/50 transition-all cursor-pointer"
+            >
+              <div className="relative w-full aspect-video rounded-lg bg-surface-container-lowest p-3 flex items-center justify-between overflow-hidden border border-outline-variant/20">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary border border-secondary/30">
+                    {pl.isSmart ? <Sparkles size={24} /> : <Radio size={24} />}
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="font-display text-base text-primary-fixed font-bold">
+                      {pl.name}
+                    </span>
+                    <span className="font-mono text-[10px] text-outline">
+                      {pl.trackIds.length} faixas selecionadas
+                    </span>
+                  </div>
                 </div>
-                <div className="flex flex-col">
-                  <span className="font-display text-base text-primary-fixed font-bold">
-                    {pl.name}
-                  </span>
-                  <span className="font-mono text-[10px] text-outline">
-                    {pl.trackIds.length} faixas selecionadas
-                  </span>
-                </div>
+
+                <button
+                  className="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-lg transition-transform group-hover:scale-110 active:scale-95"
+                  title="Tocar seleção inteira"
+                  aria-label={`Tocar ${pl.name}`}
+                >
+                  <Play size={18} className="translate-x-0.5" />
+                </button>
               </div>
 
-              <button
-                className="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-lg transition-transform group-hover:scale-110 active:scale-95"
-                title="Tocar seleção inteira"
-                aria-label={`Tocar ${pl.name}`}
-              >
-                <Play size={18} className="translate-x-0.5" />
-              </button>
-            </div>
+              <p className="font-headline text-xs text-on-surface-variant mt-space-sm line-clamp-2">
+                {pl.description || 'Seleção musical com dinâmica acústica ajustada para agulha fonocaptora.'}
+              </p>
 
-            <p className="font-headline text-xs text-on-surface-variant mt-space-sm line-clamp-2">
-              {pl.description || 'Seleção musical com dinâmica acústica ajustada para agulha fonocaptora.'}
-            </p>
-
-            <div className="flex items-center justify-between pt-space-xs mt-space-xs border-t border-outline-variant/20 font-mono text-[10px] text-outline">
-              <span className="flex items-center gap-1">
-                <Clock size={12} />
-                <span>Criada em {new Date(pl.createdAt).toLocaleDateString('pt-BR')}</span>
-              </span>
-              <span className="text-secondary font-bold">
-                {pl.isSmart ? 'SMART' : 'MANUAL'}
-              </span>
+              <div className="flex items-center justify-between pt-space-xs mt-space-xs border-t border-outline-variant/20 font-mono text-[10px] text-outline">
+                <span className="flex items-center gap-1">
+                  <Clock size={12} />
+                  <span>Criada em {new Date(pl.createdAt).toLocaleDateString('pt-BR')}</span>
+                </span>
+                <span className="text-secondary font-bold">
+                  {pl.isSmart ? 'SMART' : 'MANUAL'}
+                </span>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

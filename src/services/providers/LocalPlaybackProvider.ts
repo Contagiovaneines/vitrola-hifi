@@ -114,14 +114,9 @@ export class LocalPlaybackProvider implements PlaybackProvider {
     } else if (track.uri) {
       this.audio.src = track.uri;
     } else {
-      // Fallback para amostras de fábrica empacotadas
-      if (track.title.toLowerCase().includes('so what')) {
-        this.audio.src = '/samples/miles-davis-so-what-sample.wav';
-      } else if (track.title.toLowerCase().includes('clube')) {
-        this.audio.src = '/samples/clube-da-esquina-sample.wav';
-      } else {
-        this.audio.src = '/samples/miles-davis-so-what-sample.wav';
-      }
+      this.callbacks.onError('Nenhum arquivo físico de áudio vinculado a esta faixa. Por favor, importe o arquivo.');
+      this.callbacks.onStateChange('empty');
+      return;
     }
 
     this.audio.load();

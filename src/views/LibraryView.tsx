@@ -7,12 +7,14 @@ interface LibraryViewProps {
   onPlayTrack: (track: Track, fileBlob?: Blob) => void;
   onInspectAlbum?: (album: Album) => void;
   onImportFiles?: (files: FileList) => void;
+  onClearLibrary?: () => void;
 }
 
 export const LibraryView: React.FC<LibraryViewProps> = ({
   albums,
   onPlayTrack,
   onImportFiles,
+  onClearLibrary,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'shelf' | 'crate' | 'list'>('shelf');
@@ -70,6 +72,20 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
                 onChange={handleFileInput}
               />
             </label>
+
+            {onClearLibrary && albums.length > 0 && (
+              <button
+                onClick={() => {
+                  if (confirm('Deseja realmente limpar todos os discos da biblioteca local?')) {
+                    onClearLibrary();
+                  }
+                }}
+                className="px-2.5 py-1.5 rounded font-headline text-xs text-error hover:bg-error-container/20 transition-colors border border-error/30"
+                title="Limpar todos os discos da biblioteca local"
+              >
+                Limpar Biblioteca
+              </button>
+            )}
 
             <div className="flex items-center bg-surface-container-lowest p-1 rounded-lg shadow-[inset_0_2px_4px_rgba(0,0,0,0.9)] border border-outline-variant/30">
               <button
@@ -197,8 +213,29 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
             </span>
           </div>
 
-          {/* Vinyl Crate Grid with realistic jacket and vinyl slide out */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-space-lg">
+          {/* Vinyl Crate Grid or Clean Empty State */}
+          {filteredAlbums.length === 0 ? (
+            <div className="flex flex-col items-center justify-center p-12 bg-surface-container-low rounded-xl border border-dashed border-outline-variant/40 text-center">
+              <Disc size={48} className="text-secondary/60 mb-3" />
+              <h3 className="font-display text-base text-primary font-bold">
+                Sua estante de vinis está vazia
+              </h3>
+              <p className="font-headline text-xs text-on-surface-variant max-w-sm mt-1">
+                Nenhum arquivo mocado ou fictício. Importe suas faixas reais (FLAC, MP3, WAV, OGG, AAC) clicando no botão abaixo ou arrastando arquivos para a janela.
+              </p>
+              <label className="mt-4 px-4 py-2 rounded bg-primary text-on-primary font-headline text-xs font-bold hover:bg-primary-fixed transition-colors shadow-md cursor-pointer">
+                <span>Importar Arquivos de Áudio</span>
+                <input
+                  type="file"
+                  multiple
+                  accept=".mp3,.flac,.wav,.ogg,.m4a,.aac,audio/*"
+                  className="hidden"
+                  onChange={handleFileInput}
+                />
+              </label>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-space-lg">
             {filteredAlbums.map((album) => {
               const isSelected = selectedAlbum?.id === album.id;
               const primaryTrack = album.tracks[0];
@@ -300,6 +337,7 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
               );
             })}
           </div>
+          )}
         </div>
 
         {/* Right: Detailed Turntable Inspection Bay (4 cols) */}

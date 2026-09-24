@@ -88,44 +88,16 @@ export const PlayerView: React.FC<PlayerViewProps> = ({
           </div>
 
           <div className="hidden xl:flex items-center gap-space-xs text-outline font-mono text-[10px]">
-            <span>WOW &amp; FLUTTER: &lt;0.025%</span>
+            <span>SAMPLE RATE: {currentTrack?.format?.sampleRate ? `${currentTrack.format.sampleRate / 1000} kHz` : 'STANDBY'}</span>
             <span>•</span>
-            <span>S/N RATIO: 108 dB</span>
+            <span>CANAL: {currentTrack?.format?.channels === 1 ? 'MONO' : 'ESTÉREO'}</span>
           </div>
         </div>
 
-        {/* State Quick Toggle Pills (Interactive Demo State Switcher) */}
-        <div className="flex items-center gap-1 bg-surface-container-lowest p-1 rounded-xl shadow-[inset_0_2px_6px_rgba(0,0,0,0.9)] border border-outline-variant/30">
-          <button
-            onClick={() => setPlaybackState('playing')}
-            className={`px-3 py-1 rounded-lg font-headline text-[10px] uppercase tracking-wider font-bold transition-all ${
-              playbackState === 'playing'
-                ? 'bg-secondary-container text-on-secondary-container shadow-[0_2px_6px_rgba(0,0,0,0.6)]'
-                : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
-            }`}
-          >
-            Tocando
-          </button>
-          <button
-            onClick={() => setPlaybackState('paused')}
-            className={`px-3 py-1 rounded-lg font-headline text-[10px] uppercase tracking-wider font-bold transition-all ${
-              playbackState === 'paused'
-                ? 'bg-secondary-container text-on-secondary-container shadow-[0_2px_6px_rgba(0,0,0,0.6)]'
-                : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
-            }`}
-          >
-            Pausado
-          </button>
-          <button
-            onClick={() => setPlaybackState('empty')}
-            className={`px-3 py-1 rounded-lg font-headline text-[10px] uppercase tracking-wider font-bold transition-all ${
-              playbackState === 'empty'
-                ? 'bg-secondary-container text-on-secondary-container shadow-[0_2px_6px_rgba(0,0,0,0.6)]'
-                : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
-            }`}
-          >
-            Sem Disco
-          </button>
+        {/* Live Playback State Badge */}
+        <div className="flex items-center gap-2 px-3 py-1 rounded-lg bg-surface-container-lowest font-headline text-[10px] uppercase tracking-wider font-bold border border-outline-variant/30 text-on-surface-variant">
+          <span>STATUS:</span>
+          <span className="text-secondary font-mono">{playbackState === 'playing' ? 'TOCANDO' : playbackState === 'paused' ? 'PAUSADO' : 'SEM DISCO'}</span>
         </div>
       </div>
 

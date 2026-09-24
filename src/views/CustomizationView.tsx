@@ -410,16 +410,16 @@ export const CustomizationView: React.FC<CustomizationViewProps> = ({
                 {/* Mini Spinning Vinyl */}
                 <div className="w-12 h-12 rounded-full bg-[#0d0c0b] vinyl-grooves-pattern flex items-center justify-center shrink-0 border border-primary/30 animate-vinyl-33">
                   <div className="w-5 h-5 rounded-full bg-secondary-container flex items-center justify-center text-[6px] font-bold text-on-secondary-container">
-                    MD
+                    VT
                   </div>
                 </div>
 
                 <div className="flex flex-col min-w-0 flex-1">
                   <span className="font-display text-xs text-primary font-bold truncate">
-                    So What
+                    Vitrola Mini Deck
                   </span>
                   <span className="font-headline text-[10px] text-on-surface-variant truncate">
-                    Miles Davis — Kind of Blue
+                    Controles de Desktop &bull; WASAPI
                   </span>
                   <div className="w-full h-1 bg-surface-container-highest rounded-full mt-1.5 overflow-hidden">
                     <div className="w-2/5 h-full bg-primary shadow-[0_0_8px_#fec486]"></div>

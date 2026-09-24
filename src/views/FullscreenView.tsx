@@ -66,15 +66,16 @@ export const FullscreenView: React.FC<FullscreenViewProps> = ({
           </div>
         </div>
 
-        {/* Center Tube Rail Diagnostics */}
+        {/* Live Playback Metrics */}
         <div className="hidden md:flex items-center gap-space-md font-mono text-[10px] text-on-surface-variant">
           <div className="flex items-center gap-1 text-secondary">
-            <Thermometer size={14} />
-            <span>TUBES: 48.2°C</span>
+            <span>VELOCIDADE: {speed} RPM</span>
           </div>
           <div className="flex items-center gap-1 text-primary">
-            <Zap size={14} />
-            <span>BIAS: 1.8V OPTIMAL</span>
+            <span>VU L: {vuLeftDb > -40 ? `${vuLeftDb.toFixed(0)} dB` : 'MUTED'}</span>
+          </div>
+          <div className="flex items-center gap-1 text-primary">
+            <span>VU R: {vuRightDb > -40 ? `${vuRightDb.toFixed(0)} dB` : 'MUTED'}</span>
           </div>
         </div>
 

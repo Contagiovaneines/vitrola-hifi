@@ -30,13 +30,13 @@ export const SourcesView: React.FC<SourcesViewProps> = ({ onPlayTrack }) => {
   );
 
   // Deezer State
-  const [deezerQuery, setDeezerQuery] = useState('Miles Davis');
+  const [deezerQuery, setDeezerQuery] = useState('');
   const [deezerResults, setDeezerResults] = useState<Track[]>([]);
   const [isSearchingDeezer, setIsSearchingDeezer] = useState(false);
   const [deezerError, setDeezerError] = useState<string | null>(null);
 
   // YouTube State
-  const [ytVideoId, setYtVideoId] = useState('jfKfPfyJRdk');
+  const [ytVideoId, setYtVideoId] = useState('');
 
   const handleSearchDeezer = async () => {
     if (!deezerQuery.trim()) return;

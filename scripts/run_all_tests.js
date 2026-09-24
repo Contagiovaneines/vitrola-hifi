@@ -97,6 +97,8 @@ async function runTestSuite() {
     assert(storageCode.includes('loadPlaylists') && storageCode.includes('savePlaylists'), 'Métodos de persistência de playlists presentes');
     assert(storageCode.includes('loadSettings') && storageCode.includes('saveSettings'), 'Métodos de persistência de configurações de áudio presentes');
     assert(storageCode.includes('addTrack') && storageCode.includes('removeTrack'), 'Métodos de adição e remoção de faixas presentes');
+    assert(storageCode.includes('clearLibrary'), 'Método de expurgo/limpeza total da biblioteca (clearLibrary) implementado');
+    assert(storageCode.includes('return []'), 'Inicialização limpa e estrita sem faixas mocadas ou dados simulados');
   } catch (err) {
     assert(false, `Erro na suíte 2: ${err.message}`);
   }

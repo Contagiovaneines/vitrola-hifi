@@ -9,7 +9,7 @@ interface YouTubePlayerMonitorProps {
 }
 
 export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
-  currentVideoId = 'jfKfPfyJRdk', // Lofi hip hop / vinyl stream id de exemplo
+  currentVideoId = '',
   onVideoChange,
   isCompact = false,
 }) => {
@@ -35,9 +35,11 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
     ? `https://www.youtube.com/embed/videoseries?list=${activeMedia.id}&enablejsapi=1&origin=${origin}`
     : `https://www.youtube.com/embed/${activeMedia.id}?enablejsapi=1&origin=${origin}`;
 
-  const externalUrl = activeMedia.type === 'playlist'
-    ? `https://music.youtube.com/playlist?list=${activeMedia.id}`
-    : `https://www.youtube.com/watch?v=${activeMedia.id}`;
+  const externalUrl = !activeMedia.id
+    ? 'https://www.youtube.com'
+    : activeMedia.type === 'playlist'
+      ? `https://music.youtube.com/playlist?list=${activeMedia.id}`
+      : `https://www.youtube.com/watch?v=${activeMedia.id}`;
 
   return (
     <div className="w-full rounded-xl bg-surface-container-low p-space-md shadow-[0_8px_24px_rgba(0,0,0,0.85)] border border-primary/30 select-none flex flex-col gap-3">

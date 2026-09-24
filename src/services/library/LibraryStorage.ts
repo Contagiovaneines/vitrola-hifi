@@ -1,10 +1,9 @@
 import { Album, Playlist, Track } from '../../types';
-import { initialAlbums, initialPlaylists, initialTracks } from '../../data/mockData';
 
 const STORAGE_KEYS = {
-  TRACKS: 'vitrola_tracks_v1',
-  ALBUMS: 'vitrola_albums_v1',
-  PLAYLISTS: 'vitrola_playlists_v1',
+  TRACKS: 'vitrola_tracks_v2',
+  ALBUMS: 'vitrola_albums_v2',
+  PLAYLISTS: 'vitrola_playlists_v2',
   SETTINGS: 'vitrola_settings_v1',
 };
 
@@ -19,6 +18,19 @@ export interface UserSettings {
 }
 
 export class LibraryStorage {
+  public static clearLibrary(): void {
+    try {
+      localStorage.removeItem(STORAGE_KEYS.TRACKS);
+      localStorage.removeItem(STORAGE_KEYS.ALBUMS);
+      localStorage.removeItem(STORAGE_KEYS.PLAYLISTS);
+      localStorage.removeItem('vitrola_tracks_v1');
+      localStorage.removeItem('vitrola_albums_v1');
+      localStorage.removeItem('vitrola_playlists_v1');
+    } catch (e) {
+      console.warn('Falha ao limpar biblioteca:', e);
+    }
+  }
+
   public static loadTracks(): Track[] {
     try {
       const data = localStorage.getItem(STORAGE_KEYS.TRACKS);
@@ -28,7 +40,7 @@ export class LibraryStorage {
     } catch (e) {
       console.warn('Falha ao ler tracks do localStorage:', e);
     }
-    return initialTracks;
+    return [];
   }
 
   public static saveTracks(tracks: Track[]): void {
@@ -60,7 +72,7 @@ export class LibraryStorage {
     } catch (e) {
       console.warn('Falha ao ler albums do localStorage:', e);
     }
-    return initialAlbums;
+    return [];
   }
 
   public static saveAlbums(albums: Album[]): void {
@@ -80,7 +92,7 @@ export class LibraryStorage {
     } catch (e) {
       console.warn('Falha ao ler playlists do localStorage:', e);
     }
-    return initialPlaylists;
+    return [];
   }
 
   public static savePlaylists(playlists: Playlist[]): void {

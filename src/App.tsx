@@ -336,6 +336,17 @@ export const App: React.FC = () => {
     }
   };
 
+  const handleClearLibrary = () => {
+    LibraryStorage.clearLibrary();
+    fileBlobsRef.current.clear();
+    setTracks([]);
+    setAlbums([]);
+    setPlaylists([]);
+    setCurrentTrack(null);
+    setQueue([]);
+    handleEject();
+  };
+
   return (
     <div className="min-h-screen bg-surface text-on-surface flex flex-col font-body selection:bg-primary-container selection:text-on-primary-container">
       {/* Fullscreen Mode (Audiophile Theatre OSD) */}
@@ -377,7 +388,7 @@ export const App: React.FC = () => {
       <Sidebar
         currentTab={currentTab}
         onTabChange={setCurrentTab}
-        masterAttenuationDb={-14.5}
+        masterAttenuationDb={volume > 0 ? 20 * Math.log10(volume / 100) : -40}
         outputEngine="Direct Audio / Tube Sat"
       />
 
@@ -420,6 +431,7 @@ export const App: React.FC = () => {
               albums={albums}
               onPlayTrack={handleSelectTrack}
               onImportFiles={handleImportFiles}
+              onClearLibrary={handleClearLibrary}
             />
           )}
 

@@ -15,18 +15,18 @@ export const TrackReadout: React.FC<TrackReadoutProps> = ({ currentTrack }) => {
           <span className="px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-mono text-[10px] font-bold shadow-sm">
             {currentTrack?.trackNumber
               ? `TRACK ${String(currentTrack.trackNumber).padStart(2, '0')}`
-              : 'TRACK 01'}
+              : currentTrack ? 'TRACK 01' : 'SEM DISCO'}
           </span>
           <span className="font-mono text-[11px] text-outline font-medium tracking-wider">
             {currentTrack?.year
               ? `STEREO LP MASTERS · ${currentTrack.year}`
-              : 'STEREO LP MASTERS 1959'}
+              : currentTrack ? 'STEREO LP MASTERS' : 'BANDEJA DISPONÍVEL'}
           </span>
         </div>
 
         {/* Hero Title */}
         <h1 className="font-display text-2xl lg:text-3xl text-primary-fixed font-bold tracking-tight truncate mt-1">
-          {currentTrack?.title || 'Selecione uma faixa da estante'}
+          {currentTrack?.title || 'Sem Disco no Prato'}
         </h1>
 
         {/* Artist & Album */}
@@ -37,7 +37,7 @@ export const TrackReadout: React.FC<TrackReadoutProps> = ({ currentTrack }) => {
               <span className="text-on-surface">{currentTrack.album}</span>
             </>
           ) : (
-            'Nenhum disco em reprodução na bandeja'
+            'Importe suas faixas locais ou busque prévias no Deezer/YouTube'
           )}
         </p>
       </div>

@@ -68,21 +68,21 @@ export const VinylDisc: React.FC<VinylDiscProps> = ({
               >
                 {/* Archival Label Text */}
                 <span className="font-headline text-[7px] text-[#ffddbb] uppercase tracking-widest font-extrabold leading-tight opacity-90">
-                  {currentTrack?.labelInfo?.recordLabel || 'COLUMBIA STEREO 6-EYE'}
+                  {currentTrack?.labelInfo?.recordLabel || 'ORIGINAL MASTER RECORDING'}
                 </span>
                 <span className="font-display text-[11px] text-primary-fixed font-bold leading-tight mt-0.5 drop-shadow-sm truncate max-w-[90%]">
-                  {currentTrack?.album || 'KIND OF BLUE'}
+                  {currentTrack?.album || 'ÁLBUM DESCONHECIDO'}
                 </span>
                 <span className="font-headline text-[9px] text-tertiary-fixed font-semibold tracking-wider uppercase -mt-0.5 truncate max-w-[90%]">
-                  {currentTrack?.artist || 'MILES DAVIS'}
+                  {currentTrack?.artist || 'ARTISTA DESCONHECIDO'}
                 </span>
 
                 <div className="my-0.5 px-2 py-[1px] bg-surface-container-lowest/80 rounded font-mono text-[8px] text-secondary font-bold border border-outline-variant/30">
-                  SIDE 1 · {speed} RPM
+                  LADO 1 · {speed} RPM
                 </div>
 
                 <span className="font-mono text-[7px] text-on-surface-variant/70 tracking-tighter truncate max-w-[90%]">
-                  {currentTrack?.labelInfo?.catalogNumber || 'CL 1355 / XSM 47326'}
+                  {currentTrack?.labelInfo?.catalogNumber || 'MATRIZ ANALÓGICA DIRECT CUT'}
                 </span>
 
                 {/* Metal Center Spindle Pin */}
