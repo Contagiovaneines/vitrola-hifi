@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 vitrola-entrega-final.zip
 test-audio/
+dist-electron/
+*.exe
+
