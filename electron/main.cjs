@@ -1,10 +1,53 @@
-const { app, BrowserWindow, session } = require('electron');
+const { app, BrowserWindow, session, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
 let mainWindow = null;
 
+function updateThumbarButtons(win, isPlaying = false) {
+  if (process.platform !== 'win32' || !win || win.isDestroyed()) return;
+
+  const assetsDir = path.join(__dirname, 'assets');
+  const prevIcon = path.join(assetsDir, 'prev.png');
+  const playIcon = path.join(assetsDir, 'play.png');
+  const pauseIcon = path.join(assetsDir, 'pause.png');
+  const nextIcon = path.join(assetsDir, 'next.png');
+
+  if (!fs.existsSync(prevIcon) || !fs.existsSync(playIcon)) return;
+
+  try {
+    win.setThumbarButtons([
+      {
+        tooltip: 'Voltar Faixa (⏮)',
+        icon: prevIcon,
+        click() {
+          win.webContents.send('media-prev');
+        }
+      },
+      {
+        tooltip: isPlaying ? 'Pausar (⏯)' : 'Tocar (⏯)',
+        icon: isPlaying ? pauseIcon : playIcon,
+        click() {
+          win.webContents.send('media-play-pause');
+        }
+      },
+      {
+        tooltip: 'Passar pra Frente (⏭)',
+        icon: nextIcon,
+        click() {
+          win.webContents.send('media-next');
+        }
+      }
+    ]);
+  } catch (err) {
+    // Some Windows display configurations may not support thumbar
+    console.warn('Aviso: setThumbarButtons:', err.message);
+  }
+}
+
 function createWindow() {
+  const iconPath = path.join(__dirname, '..', 'public', 'icon.png');
+
   mainWindow = new BrowserWindow({
     width: 1440,
     height: 920,
@@ -12,10 +55,12 @@ function createWindow() {
     minHeight: 700,
     title: 'Vitrola — Hi-Fi Turntable Desktop Console',
     backgroundColor: '#0c0a09',
+    icon: fs.existsSync(iconPath) ? iconPath : undefined,
     autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
+      preload: path.join(__dirname, 'preload.cjs'),
       webviewTag: true, // Habilita o componente <webview> para o YouTube Music embutido
       partition: 'persist:vitrola_session', // Persiste o login do Google entre reinicializações
     },
@@ -38,10 +83,22 @@ function createWindow() {
     mainWindow.loadURL('http://localhost:5173');
   }
 
+  // Windows Taskbar Thumbnail Toolbar (Volta, Pausa/Play, Passa pra Frente)
+  mainWindow.once('ready-to-show', () => {
+    updateThumbarButtons(mainWindow, false);
+  });
+
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
 }
+
+// IPC Handlers
+ipcMain.on('playback-state-changed', (event, { isPlaying }) => {
+  if (mainWindow) {
+    updateThumbarButtons(mainWindow, isPlaying);
+  }
+});
 
 app.whenReady().then(() => {
   // Configura a partição de sessão persistente para armazenar cookies de login do Google

@@ -1,7 +1,7 @@
 import React from 'react';
 import { VitrolaLogo } from '../../assets/VitrolaLogo';
 import { NavigationTab } from '../../types';
-import { Minus, Square, X, Music, PictureInPicture2 } from 'lucide-react';
+import { Minus, Square, X, Music, PictureInPicture2, Disc } from 'lucide-react';
 
 interface WindowHeaderProps {
   currentTab: NavigationTab;
@@ -91,11 +91,14 @@ export const WindowHeader: React.FC<WindowHeaderProps> = ({
           {onToggleMiniWidget && (
             <button
               onClick={onToggleMiniWidget}
-              aria-label="Destacar Mini Widget Flutuante"
-              title="Destacar Mini Widget Flutuante"
-              className="w-7 h-7 rounded bg-surface-container-high/70 hover:bg-surface-bright flex items-center justify-center text-secondary hover:text-primary transition-colors"
+              aria-label="Abrir Widget Dock Windows (Tecla D)"
+              title="Abrir Widget Dock Windows (Tecla D) com controles e vinil girando"
+              className="h-7 px-2 rounded-lg bg-surface-container-high/80 hover:bg-surface-bright flex items-center gap-1.5 text-xs text-amber-300 hover:text-amber-100 border border-amber-500/30 transition-all shadow-xs mr-1"
             >
-              <PictureInPicture2 size={13} />
+              <Disc size={13} className="text-amber-400" />
+              <span className="hidden md:inline font-mono text-[10px] tracking-wider uppercase font-bold">
+                Modo Dock
+              </span>
             </button>
           )}
           <button

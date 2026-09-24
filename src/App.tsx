@@ -133,6 +133,24 @@ export const App: React.FC = () => {
     };
   }, []);
 
+  // 1.1 Electron Taskbar Thumbnail Controls (Volta, Pausa/Play, Passa pra Frente)
+  useEffect(() => {
+    const electron = (window as any).electronAPI;
+    if (!electron) return;
+
+    electron.sendPlaybackState({ isPlaying: playbackState === 'playing' });
+
+    const unsubPrev = electron.onMediaPrev?.(() => handlePrevTrack());
+    const unsubPlayPause = electron.onMediaPlayPause?.(() => handlePlayToggle());
+    const unsubNext = electron.onMediaNext?.(() => handleNextTrack());
+
+    return () => {
+      if (unsubPrev) unsubPrev();
+      if (unsubPlayPause) unsubPlayPause();
+      if (unsubNext) unsubNext();
+    };
+  }, [playbackState]);
+
   // 2. Real-time PCM VU Meter Loop
   useEffect(() => {
     let animId: number;
@@ -317,6 +335,9 @@ export const App: React.FC = () => {
         setVolume((v) => Math.max(0, v - 5));
       } else if (e.key.toLowerCase() === 'm') {
         setVolume((v) => (v > 0 ? 0 : 75));
+      } else if (e.key.toLowerCase() === 'd') {
+        e.preventDefault();
+        setIsMiniWidgetOpen((open) => !open);
       } else if (e.key === '1') {
         setCurrentTab('inicio');
       } else if (e.key === '2') {
