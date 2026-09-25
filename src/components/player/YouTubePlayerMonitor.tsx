@@ -181,6 +181,12 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
         playCount: 0,
       });
     }
+
+    setTimeout(() => {
+      const iframe = document.getElementById('vitrola-youtube-player-iframe') as HTMLIFrameElement;
+      iframe?.contentWindow?.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+      iframe?.contentWindow?.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+    }, 400);
   };
 
   const handleLoad = async () => {
@@ -296,31 +302,36 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
     setIsLoading(false);
   };
 
-  // Construção do link de incorporação seguro (SEM origin=file:// para eliminar o Erro 153)
+  // Construção do link de incorporação oficial do YouTube (suportado por web e desktop)
   const getEmbedUrl = () => {
     if (!activeMedia.id && !activeMedia.videoId) return '';
 
-    const hasHttpOrigin =
-      typeof window !== 'undefined' &&
-      window.location.origin &&
-      window.location.origin.startsWith('http');
-    const originParam = hasHttpOrigin ? `&origin=${encodeURIComponent(window.location.origin)}` : '';
+    const vid = activeMedia.videoId || (activeMedia.type === 'video' ? activeMedia.id : 'kffacxfA7G4');
 
     // Se temos um vídeo específico (mesmo dentro de uma playlist):
     if (activeMedia.videoId) {
       const listParam = activeMedia.id && activeMedia.type === 'playlist' ? `&list=${activeMedia.id}` : '';
-      return `https://www.youtube-nocookie.com/embed/${activeMedia.videoId}?autoplay=1&enablejsapi=1${listParam}${originParam}`;
+      return `https://www.youtube.com/embed/${activeMedia.videoId}?autoplay=1&enablejsapi=1&playsinline=1${listParam}`;
     }
 
     // Se for playlist padrão PL...
     if (activeMedia.type === 'playlist' && activeMedia.id.startsWith('PL')) {
-      return `https://www.youtube-nocookie.com/embed/videoseries?list=${activeMedia.id}&autoplay=1&enablejsapi=1${originParam}`;
+      return `https://www.youtube.com/embed/videoseries?list=${activeMedia.id}&autoplay=1&enablejsapi=1&playsinline=1`;
     }
 
-    return `https://www.youtube-nocookie.com/embed/${activeMedia.id}?autoplay=1&enablejsapi=1${originParam}`;
+    return `https://www.youtube.com/embed/${vid}?autoplay=1&enablejsapi=1&playsinline=1`;
   };
 
   const embedSrc = getEmbedUrl();
+
+  const handleTriggerPlay = () => {
+    const iframe = document.getElementById('vitrola-youtube-player-iframe') as HTMLIFrameElement;
+    if (iframe?.contentWindow) {
+      iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+      iframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+    }
+    onStateChange?.('playing');
+  };
 
   return (
     <div className="w-full rounded-xl bg-surface-container-low p-space-md shadow-[0_8px_24px_rgba(0,0,0,0.85)] border border-primary/30 select-none flex flex-col gap-3">
@@ -339,10 +350,14 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
               <span>PLAYLIST CARREGADA</span>
             </span>
           )}
-          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#ff3333]/15 text-[#ff3333] border border-[#ff3333]/30 font-mono text-[9px] font-bold">
-            <ShieldCheck size={12} />
-            <span>TOCANDO NA VITROLA</span>
-          </div>
+          <button
+            onClick={handleTriggerPlay}
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#ff3333] hover:bg-[#e62e2e] text-white font-headline text-[10px] font-bold shadow-md cursor-pointer transition-all active:scale-95"
+            title="Iniciar ou desmutar reprodução no toca-discos"
+          >
+            <Play size={11} className="fill-current" />
+            <span>TOCAR NA VITROLA</span>
+          </button>
         </div>
       </div>
 
@@ -355,8 +370,17 @@ export const YouTubePlayerMonitor: React.FC<YouTubePlayerMonitorProps> = ({
             title="Vitrola Official YouTube Player"
             src={embedSrc}
             className="w-full h-full border-0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
+            onLoad={() => {
+              // Garante que o player receba comando play e unMute após inicialização
+              setTimeout(() => {
+                const iframe = document.getElementById('vitrola-youtube-player-iframe') as HTMLIFrameElement;
+                iframe?.contentWindow?.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                iframe?.contentWindow?.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+              }, 400);
+            }}
           />
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-center p-4 text-outline font-headline text-xs">

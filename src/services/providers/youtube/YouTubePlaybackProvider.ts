@@ -146,7 +146,7 @@ export class YouTubePlaybackProvider implements PlaybackProvider {
           modestbranding: 1,
           rel: 0,
           enablejsapi: 1,
-          origin: window.location.origin,
+          origin: typeof window !== 'undefined' && window.location.origin && window.location.origin.startsWith('http') ? window.location.origin : undefined,
         },
         events: {
           onReady: (event) => {

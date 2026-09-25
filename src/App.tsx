@@ -366,6 +366,7 @@ export const App: React.FC = () => {
         setPlaybackState('paused');
       } else {
         iframe?.contentWindow?.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+        iframe?.contentWindow?.postMessage('{"event":"command","func":"unMute","args":""}', '*');
         setPlaybackState('playing');
       }
       return;

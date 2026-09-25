@@ -2,6 +2,9 @@ const { app, BrowserWindow, session, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
+// Permite autoplay de áudio/vídeo imediatamente sem exigir clique prévio do usuário
+app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
+
 let mainWindow = null;
 
 function updateThumbarButtons(win, isPlaying = false) {
@@ -63,6 +66,8 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.cjs'),
       webviewTag: true, // Habilita o componente <webview> para o YouTube Music embutido
       partition: 'persist:vitrola_session', // Persiste o login do Google entre reinicializações
+      webSecurity: false, // Permite carregar iframes e mídias sem bloqueio de protocolo local
+      allowRunningInsecureContent: true,
     },
   });
 
@@ -119,6 +124,38 @@ app.whenReady().then(() => {
   ses.setUserAgent(
     ses.getUserAgent().replace(/Electron\/[0-9.]+\s/gi, '')
   );
+
+  // Intercepta e remove bloqueios de iframe (X-Frame-Options / Referer) para YouTube e mídia externa
+  const setupMediaHeaders = (targetSession) => {
+    const filter = {
+      urls: [
+        '*://*.youtube.com/*',
+        '*://*.youtube-nocookie.com/*',
+        '*://*.googlevideo.com/*',
+      ],
+    };
+
+    targetSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
+      details.requestHeaders['Referer'] = 'https://www.youtube.com/';
+      details.requestHeaders['Origin'] = 'https://www.youtube.com';
+      callback({ cancel: false, requestHeaders: details.requestHeaders });
+    });
+
+    targetSession.webRequest.onHeadersReceived(filter, (details, callback) => {
+      const responseHeaders = { ...details.responseHeaders };
+      delete responseHeaders['x-frame-options'];
+      delete responseHeaders['X-Frame-Options'];
+      if (responseHeaders['content-security-policy']) {
+        responseHeaders['content-security-policy'] = responseHeaders['content-security-policy'].map((csp) =>
+          csp.replace(/frame-ancestors[^;]+;?/gi, '')
+        );
+      }
+      callback({ cancel: false, responseHeaders });
+    });
+  };
+
+  setupMediaHeaders(ses);
+  setupMediaHeaders(session.defaultSession);
 
   createWindow();
 
