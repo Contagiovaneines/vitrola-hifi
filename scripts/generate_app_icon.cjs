@@ -188,8 +188,4 @@ fs.writeFileSync(path.join(publicDir, 'icon.png'), png256);
 fs.writeFileSync(path.join(publicDir, 'icon.ico'), icoBuffer);
 fs.writeFileSync(path.join(publicDir, 'favicon.ico'), icoBuffer);
 
-// Also copy to root for electron-builder / windows installer
-fs.writeFileSync(path.join(__dirname, '..', 'icon.ico'), icoBuffer);
-fs.writeFileSync(path.join(__dirname, '..', 'icon.png'), png256);
-
-console.log('Icones gerados com sucesso em public/icon.png e public/icon.ico!');
+console.log('Icones gerados com sucesso em public/icon.png, public/icon.ico e public/favicon.ico!');

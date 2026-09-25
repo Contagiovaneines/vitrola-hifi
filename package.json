@@ -9,6 +9,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "desktop": "electron electron/main.cjs",
+    "test": "node scripts/run_all_tests.js",
     "package:dir": "npm run build && electron-builder --dir",
     "package:win": "npm run build && electron-builder --win nsis",
     "install:windows": "powershell -ExecutionPolicy Bypass -File scripts/install-windows.ps1"

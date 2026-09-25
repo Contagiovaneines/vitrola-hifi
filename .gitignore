@@ -36,7 +36,3 @@ dist-electron/
 *.ntvs*
 *.njsproj
 *.sln
-*.sw?
-
-# Testing and Local Audio
-test-audio/

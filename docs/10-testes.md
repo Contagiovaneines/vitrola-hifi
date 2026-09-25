@@ -73,16 +73,11 @@ Este documento registra a execução da suíte de homologação de testes automa
 ## 4. Comandos Executados
 
 ```powershell
-# 1. Execução da suíte completa de homologação
-node scripts/run_all_tests.js
+# 1. Execução da suíte completa de homologação (68 testes)
+npm test
+# ou: node scripts/run_all_tests.js
 
-# 2. Execução dos testes dedicados de streaming
-node scripts/test_providers_deezer_youtube.js
-
-# 3. Execução dos testes de temas e mini widget
-node scripts/test_stage_08_themes_widget.js
-
-# 4. Compilação TypeScript e empacotamento Vite
+# 2. Compilação TypeScript e empacotamento Vite
 npm run build
 ```
 *Todos os comandos finalizaram com código de saída 0.*
