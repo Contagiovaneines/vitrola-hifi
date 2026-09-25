@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { PlayerPlaybackState, Track, AudioSourceType } from '../../types';
 import {
   Play,
@@ -12,6 +13,7 @@ import {
   Anchor,
   Sliders,
   Disc,
+  ExternalLink,
 } from 'lucide-react';
 
 interface MiniPlayerWidgetProps {
@@ -67,6 +69,58 @@ export const MiniPlayerWidget: React.FC<MiniPlayerWidgetProps> = ({
     }
     return null;
   });
+
+  const [pipWindow, setPipWindow] = useState<Window | null>(null);
+
+  // Alterna o modo Document Picture-in-Picture nativo (permanece visível mesmo com navegador minimizado)
+  const toggleDocumentPiP = async () => {
+    if (pipWindow) {
+      pipWindow.close();
+      setPipWindow(null);
+      return;
+    }
+
+    if (typeof window !== 'undefined' && 'documentPictureInPicture' in window) {
+      try {
+        const pip = await (window as any).documentPictureInPicture.requestWindow({
+          width: 480,
+          height: 82,
+        });
+
+        // Clona as folhas de estilo do pai para estilização idêntica (Tailwind + CSS retro)
+        [...document.styleSheets].forEach((styleSheet) => {
+          try {
+            if (styleSheet.href) {
+              const link = document.createElement('link');
+              link.rel = 'stylesheet';
+              link.type = styleSheet.type;
+              link.media = styleSheet.media.mediaText;
+              link.href = styleSheet.href;
+              pip.document.head.appendChild(link);
+            } else if (styleSheet.cssRules) {
+              const style = document.createElement('style');
+              [...styleSheet.cssRules].forEach((rule) => {
+                style.appendChild(document.createTextNode(rule.cssText));
+              });
+              pip.document.head.appendChild(style);
+            }
+          } catch {}
+        });
+
+        pip.document.body.className =
+          document.body.className +
+          ' bg-[#0c0a08] overflow-hidden m-0 p-1 flex items-center justify-center';
+
+        pip.addEventListener('pagehide', () => {
+          setPipWindow(null);
+        });
+
+        setPipWindow(pip);
+      } catch (err) {
+        console.warn('Falha ao abrir Document PiP:', err);
+      }
+    }
+  };
 
   const isDraggingRef = useRef(false);
   const dragStartRef = useRef<{ mouseX: number; mouseY: number; startX: number; startY: number }>({
@@ -202,19 +256,20 @@ export const MiniPlayerWidget: React.FC<MiniPlayerWidgetProps> = ({
   // RENDER: DOCK HORIZONTAL BAR (Ideal para o Dock do Windows)
   // -------------------------------------------------------------
   if (widgetMode === 'dock') {
-    return (
+    const dockNode = (
       <div
         ref={widgetRef}
-        onMouseDown={handleMouseDown}
+        onMouseDown={pipWindow ? undefined : handleMouseDown}
         style={{
-          position: 'fixed',
-          left: position ? `${position.x}px` : undefined,
-          top: position ? `${position.y}px` : undefined,
+          position: pipWindow ? 'relative' : 'fixed',
+          left: pipWindow ? undefined : position ? `${position.x}px` : undefined,
+          top: pipWindow ? undefined : position ? `${position.y}px` : undefined,
+          margin: pipWindow ? '0 auto' : undefined,
           zIndex: isAlwaysOnTop ? 99999 : 50,
         }}
-        className={`w-[450px] max-w-[calc(100vw-20px)] h-[66px] px-3.5 py-2 rounded-2xl bg-[#0c0a08]/95 backdrop-blur-2xl border border-amber-500/35 shadow-[0_12px_36px_rgba(0,0,0,0.92),0_0_20px_rgba(255,185,95,0.18)] flex items-center justify-between gap-3 select-none transition-shadow cursor-grab active:cursor-grabbing ${
-          isAlwaysOnTop ? 'ring-1 ring-amber-400/40' : ''
-        }`}
+        className={`w-[450px] max-w-[calc(100vw-20px)] h-[66px] px-3.5 py-2 rounded-2xl bg-[#0c0a08]/95 backdrop-blur-2xl border border-amber-500/35 shadow-[0_12px_36px_rgba(0,0,0,0.92),0_0_20px_rgba(255,185,95,0.18)] flex items-center justify-between gap-3 select-none transition-shadow ${
+          pipWindow ? '' : 'cursor-grab active:cursor-grabbing'
+        } ${isAlwaysOnTop ? 'ring-1 ring-amber-400/40' : ''}`}
         title="Dock Vitrola Hi-Fi (Arraste para posicionar no seu dock)"
       >
         {/* 1. DISQUINHO GIRANDO (VINIL EM MINIATURA) */}
@@ -359,6 +414,26 @@ export const MiniPlayerWidget: React.FC<MiniPlayerWidgetProps> = ({
             <Anchor size={13} />
           </button>
 
+          {/* Destacar para Janela Flutuante no Desktop (Document PiP) */}
+          {typeof window !== 'undefined' && 'documentPictureInPicture' in window && (
+            <button
+              onClick={toggleDocumentPiP}
+              aria-label="Destacar para janela flutuante no desktop (permanece ao minimizar o navegador)"
+              title={
+                pipWindow
+                  ? 'Retornar Widget para o Navegador'
+                  : 'Destacar Widget no Windows (Fica visível mesmo minimizando o navegador)'
+              }
+              className={`p-1 rounded transition-colors ${
+                pipWindow
+                  ? 'text-amber-400 bg-amber-950/60 border border-amber-500/40 shadow-[0_0_8px_#fec486]'
+                  : 'text-stone-400 hover:text-amber-300 hover:bg-stone-800/80'
+              }`}
+            >
+              <ExternalLink size={13} />
+            </button>
+          )}
+
           {/* Fixar Sempre no Topo */}
           <button
             onClick={() => setIsAlwaysOnTop(!isAlwaysOnTop)}
@@ -409,24 +484,27 @@ export const MiniPlayerWidget: React.FC<MiniPlayerWidgetProps> = ({
         </div>
       </div>
     );
+
+    return pipWindow ? createPortal(dockNode, pipWindow.document.body) : dockNode;
   }
 
   // -------------------------------------------------------------
   // RENDER: MODO MINI DECK (Console Vertical com Ponteiros VU)
   // -------------------------------------------------------------
-  return (
+  const deckNode = (
     <div
       ref={widgetRef}
-      onMouseDown={handleMouseDown}
+      onMouseDown={pipWindow ? undefined : handleMouseDown}
       style={{
-        position: 'fixed',
-        left: position ? `${position.x}px` : undefined,
-        top: position ? `${position.y}px` : undefined,
+        position: pipWindow ? 'relative' : 'fixed',
+        left: pipWindow ? undefined : position ? `${position.x}px` : undefined,
+        top: pipWindow ? undefined : position ? `${position.y}px` : undefined,
+        margin: pipWindow ? '0 auto' : undefined,
         zIndex: isAlwaysOnTop ? 99999 : 50,
       }}
-      className={`w-[360px] p-3 rounded-xl bg-surface-container-lowest/95 backdrop-blur-xl border border-primary/40 shadow-[0_16px_40px_rgba(0,0,0,0.9),0_0_15px_var(--color-glow,rgba(255,185,95,0.15))] flex flex-col gap-2 select-none transition-shadow cursor-grab active:cursor-grabbing ${
-        isAlwaysOnTop ? 'ring-1 ring-secondary/30' : ''
-      }`}
+      className={`w-[360px] p-3 rounded-xl bg-surface-container-lowest/95 backdrop-blur-xl border border-primary/40 shadow-[0_16px_40px_rgba(0,0,0,0.9),0_0_15px_var(--color-glow,rgba(255,185,95,0.15))] flex flex-col gap-2 select-none transition-shadow ${
+        pipWindow ? '' : 'cursor-grab active:cursor-grabbing'
+      } ${isAlwaysOnTop ? 'ring-1 ring-secondary/30' : ''}`}
     >
       {/* Barra de Título & Arraste */}
       <div className="flex items-center justify-between pb-1.5 border-b border-outline-variant/20">
@@ -631,4 +709,6 @@ export const MiniPlayerWidget: React.FC<MiniPlayerWidgetProps> = ({
       </div>
     </div>
   );
+
+  return pipWindow ? createPortal(deckNode, pipWindow.document.body) : deckNode;
 };
