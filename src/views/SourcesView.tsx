@@ -182,7 +182,7 @@ export const SourcesView: React.FC<SourcesViewProps> = ({ onPlayTrack }) => {
                         alert('Por favor, informe seu Client ID do Spotify Developer primeiro.');
                         return;
                       }
-                      alert('Modo de autenticação Spotify OAuth PKCE inicializado. Consulte docs/06-spotify-config.md para detalhes de registro.');
+                      alert('Modo de autenticação Spotify OAuth PKCE inicializado. Registre seu aplicativo no Spotify Developer Dashboard com a Redirect URI.');
                     }}
                     className="px-3 py-1 rounded bg-[#1db954] text-black font-headline text-[10px] font-bold hover:bg-[#1ed760] transition-colors shadow-sm"
                   >
@@ -196,7 +196,7 @@ export const SourcesView: React.FC<SourcesViewProps> = ({ onPlayTrack }) => {
           <div className="mt-space-md pt-space-xs border-t border-outline-variant/20 flex items-center justify-between text-xs font-headline">
             <span className="flex items-center gap-1 text-outline">
               <Info size={14} />
-              <span>Consulte docs/06-spotify-config.md</span>
+              <span>Autenticação OAuth 2.0 PKCE</span>
             </span>
             <span className="text-secondary font-mono text-[10px]">
               SDK Pronto

@@ -110,22 +110,14 @@ iniciar-vitrola-desktop.bat
 ```text
 vitrola/
 ├── dist/                      # Artefatos compilados de produção
-├── docs/                      # Documentação de arquitetura, integrações e testes
-│   ├── 01-analise.md
-│   ├── 02-arquitetura.md
-│   ├── 06-spotify-config.md
-│   ├── 07-matriz-provedores.md
-│   ├── 12-instalador-e-dock-widget.md
-│   ├── handoff/               # Histórico das passagens de estágio
-│   └── integracoes-midias.md
 ├── electron/                  # Código nativo do Electron Desktop
 │   ├── assets/                # Ícones da barra de tarefas (prev, play, pause, next)
 │   ├── main.cjs               # Processo principal, persistência de sessão e thumbar
 │   └── preload.cjs            # IPC seguro para comunicação do player
-├── prompts/                   # Histórico de prompts e especificações dos agentes
 ├── public/                    # Assets estáticos, ícones e amostras PCM
 │   ├── icon.ico               # Ícone multi-resolução para Windows
 │   ├── icon.png               # Ícone em alta resolução
+│   ├── favicon.ico            # Favicon para o modo web
 │   └── samples/               # Áudios PCM de demonstração
 ├── referencias/               # Especificações visuais e protótipo de design Stitch
 ├── scripts/                   # Scripts de instalação, geração de ícones e testes
