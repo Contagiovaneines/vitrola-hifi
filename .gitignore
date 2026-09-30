@@ -1,5 +1,14 @@
-# Logs
-logs
+# =============================================================================
+# DEPENDÊNCIAS
+# =============================================================================
+node_modules/
+.pnp
+.pnp.js
+
+# =============================================================================
+# LOGS E DEPURAÇÃO
+# =============================================================================
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -7,32 +16,127 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Dependencies
-node_modules/
-
-# Production build outputs
+# =============================================================================
+# COMPILAÇÃO E BUILDS (Vite, TypeScript, Electron)
+# =============================================================================
 dist/
 dist-ssr/
 dist-electron/
+out/
+build/
+release/
+releases/
+.vite/
+.cache/
+.parcel-cache/
+*.tsbuildinfo
+.eslintcache
 
-# Executables and Large Binaries (Download from GitHub Releases)
+# =============================================================================
+# EXECUTÁVEIS, INSTALADORES E BINÁRIOS PESADOS
+# (Estes arquivos devem ser disponibilizados via GitHub Releases, não no repositório)
+# =============================================================================
 *.exe
+*.msi
+*.dmg
+*.pkg
+*.deb
+*.rpm
+*.AppImage
+*.snap
 *.blockmap
-*.zip
-*.tar.gz
-*.7z
+builder-debug.yml
+builder-effective-config.yaml
 
-# Environment variables
+# =============================================================================
+# ARQUIVOS COMPACTADOS E IMAGENS DE DISCO
+# =============================================================================
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+*.iso
+
+# =============================================================================
+# ARQUIVOS DE MÍDIA PESADOS E BIBLIOTECA PESSOAL DO USUÁRIO
+# (Impede subir acidentalmente gigabytes de músicas ou vídeos gravados)
+# =============================================================================
+*.mp3
+*.flac
+*.aac
+*.m4a
+*.ogg
+*.opus
+*.alac
+*.mp4
+*.mkv
+*.avi
+*.mov
+*.webm
+
+# Permite apenas os samples de áudio de fábrica usados pelos testes e demonstração
+*.wav
+!public/samples/*.wav
+
+# =============================================================================
+# VARIÁVEIS DE AMBIENTE E SEGREDOS
+# =============================================================================
 .env
 .env.local
 .env.*.local
+*.pem
+*.key
+*.cert
+*.pfx
+*.p12
 
-# Editor directories and files
+# =============================================================================
+# EDITORES E IDES
+# =============================================================================
 .vscode/*
 !.vscode/extensions.json
 .idea/
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
+*.swp
+*.swo
+*~
+.history/
+
+# =============================================================================
+# ARQUIVOS DO SISTEMA OPERACIONAL (Windows, macOS, Linux)
+# =============================================================================
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Linux
+.fuse_hidden*
+.directory
+.Trash-*
+
+# =============================================================================
+# COBERTURA DE TESTES E ARQUIVOS TEMPORÁRIOS
+# =============================================================================
+coverage/
+.nyc_output/
+temp/
+tmp/
+*.tmp
+*.temp
+*.bak
